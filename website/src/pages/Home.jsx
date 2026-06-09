@@ -590,12 +590,26 @@ function HomeEditions() {
               key={c.name}
               to={c.to}
               className="card"
-              style={{ display: 'block', background: c.accSoft, position: 'relative', overflow: 'hidden' }}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                background: c.accSoft,
+                position: 'relative',
+                overflow: 'hidden',
+              }}
             >
               <div style={{ position: 'absolute', top: -30, right: -30, opacity: 0.1 }}>
                 <HexRosette size={180} color={c.acc} stroke={0.5} />
               </div>
-              <div style={{ position: 'relative', zIndex: 2 }}>
+              <div
+                style={{
+                  position: 'relative',
+                  zIndex: 2,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  flex: 1,
+                }}
+              >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                   <span
                     className="mono"
@@ -618,7 +632,7 @@ function HomeEditions() {
                 >
                   <i style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', color: c.acc }}>{c.name}</i> sürümü
                 </h3>
-                <p className="body" style={{ marginTop: 18, minHeight: '5em' }}>
+                <p className="body" style={{ marginTop: 18, minHeight: '6.6em' }}>
                   {c.lede}
                 </p>
                 <div className="cmd-strip">
@@ -626,7 +640,13 @@ function HomeEditions() {
                   <span>{c.cmd}</span>
                 </div>
                 <div
-                  style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginTop: 28 }}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'baseline',
+                    marginTop: 'auto',
+                    paddingTop: 28,
+                  }}
                 >
                   <span className="eyebrow">İncele</span>
                   <span style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 22, color: c.acc }}>
