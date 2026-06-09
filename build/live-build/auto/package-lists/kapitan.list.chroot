@@ -16,6 +16,9 @@ git
 sudo
 curl
 
+# Kernel (scheduled by live-build; explicit for F1 alpha)
+linux-image-amd64
+
 # Live system boot infrastructure (usually pulled by live-build; explicit for skeleton)
 live-boot
 live-config

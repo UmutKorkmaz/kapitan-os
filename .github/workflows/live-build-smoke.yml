@@ -53,8 +53,13 @@ jobs:
 
       - name: Install live-build (dry-run prerequisites)
         run: |
+          set -euo pipefail
           sudo apt-get update
-          sudo apt-get install -y live-build jq
+          sudo apt-get install -y debootstrap jq wget
+          curl -fsSL -o /tmp/live-build.deb \
+            http://deb.debian.org/debian/pool/main/l/live-build/live-build_20230502_all.deb
+          sudo dpkg -i /tmp/live-build.deb
+          lb --version
 
       - name: Dry-run ISO build wrapper
         run: npm run dry-run:iso
@@ -87,8 +92,13 @@ jobs:
 
       - name: Install build dependencies
         run: |
+          set -euo pipefail
           sudo apt-get update
-          sudo apt-get install -y live-build debootstrap squashfs-tools xorriso isolinux syslinux-common jq
+          sudo apt-get install -y debootstrap squashfs-tools xorriso isolinux syslinux-common jq wget
+          curl -fsSL -o /tmp/live-build.deb \
+            http://deb.debian.org/debian/pool/main/l/live-build/live-build_20230502_all.deb
+          sudo dpkg -i /tmp/live-build.deb
+          lb --version
           npm ci
           npm run validate:commands
           npm run sync:iso-assets
