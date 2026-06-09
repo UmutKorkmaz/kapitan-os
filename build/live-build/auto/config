@@ -21,8 +21,7 @@ lb config noauto \
   --win32-loader false \
   --binary-images iso-hybrid \
   --bootloader grub-pc \
-  --security false \
-  --updates false
+  --security false
 
 # --- Mirror (override via KAPITAN_MIRROR env) ---
 : "${KAPITAN_MIRROR:=http://deb.debian.org/debian}"
