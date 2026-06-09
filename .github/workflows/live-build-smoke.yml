@@ -110,10 +110,12 @@ jobs:
         run: |
           set -euo pipefail
           iso=build/artifacts/kapitan-v0.1.0-alpha-amd64.iso
+          sudo chown -R "$(id -u):$(id -g)" build/artifacts
           test -f "$iso"
           size=$(stat -c%s "$iso")
           test "$size" -gt 104857600
           sha256sum "$iso" | tee "$iso.sha256"
+          echo "ISO size: $size bytes"
 
       - name: Upload ISO artifact
         uses: actions/upload-artifact@v4

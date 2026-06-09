@@ -143,6 +143,11 @@ main() {
 
   cp "${ISO_SRC}" "${ARTIFACTS_DIR}/${ISO_NAME}"
   sha256sum "${ARTIFACTS_DIR}/${ISO_NAME}" > "${ARTIFACTS_DIR}/${ISO_NAME}.sha256"
+
+  if [[ -n "${SUDO_USER:-}" ]]; then
+    chown -R "${SUDO_USER}:${SUDO_USER}" "${ARTIFACTS_DIR}"
+  fi
+
   log "ISO written to: ${ARTIFACTS_DIR}/${ISO_NAME}"
   log "SHA256: ${ARTIFACTS_DIR}/${ISO_NAME}.sha256"
 }
