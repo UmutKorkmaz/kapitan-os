@@ -4,8 +4,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const base = process.env.VITE_BASE_PATH || '/';
 
 export default defineConfig({
+  base,
   plugins: [react()],
   resolve: {
     alias: {
