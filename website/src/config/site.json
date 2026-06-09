@@ -13,12 +13,15 @@
     "ofis": 160,
     "gelistirici": 218
   },
+  "github": {
+    "repoUrl": "https://github.com/UmutKorkmaz/kapitan-os",
+    "releasesUrl": "https://github.com/UmutKorkmaz/kapitan-os/releases/latest"
+  },
   "simulation": {
     "badge": "SİMÜLASYON",
     "disclaimer": "Bu önizleme gerçek KAPiTaN OS değildir. Davranışlar yaklaşık modelleme amaçlıdır."
   },
   "features": {
-    "isoDownload": false,
     "communityMetrics": false,
     "marketplaceLive": false
   }

@@ -1,6 +1,7 @@
 /* Ofis sürümü — saffron-tinted, document-centric, ceremonial */
 
 import { Link, PageHead, SectionHead } from '../components/Shell';
+import GithubReleaseLink from '../components/GithubReleaseLink.jsx';
 import { HexRosette, MandalaBg, TileBand } from '../components/Ornaments';
 import { getEditionById } from '@data/editions';
 
@@ -19,7 +20,7 @@ export default function Ofis() {
         ornamentColor="var(--saffron)"
       >
         <div style={{display:'flex', gap:12, marginTop:36, flexWrap:'wrap', alignItems:'center'}}>
-          <Link to="/hakkinda" className="btn btn-crimson" style={{background:'var(--saffron)', color:'var(--ink)', boxShadow:'0 12px 30px -10px rgba(232,178,62,0.4)'}}>{downloadLabel} →</Link>
+          <GithubReleaseLink className="btn btn-crimson" style={{background:'var(--saffron)', color:'var(--ink)', boxShadow:'0 12px 30px -10px rgba(232,178,62,0.4)'}}>{downloadLabel} →</GithubReleaseLink>
           <Link to="/surumler" className="btn btn-line">Karşılaştır</Link>
           <span className="pill pill--saffron"><span className="ldot"/>ÜRETKENLİK ODAKLI</span>
         </div>
@@ -234,7 +235,7 @@ Saygılarımla,
           </h2>
           <p className="lede reveal delay-1" style={{marginInline:'auto', marginTop:24}}>Ücretsiz, Türkçe, üretkenliğiniz için tasarlandı.</p>
           <div className="reveal delay-2" style={{display:'flex', gap:12, justifyContent:'center', marginTop:36, flexWrap:'wrap'}}>
-            <Link to="/hakkinda" className="btn btn-crimson" style={{background:'var(--saffron)', color:'var(--ink)', boxShadow:'0 12px 30px -10px rgba(232,178,62,0.4)'}}>ISO {downloadLabel} →</Link>
+            <GithubReleaseLink className="btn btn-crimson" style={{background:'var(--saffron)', color:'var(--ink)', boxShadow:'0 12px 30px -10px rgba(232,178,62,0.4)'}}>ISO {downloadLabel} →</GithubReleaseLink>
           </div>
           <div className="eyebrow reveal delay-3" style={{marginTop:28}}>Minimum {edition.requirements.ramMinLabel} RAM · {edition.requirements.diskMinLabel} disk</div>
         </div>

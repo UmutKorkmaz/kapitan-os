@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Link, SectionHead } from '../components/Shell';
+import GithubReleaseLink from '../components/GithubReleaseLink.jsx';
 import { MandalaBg, StarSeal, HexRosette, Tugra, CornerOrnament } from '../components/Ornaments';
 import { DraggableWindow, AIPrompt, LiveTerminal } from '../components/Interactive';
 import SimulationBadge from '../components/SimulationBadge';
@@ -106,9 +107,9 @@ function HomeHero() {
               kadar — herkes için bir sürüm. Tüm uçbirim komutları, arayüz ve belgeler Türkçedir.
             </p>
             <div style={{ display: 'flex', gap: 12, marginTop: 36, flexWrap: 'wrap' }}>
-              <Link to="/hakkinda" className="btn btn-crimson">
-                Ücretsiz indir <span className="arrow">→</span>
-              </Link>
+              <GithubReleaseLink className="btn btn-crimson">
+                GitHub'da indir <span className="arrow">→</span>
+              </GithubReleaseLink>
               <Link to="/surumler" className="btn btn-line">
                 Sürümleri karşılaştır
               </Link>
@@ -986,15 +987,15 @@ function HomeFinal() {
           KAPiTaN'ı bugün <i>indirin</i>.
         </h2>
         <p className="lede reveal delay-1" style={{ marginInline: 'auto', marginTop: 36 }}>
-          Ücretsiz, açık kaynak, tamamen Türkçe. Alpha sürümü — ISO yayınlandığında duyurulacak.
+          Ücretsiz, açık kaynak, tamamen Türkçe. Güncel sürüm GitHub Releases üzerinden indirilir.
         </p>
         <div
           className="reveal delay-2"
           style={{ display: 'flex', gap: 14, justifyContent: 'center', marginTop: 44, flexWrap: 'wrap' }}
         >
-          <Link to="/hakkinda" className="btn btn-crimson" style={{ padding: '16px 28px', fontSize: 15 }}>
-            Alpha listesine katıl →
-          </Link>
+          <GithubReleaseLink className="btn btn-crimson" style={{ padding: '16px 28px', fontSize: 15 }}>
+            GitHub'da indir →
+          </GithubReleaseLink>
           <Link to="/surumler" className="btn btn-line" style={{ padding: '16px 24px' }}>
             Sürümleri karşılaştır
           </Link>

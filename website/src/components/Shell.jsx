@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from './Link.jsx';
+import GithubReleaseLink from './GithubReleaseLink.jsx';
 import { MandalaBg, SectionOrnament, StarSeal } from './Ornaments.jsx';
 
 export { default as Link } from './Link.jsx';
@@ -118,9 +119,9 @@ export function Nav({ activePath, onOpenCmdK }) {
             <kbd>⌘K</kbd>
           </button>
           <ThemeToggle />
-          <Link to="/hakkinda" className="btn btn-crimson nav-cta">
+          <GithubReleaseLink className="btn btn-crimson nav-cta">
             İndir →
-          </Link>
+          </GithubReleaseLink>
         </div>
       </div>
     </header>
@@ -198,7 +199,7 @@ export function Footer() {
                 <Link to="/topluluk">Topluluk</Link>
               </li>
               <li>
-                <Link to="/hakkinda">Kaynak kodu</Link>
+                <GithubReleaseLink variant="repo">Kaynak kodu</GithubReleaseLink>
               </li>
               <li>
                 <Link to="/hakkinda">İletişim</Link>

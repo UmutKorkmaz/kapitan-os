@@ -1,6 +1,7 @@
 /* Bar sürümü — jade, minimal, contemplative */
 
 import { Link, PageHead, SectionHead } from '../components/Shell';
+import GithubReleaseLink from '../components/GithubReleaseLink.jsx';
 import { MandalaBg, SectionOrnament, TileBand } from '../components/Ornaments';
 import { getEditionById } from '@data/editions';
 
@@ -20,7 +21,7 @@ export default function Bar() {
         ornamentColor="var(--jade)"
       >
         <div style={{display:'flex', gap:12, marginTop:36, flexWrap:'wrap', alignItems:'center'}}>
-          <Link to="/hakkinda" className="btn btn-crimson" style={{background:'var(--jade)', boxShadow:'0 12px 30px -10px rgba(63,142,99,0.4)'}}>{downloadLabel} →</Link>
+          <GithubReleaseLink className="btn btn-crimson" style={{background:'var(--jade)', boxShadow:'0 12px 30px -10px rgba(63,142,99,0.4)'}}>{downloadLabel} →</GithubReleaseLink>
           <span className="pill pill--jade"><span className="ldot"/>TEMİZ VE SADE</span>
         </div>
       </PageHead>
@@ -169,7 +170,7 @@ export default function Bar() {
           </h2>
           <p className="lede reveal delay-1" style={{marginInline:'auto', marginTop:24}}>En hafif, en hızlı, en sade.</p>
           <div className="reveal delay-2" style={{display:'flex', gap:12, justifyContent:'center', marginTop:36, flexWrap:'wrap'}}>
-            <Link to="/hakkinda" className="btn btn-crimson" style={{background:'var(--jade)', boxShadow:'0 12px 30px -10px rgba(63,142,99,0.4)'}}>ISO {downloadLabel} →</Link>
+            <GithubReleaseLink className="btn btn-crimson" style={{background:'var(--jade)', boxShadow:'0 12px 30px -10px rgba(63,142,99,0.4)'}}>ISO {downloadLabel} →</GithubReleaseLink>
           </div>
           <div className="eyebrow reveal delay-3" style={{marginTop:28}}>Minimum {edition.requirements.ramMinLabel} RAM · {edition.requirements.diskMinLabel} disk</div>
         </div>

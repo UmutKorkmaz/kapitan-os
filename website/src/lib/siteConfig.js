@@ -51,4 +51,18 @@ export function getSimulation() {
   return siteConfig.simulation;
 }
 
+/**
+ * @returns {string}
+ */
+export function getGithubRepoUrl() {
+  return siteConfig.github?.repoUrl ?? 'https://github.com/UmutKorkmaz/kapitan-os';
+}
+
+/**
+ * @returns {string}
+ */
+export function getGithubReleasesUrl() {
+  return siteConfig.github?.releasesUrl ?? `${getGithubRepoUrl()}/releases/latest`;
+}
+
 export default siteConfig;

@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import Link from '../components/Link.jsx';
-import SimulationBadge from '../components/SimulationBadge.jsx';
+import GithubReleaseLink from '../components/GithubReleaseLink.jsx';
 import { PageHead, SectionHead } from '../components/Shell.jsx';
-import { MandalaBg, SectionOrnament, TileBand } from '../components/Ornaments.jsx';
-import siteConfig, { getVersion } from '../lib/siteConfig.js';
+import { MandalaBg, TileBand } from '../components/Ornaments.jsx';
+import { getGithubRepoUrl, getVersion } from '../lib/siteConfig.js';
 
 const VERSION = getVersion();
 
-const downloadOpts = [
-  { name: 'Geliştirici', size: '4.2 GB', ram: '8 GB', acc: 'var(--crimson)', to: '/surumler/gelistirici' },
-  { name: 'Ofis', size: '3.1 GB', ram: '4 GB', acc: 'var(--saffron)', to: '/surumler/ofis' },
-  { name: 'Bar', size: '1.4 GB', ram: '2 GB', acc: 'var(--jade)', to: '/surumler/bar' },
+const editionRoadmap = [
+  { name: 'Geliştirici', ram: '8 GB', acc: 'var(--crimson)', to: '/surumler/gelistirici' },
+  { name: 'Ofis', ram: '4 GB', acc: 'var(--saffron)', to: '/surumler/ofis' },
+  { name: 'Bar', ram: '2 GB', acc: 'var(--jade)', to: '/surumler/bar' },
 ];
 
 const timeline = [
@@ -19,13 +19,13 @@ const timeline = [
   ['2023', 'Topluluk', 'Forum ve topluluk altyapısı planlandı.'],
   ['2024', 'Üç sürüm', 'Geliştirici, Ofis ve Bar olarak ayrıştırma tasarımı.'],
   ['2025', 'AI', 'KAPiTaN AI komut katmanı tasarlandı.'],
-  ['2026', '0.1-alpha', '0.1-alpha web sitesi ve komut sözlüğü hizalandı.'],
+  ['2026', '0.1-alpha', '0.1-alpha web sitesi, komut sözlüğü ve GitHub sürümü.'],
 ];
 
 const faqs = [
   [
-    'Alpha sürümü indirebilir miyim?',
-    'Henüz hayır. 0.1-alpha ISO build\'i tamamlandığında bu sayfada gerçek SHA-256 imzasıyla yayınlanacak. Şimdilik duyuru listesine katılabilirsiniz.',
+    'Sürümü nereden indirebilirim?',
+    'GitHub Releases üzerinden. En güncel ISO, SHA-256 özeti ve sürüm notları orada yayınlanır.',
   ],
   [
     'KAPiTaN OS ücretsiz mi?',
@@ -36,28 +36,20 @@ const faqs = [
     'Evet, KAPiTaN OS POSIX uyumlu bir çekirdek üzerine kurulmuştur. Mevcut Linux uygulamalarınız ve betikleriniz değişiklik gerektirmeden çalışır.',
   ],
   [
-    'Yapay zekâ özelliği bulutta mı çalışıyor?',
-    'Hayır, KAPiTaN AI varsayılan olarak cihazınızda yerel çalışır. Bulut modu isteğe bağlıdır ve istediğiniz zaman kapatabilirsiniz.',
+    'Geliştirici, Ofis ve Bar ISO\'ları ayrı mı?',
+    '0.1-alpha şimdilik tek bir amd64 canlı ISO olarak yayınlanır. Üç sürüm ayrımı yol haritasında; ayrı imajlar sonraki fazlarda gelecek.',
   ],
   [
-    'Sürümler arası geçiş yapabilir miyim?',
-    'Evet, sürümler arası geçiş her zaman ücretsizdir ve verileriniz korunur. Tek bir komutla istediğiniz sürüme geçebilirsiniz.',
+    'Yapay zekâ özelliği bulutta mı çalışıyor?',
+    'Hayır, KAPiTaN AI varsayılan olarak cihazınızda yerel çalışır. Bulut modu isteğe bağlıdır ve istediğiniz zaman kapatabilirsiniz.',
   ],
   [
     'Türkçe karakterler her yerde destekleniyor mu?',
     'Evet, ı/İ ayrımı dâhil tüm Türkçe karakterler komutlarda, dosya adlarında ve uçbirimde tam olarak desteklenir.',
   ],
-  [
-    'Hangi donanım gereksinimleri var?',
-    'Bar sürümü 2 GB RAM ile, Ofis sürümü 4 GB ile, Geliştirici sürümü 8 GB ile çalışır. Detaylar sürüm sayfalarındadır.',
-  ],
 ];
 
-function AlphaDownloadPanel() {
-  const [chosen, setChosen] = useState(0);
-  const opt = downloadOpts[chosen];
-  const isoAvailable = siteConfig.features.isoDownload;
-
+function GithubDownloadPanel() {
   return (
     <div
       style={{
@@ -68,88 +60,41 @@ function AlphaDownloadPanel() {
         position: 'relative',
       }}
     >
-      {!isoAvailable && (
-        <div
-          className="sim-banner"
-          style={{
-            padding: '12px 16px',
-            background: 'var(--ink-3)',
-            borderBottom: '1px solid var(--ink-line)',
-            fontSize: 13,
-            color: 'var(--fg-soft)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 10,
-            flexWrap: 'wrap',
-          }}
-        >
-          <SimulationBadge variant="banner" />
-          <span>Alpha ISO henüz yayınlanmadı. SHA-256 imzası yayın sonrası burada görünecek.</span>
-        </div>
-      )}
-
       <div style={{ position: 'absolute', right: -100, top: -100, opacity: 0.06, pointerEvents: 'none' }}>
-        <MandalaBg color={opt.acc} size={400} opacity={1} />
+        <MandalaBg color="var(--crimson)" size={400} opacity={1} />
       </div>
 
       <div style={{ padding: '40px 40px 32px', position: 'relative', zIndex: 2 }}>
-        <div style={{ display: 'flex', gap: 8, marginBottom: 32 }}>
-          {downloadOpts.map((d, i) => (
-            <button
-              key={d.name}
-              onClick={() => setChosen(i)}
-              style={{
-                padding: '10px 18px',
-                borderRadius: 999,
-                fontSize: 13,
-                background: chosen === i ? d.acc : 'var(--ink-2)',
-                color: chosen === i ? 'var(--pearl)' : 'var(--sand)',
-                border: '1px solid ' + (chosen === i ? d.acc : 'var(--ink-line)'),
-                cursor: 'pointer',
-              }}
-            >
-              {d.name}
-            </button>
-          ))}
-        </div>
-
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: 24 }}>
           <div>
             <span className="mono" style={{ fontSize: 11, letterSpacing: '0.18em', color: 'var(--sand)', textTransform: 'uppercase' }}>
-              kapitan.iso
+              github releases
             </span>
             <h3 style={{ fontFamily: 'var(--display)', fontSize: 'clamp(48px, 5vw, 72px)', lineHeight: 1, marginTop: 14 }}>
-              KAPiTaN OS {VERSION}{' '}
-              <i style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', color: opt.acc }}>{opt.name}</i>
+              KAPiTaN OS {VERSION}
             </h3>
           </div>
           <div className="mono" style={{ fontSize: 11, color: 'var(--sand)', letterSpacing: '0.14em', textAlign: 'right' }}>
-            <div>SHA-256 · {isoAvailable ? '—' : '— (yayın sonrası)'}</div>
-            <div style={{ marginTop: 4 }}>
-              Min RAM: {opt.ram} · Boyut: {isoAvailable ? opt.size : 'Yakında'}
-            </div>
+            <div>Dosya · kapitan-v0.1.0-alpha-amd64.iso</div>
+            <div style={{ marginTop: 4 }}>Mimari · x86_64 · canlı ISO</div>
           </div>
         </div>
 
         <div style={{ marginTop: 48 }}>
           <p className="body" style={{ maxWidth: '60ch' }}>
-            {isoAvailable
-              ? 'Aşağıdaki düğmeye tıklayarak ISO indirme işlemini başlatın. İndirdikten sonra SHA-256 imzasını doğrulayın.'
-              : '0.1-alpha ISO henüz yayınlanmadı. Yayınlandığında bu sayfada gerçek SHA-256 imzası ve indirme bağlantısı görünecek.'}
+            Açık kaynak sürüm GitHub üzerinde yayınlanır. ISO dosyasını indirin; SHA-256 özeti ve kurulum notları sürüm
+            sayfasında yer alır.
           </p>
 
           <div style={{ display: 'flex', gap: 12, marginTop: 24, flexWrap: 'wrap' }}>
-            {isoAvailable ? (
-              <button className="btn btn-crimson" style={{ background: opt.acc, boxShadow: `0 16px 40px -12px ${opt.acc}` }}>
-                ISO indir ({opt.size}) →
-              </button>
-            ) : (
-              <button className="btn btn-crimson" style={{ background: opt.acc, boxShadow: `0 16px 40px -12px ${opt.acc}` }}>
-                Duyuru listesine yazıl →
-              </button>
-            )}
-            <Link to={opt.to} className="btn btn-line">
-              Sürüm sayfasına git
+            <GithubReleaseLink className="btn btn-crimson" style={{ boxShadow: '0 16px 40px -12px var(--crimson)' }}>
+              GitHub'da indir →
+            </GithubReleaseLink>
+            <GithubReleaseLink variant="repo" className="btn btn-line">
+              Kaynak kodu
+            </GithubReleaseLink>
+            <Link to="/belgeler" className="btn btn-ghost">
+              Kurulum belgesi
             </Link>
           </div>
         </div>
@@ -160,7 +105,6 @@ function AlphaDownloadPanel() {
 
 export default function Hakkinda() {
   const [openFaq, setOpenFaq] = useState(0);
-  const isoAvailable = siteConfig.features.isoDownload;
 
   return (
     <>
@@ -171,7 +115,7 @@ export default function Hakkinda() {
             İndir, kur, <em>başla</em>.
           </>
         }
-        lede="KAPiTaN OS ücretsiz, açık kaynak ve tamamen Türkçedir. Alpha sürümü geliştiriliyor; ISO yayınlandığında buradan indirebileceksiniz."
+        lede="KAPiTaN OS ücretsiz, açık kaynak ve tamamen Türkçedir. Güncel sürüm GitHub Releases üzerinden indirilir."
         ornamentColor="var(--crimson)"
       />
 
@@ -183,14 +127,14 @@ export default function Hakkinda() {
               eyebrow="ISO indir"
               title={
                 <>
-                  Hangi sürümü <em>seçeceksiniz</em>?
+                  GitHub'dan <em>indirin</em>.
                 </>
               }
               align="center"
             />
           </div>
           <div className="reveal" style={{ marginTop: 64 }}>
-            <AlphaDownloadPanel />
+            <GithubDownloadPanel />
           </div>
         </div>
       </section>
@@ -203,22 +147,23 @@ export default function Hakkinda() {
           <div className="reveal">
             <SectionHead
               no="02"
-              eyebrow="Doğrudan ISO"
+              eyebrow="Sürüm yol haritası"
               title={
                 <>
-                  İmza ve <em>kontrol</em>.
+                  Üç kişilik, <em>tek çekirdek</em>.
                 </>
               }
+              lede="0.1-alpha şimdilik birleşik canlı ISO olarak gelir. Geliştirici, Ofis ve Bar ayrı imajları sonraki fazlarda."
             />
           </div>
           <div className="grid grid-3 reveal" style={{ marginTop: 64 }}>
-            {downloadOpts.map((d, i) => (
+            {editionRoadmap.map((d, i) => (
               <div key={d.name} className="card" style={{ padding: '32px', display: 'flex', flexDirection: 'column' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                   <span className="mono" style={{ color: d.acc, letterSpacing: '0.18em', textTransform: 'uppercase' }}>
                     SÜRÜM № 0{i + 1}
                   </span>
-                  <span className="mono" style={{ color: 'var(--sand)' }}>{isoAvailable ? d.size : 'Yakında'}</span>
+                  <span className="mono" style={{ color: 'var(--sand)' }}>Yol haritası</span>
                 </div>
                 <h3 style={{ fontFamily: 'var(--display)', fontSize: 48, lineHeight: 1.04, marginTop: 24 }}>
                   <i style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', color: d.acc }}>{d.name}</i>
@@ -235,28 +180,21 @@ export default function Hakkinda() {
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span className="eyebrow" style={{ color: 'var(--terminal-fg-muted)' }}>Min RAM</span>
+                    <span className="eyebrow" style={{ color: 'var(--terminal-fg-muted)' }}>Hedef RAM</span>
                     <span className="terminal-panel__value">{d.ram}</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span className="eyebrow" style={{ color: 'var(--terminal-fg-muted)' }}>Mimari</span>
-                    <span className="terminal-panel__value">x86_64 · arm64</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span className="eyebrow" style={{ color: 'var(--terminal-fg-muted)' }}>SHA-256</span>
-                    <span className="terminal-panel__value">
-                      {isoAvailable ? '—' : '— (yayın sonrası)'}
-                    </span>
+                    <span className="eyebrow" style={{ color: 'var(--terminal-fg-muted)' }}>Şimdiki alpha</span>
+                    <span className="terminal-panel__value">Birleşik ISO</span>
                   </div>
                 </div>
                 <div style={{ marginTop: 'auto', paddingTop: 24, display: 'grid', gap: 8 }}>
-                  <button
+                  <GithubReleaseLink
                     className="btn btn-crimson"
                     style={{ justifyContent: 'center', background: d.acc, boxShadow: 'none' }}
-                    disabled={!isoAvailable}
                   >
-                    {isoAvailable ? `ISO indir (${d.size}) →` : 'Yakında'}
-                  </button>
+                    GitHub'da indir →
+                  </GithubReleaseLink>
                   <Link to={d.to} className="btn btn-ghost" style={{ justifyContent: 'center', fontSize: 13 }}>
                     Sürüm sayfasına git
                   </Link>
@@ -280,15 +218,11 @@ export default function Hakkinda() {
           >
             <span className="mono" style={{ color: 'var(--crimson)' }}>!</span>
             <span style={{ fontSize: 14, color: 'var(--fg-soft)', flex: 1, minWidth: 280 }}>
-              {isoAvailable
-                ? 'İndirdikten sonra mutlaka SHA-256 imzayı doğrulayın. Komut:'
-                : 'Alpha ISO yayınlandığında SHA-256 doğrulama komutu burada güncellenecek.'}
+              İndirdikten sonra SHA-256 özetini GitHub sürüm notlarından doğrulayın.
             </span>
-            {isoAvailable && (
-              <code style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--saffron)' }}>
-                doğrula iso ./kapitan-{VERSION}.iso
-              </code>
-            )}
+            <GithubReleaseLink style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--saffron)' }}>
+              {getGithubRepoUrl()}/releases
+            </GithubReleaseLink>
           </div>
         </div>
       </section>
@@ -308,7 +242,7 @@ export default function Hakkinda() {
                     2021'den <em>bugüne</em>.
                   </>
                 }
-                lede="İstanbul'da başlayan bir doktora çalışması, açık kaynak bir işletim sistemi projesine dönüştü. 0.1-alpha ile web sitesi ve komut sözlüğü hizalanıyor."
+                lede="İstanbul'da başlayan bir doktora çalışması, açık kaynak bir işletim sistemi projesine dönüştü."
               />
               <div style={{ marginTop: 36, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                 <span className="pill">
@@ -443,54 +377,15 @@ export default function Hakkinda() {
           <MandalaBg color="var(--crimson)" size={600} opacity={0.05} />
         </div>
         <div className="wrap" style={{ textAlign: 'center', maxWidth: 720, margin: '0 auto', position: 'relative', zIndex: 2 }}>
-          <div className="reveal kicker" style={{ justifyContent: 'center' }}>
-            <span className="glyph" />
-            <span style={{ color: 'var(--crimson)' }}>05</span>
-            <span style={{ color: 'var(--fg-faint)' }}>·</span>
-            <span>Bülten</span>
-          </div>
           <h2 className="h1 reveal" style={{ marginTop: 22 }}>
-            Yeni sürümler için <em>haber alın</em>.
+            Hazır mısınız? <em>İndirin</em>.
           </h2>
           <p className="lede reveal delay-1" style={{ marginInline: 'auto', marginTop: 24 }}>
-            Ayda bir, fazla değil. Alpha ISO yayınlandığında ilk siz haberdar olun.
+            Güncel sürüm, kaynak kodu ve sürüm notları GitHub'da. Sorun bildirmek için Issues kullanın.
           </p>
-
-          <form
-            onSubmit={(e) => e.preventDefault()}
-            className="reveal delay-2"
-            style={{
-              marginTop: 40,
-              display: 'flex',
-              gap: 10,
-              justifyContent: 'center',
-              flexWrap: 'wrap',
-              maxWidth: 540,
-              marginInline: 'auto',
-            }}
-          >
-            <input
-              type="email"
-              placeholder="e-posta@adresi.tr"
-              style={{
-                flex: 1,
-                minWidth: 260,
-                background: 'var(--ink-2)',
-                border: '1px solid var(--ink-line)',
-                color: 'var(--ink)',
-                padding: '14px 22px',
-                borderRadius: 999,
-                fontFamily: 'var(--sans)',
-                fontSize: 14,
-                outline: 'none',
-              }}
-            />
-            <button className="btn btn-crimson" type="submit">
-              Abone ol →
-            </button>
-          </form>
-          <div className="eyebrow reveal delay-3" style={{ marginTop: 20 }}>
-            İstenmeyen posta yok. Tek tıkla çıkış.
+          <div className="reveal delay-2" style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 40, flexWrap: 'wrap' }}>
+            <GithubReleaseLink className="btn btn-crimson">GitHub'da indir →</GithubReleaseLink>
+            <GithubReleaseLink variant="repo" className="btn btn-line">Depoyu aç</GithubReleaseLink>
           </div>
         </div>
       </section>

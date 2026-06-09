@@ -198,22 +198,33 @@ export default function Belgeler() {
                   USB hazırlayın, <em>15 dakika</em>.
                 </h2>
 
-                <Callout tone="warn" title="Alpha ISO henüz yayınlanmadı">
-                  Kurulum adımları alpha ISO build'i tamamlandığında güncellenecek. Şimdilik{' '}
-                  <Link to="/hakkinda" style={{ color: 'var(--crimson)' }}>
-                    duyuru listesine
-                  </Link>{' '}
-                  katılabilirsiniz.
+                <Callout tone="info" title="ISO indirme">
+                  Güncel sürümü{' '}
+                  <a
+                    href="https://github.com/UmutKorkmaz/kapitan-os/releases/latest"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: 'var(--crimson)' }}
+                  >
+                    GitHub Releases
+                  </a>{' '}
+                  üzerinden indirin. SHA-256 özeti sürüm notlarında yer alır.
                 </Callout>
 
                 <p>KAPiTaN OS yan yana ya da tek başına kurulabilir. Bilgisayarınızda Windows ya da macOS varsa, dual-boot sihirbazı verilerinize dokunmadan kurulum yapar.</p>
 
                 <h3>1. ISO'yu indirin</h3>
                 <p>
-                  <Link to="/hakkinda" style={{ color: 'var(--crimson)' }}>
-                    /hakkinda
-                  </Link>{' '}
-                  sayfasından Geliştirici, Ofis ya da Bar sürümünü seçin. Alpha ISO yayınlandığında gerçek SHA-256 imzası burada görünecek.
+                  <a
+                    href="https://github.com/UmutKorkmaz/kapitan-os/releases/latest"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: 'var(--crimson)' }}
+                  >
+                    GitHub Releases
+                  </a>{' '}
+                  sayfasından <code>kapitan-v0.1.0-alpha-amd64.iso</code> dosyasını indirin. 0.1-alpha şimdilik tek bir
+                  birleşik canlı imaj olarak gelir.
                 </p>
 
                 <h3>2. USB'ye yazın</h3>

@@ -1,6 +1,7 @@
 /* Geliştirici sürümü — code-native, terminal-centric */
 
 import { Link, PageHead, SectionHead } from '../components/Shell';
+import GithubReleaseLink from '../components/GithubReleaseLink.jsx';
 import { MandalaBg, TileBand, CornerOrnament } from '../components/Ornaments';
 import { AIPrompt, LiveTerminal } from '../components/Interactive';
 import { getEditionById, formatCommandTarget } from '@data/editions';
@@ -22,7 +23,7 @@ export default function Gelistirici() {
         ornamentColor="var(--crimson)"
       >
         <div style={{display:'flex', gap:12, marginTop:36, flexWrap:'wrap', alignItems:'center'}}>
-          <Link to="/hakkinda" className="btn btn-crimson">{downloadLabel} →</Link>
+          <GithubReleaseLink className="btn btn-crimson">{downloadLabel} →</GithubReleaseLink>
           <Link to="/komutlar" className="btn btn-line">Komutları incele</Link>
           <span className="pill"><span className="ldot"/>YAPAY ZEKÂ DESTEKLİ</span>
         </div>
@@ -181,7 +182,7 @@ export default function Gelistirici() {
           </h2>
           <p className="lede reveal delay-1" style={{marginInline:'auto', marginTop:24}}>Ücretsiz, açık kaynak, tamamen Türkçe.</p>
           <div className="reveal delay-2" style={{display:'flex', gap:12, justifyContent:'center', marginTop:36, flexWrap:'wrap'}}>
-            <Link to="/hakkinda" className="btn btn-crimson">ISO {downloadLabel} →</Link>
+            <GithubReleaseLink className="btn btn-crimson">ISO {downloadLabel} →</GithubReleaseLink>
             <Link to="/hakkinda" className="btn btn-line">Docker görseli</Link>
           </div>
         </div>

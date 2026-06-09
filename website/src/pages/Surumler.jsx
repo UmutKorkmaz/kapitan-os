@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Link, PageHead, SectionHead } from '../components/Shell';
+import GithubReleaseLink from '../components/GithubReleaseLink.jsx';
 import { HexRosette, MandalaBg, SectionOrnament, TileBand } from '../components/Ornaments';
 import {
   editionCards,
@@ -204,7 +205,7 @@ function VersionQuiz() {
               <Link to={winnerData.to} className="btn btn-crimson" style={{background:winnerData.acc, boxShadow:'none'}}>
                 {winnerData.name} sürümünü incele →
               </Link>
-              <Link to="/hakkinda" className="btn btn-line">Yakında</Link>
+              <GithubReleaseLink className="btn btn-line">GitHub'da indir</GithubReleaseLink>
               <button onClick={reset} className="btn btn-ghost">↻ Yeniden başla</button>
             </div>
           </>
@@ -267,7 +268,7 @@ export default function Surumler() {
         <div style={{display:'flex', gap:12, marginTop:36, flexWrap:'wrap'}}>
           <a href="#compare" className="btn btn-crimson">Karşılaştır →</a>
           <a href="#quiz" className="btn btn-line">Yardım ister misin?</a>
-          <Link to="/hakkinda" className="btn btn-ghost">Yakında</Link>
+          <GithubReleaseLink className="btn btn-ghost">GitHub'da indir</GithubReleaseLink>
         </div>
       </PageHead>
 
@@ -327,7 +328,7 @@ export default function Surumler() {
             Sürümler arası geçiş her zaman ücretsiz, verileriniz korunur. Tek komut: <code style={{fontFamily:'var(--mono)', color:'var(--saffron)'}}>sürümdeğiştir</code>.
           </p>
           <div className="reveal delay-2" style={{display:'flex', gap:12, justifyContent:'center', marginTop:40, flexWrap:'wrap'}}>
-            <Link to="/hakkinda" className="btn btn-crimson">Yakında</Link>
+            <GithubReleaseLink className="btn btn-crimson">GitHub'da indir →</GithubReleaseLink>
             <Link to="/komutlar" className="btn btn-line">Komut rehberini gör</Link>
           </div>
         </div>

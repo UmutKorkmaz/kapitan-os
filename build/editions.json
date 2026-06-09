@@ -33,14 +33,14 @@
         "preinstalledApps": 45
       },
       "iso": {
-        "filename": "kapitan-0.1.0-alpha-gelistirici.iso",
+        "filename": "kapitan-v0.1.0-alpha-amd64.iso",
         "sizeBytes": null,
         "sizeLabel": null,
-        "available": false
+        "available": true
       },
       "marketing": {
-        "showDownloadCta": false,
-        "downloadLabel": "Yakında"
+        "showDownloadCta": true,
+        "downloadLabel": "GitHub'da indir"
       },
       "devFeatures": [
         {
@@ -119,14 +119,14 @@
         "preinstalledApps": 30
       },
       "iso": {
-        "filename": "kapitan-0.1.0-alpha-ofis.iso",
+        "filename": "kapitan-v0.1.0-alpha-amd64.iso",
         "sizeBytes": null,
         "sizeLabel": null,
-        "available": false
+        "available": true
       },
       "marketing": {
-        "showDownloadCta": false,
-        "downloadLabel": "Yakında"
+        "showDownloadCta": true,
+        "downloadLabel": "GitHub'da indir"
       },
       "ofisSuite": [
         {
@@ -197,14 +197,14 @@
         "preinstalledApps": 8
       },
       "iso": {
-        "filename": "kapitan-0.1.0-alpha-bar.iso",
+        "filename": "kapitan-v0.1.0-alpha-amd64.iso",
         "sizeBytes": null,
         "sizeLabel": null,
-        "available": false
+        "available": true
       },
       "marketing": {
-        "showDownloadCta": false,
-        "downloadLabel": "Yakında"
+        "showDownloadCta": true,
+        "downloadLabel": "GitHub'da indir"
       },
       "stats": [
         { "value": "15 sn", "label": "Açılış süresi" },

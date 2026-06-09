@@ -1,5 +1,8 @@
 name: live-build-smoke
 
+permissions:
+  contents: write
+
 on:
   workflow_dispatch:
   pull_request:
@@ -123,3 +126,28 @@ jobs:
           name: kapitan-v0.1.0-alpha-amd64
           path: build/artifacts/kapitan-v0.1.0-alpha-amd64.iso
           retention-days: 7
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="v0.1.0-alpha"
+          iso="build/artifacts/kapitan-v0.1.0-alpha-amd64.iso"
+          notes="$(mktemp)"
+          {
+            echo "## KAPiTaN OS 0.1.0-alpha"
+            echo ""
+            echo "F1 alpha skeleton — Debian 12 bookworm amd64 live ISO."
+            echo ""
+            echo "### SHA-256"
+            echo '```'
+            cat "build/artifacts/kapitan-v0.1.0-alpha-amd64.iso.sha256"
+            echo '```'
+          } > "$notes"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" "$iso" --clobber
+            gh release edit "$tag" --notes-file "$notes"
+          else
+            gh release create "$tag" "$iso" --title "KAPiTaN OS 0.1.0-alpha" --notes-file "$notes"
+          fi

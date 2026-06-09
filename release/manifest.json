@@ -1,5 +1,13 @@
 {
-  "releases": [],
-  "status": "pending",
-  "note": "ISO henüz derlenmedi."
+  "releases": [
+    {
+      "version": "0.1.0-alpha",
+      "tag": "v0.1.0-alpha",
+      "channel": "alpha",
+      "filename": "kapitan-v0.1.0-alpha-amd64.iso",
+      "url": "https://github.com/UmutKorkmaz/kapitan-os/releases/latest"
+    }
+  ],
+  "status": "published",
+  "note": "ISO GitHub Releases üzerinden dağıtılır."
 }
