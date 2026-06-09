@@ -24,11 +24,12 @@ lb config noauto \
 
 # --- Mirror (override via KAPITAN_MIRROR env) ---
 : "${KAPITAN_MIRROR:=http://deb.debian.org/debian}"
+: "${KAPITAN_SECURITY_MIRROR:=http://deb.debian.org/debian-security}"
 lb config noauto --mirror-bootstrap "${KAPITAN_MIRROR}"
 lb config noauto --mirror-chroot "${KAPITAN_MIRROR}"
-lb config noauto --mirror-chroot-security "http://security.debian.org/debian-security"
+lb config noauto --mirror-chroot-security "${KAPITAN_SECURITY_MIRROR}"
 lb config noauto --mirror-binary "${KAPITAN_MIRROR}"
-lb config noauto --mirror-binary-security "http://security.debian.org/debian-security"
+lb config noauto --mirror-binary-security "${KAPITAN_SECURITY_MIRROR}"
 
 # Chroot hook: config/hooks/normal/0100-kapitan.hook.chroot
 # Image assets: build/scripts/sync-image-assets.sh → config/includes.chroot

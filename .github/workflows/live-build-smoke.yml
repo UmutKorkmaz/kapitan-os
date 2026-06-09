@@ -65,6 +65,9 @@ jobs:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 180
+    env:
+      KAPITAN_MIRROR: http://deb.debian.org/debian
+      KAPITAN_SECURITY_MIRROR: http://deb.debian.org/debian-security
     steps:
       - name: Checkout
         uses: actions/checkout@v4
