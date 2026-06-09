@@ -1,0 +1,33 @@
+#!/bin/bash
+# KAPiTaN OS — chroot finalization (locale, shells, kapitan-sh registration)
+set -e
+
+echo "[kapitan-hook] Configuring tr_TR.UTF-8 locale"
+
+if [[ -f /etc/locale.gen ]]; then
+  if ! grep -q '^tr_TR.UTF-8 UTF-8' /etc/locale.gen; then
+    echo 'tr_TR.UTF-8 UTF-8' >> /etc/locale.gen
+  fi
+fi
+
+if command -v locale-gen >/dev/null 2>&1; then
+  locale-gen tr_TR.UTF-8
+fi
+
+if command -v update-locale >/dev/null 2>&1; then
+  update-locale LANG=tr_TR.UTF-8 LC_ALL=tr_TR.UTF-8 || true
+fi
+
+if [[ -x /usr/local/bin/kapitan-sh ]]; then
+  if ! grep -q '^/usr/local/bin/kapitan-sh$' /etc/shells 2>/dev/null; then
+    echo '/usr/local/bin/kapitan-sh' >> /etc/shells
+  fi
+  echo "[kapitan-hook] Registered kapitan-sh in /etc/shells"
+fi
+
+mkdir -p /etc/kapitan
+if [[ ! -f /etc/kapitan/VERSION ]]; then
+  echo 'v0.1.0-alpha' > /etc/kapitan/VERSION
+fi
+
+echo "[kapitan-hook] Done"

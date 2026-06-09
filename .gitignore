@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/artifacts/
+*.iso
+*.iso.sha256
+
+# live-build chroot and binary artifacts
+build/live-build/chroot/
+build/live-build/binary/
+build/live-build/cache/
+build/live-build/*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Logs & debug
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Test / coverage
+coverage/
+.nyc_output/
+
+# Vite
+*.local

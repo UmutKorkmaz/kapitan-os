@@ -1,0 +1,328 @@
+{
+  "$schema": "./schema.json",
+  "osVersion": "0.1.0-alpha",
+  "channel": "alpha",
+  "editions": [
+    {
+      "id": "gelistirici",
+      "no": "01",
+      "name": "Geliştirici",
+      "slug": "/surumler/gelistirici",
+      "accent": "crimson",
+      "tagline": "Kod yazmanın yeni dili, Türkçe.",
+      "lede": "Yapay zekâ destekli IDE, 218 hedef Türkçe komut. Python, Rust, Go, Node önyüklü.",
+      "requirements": {
+        "ramMinGb": 8,
+        "ramMinLabel": "8 GB",
+        "ramRecommendedGb": 16,
+        "ramRecommendedLabel": "16 GB önerilir",
+        "diskMinGb": 50,
+        "diskMinLabel": "50 GB SSD",
+        "arch": ["x86_64", "arm64"]
+      },
+      "apps": "45+",
+      "cmdMetapackage": "kur kapitan-gelistirici",
+      "edition_command_target": 218,
+      "commandCount": null,
+      "bootTime": "~22 sn",
+      "features": {
+        "ai": "planned",
+        "terminal": "advanced",
+        "officeSuite": false,
+        "packageManager": "planned",
+        "preinstalledApps": 45
+      },
+      "iso": {
+        "filename": "kapitan-0.1.0-alpha-gelistirici.iso",
+        "sizeBytes": null,
+        "sizeLabel": null,
+        "available": false
+      },
+      "marketing": {
+        "showDownloadCta": false,
+        "downloadLabel": "Yakında"
+      },
+      "devFeatures": [
+        {
+          "no": "01",
+          "title": "Türkçe değişken adları",
+          "body": "fonksiyon.hesapla, sınıf.Müşteri, değişken.sayaç. AI adlandırma önerileri ile Türkçe kod profesyonel standartlarda."
+        },
+        {
+          "no": "02",
+          "title": "KAPiTaN AI kod asistanı",
+          "body": "\"Bir web sunucusu oluştur\" deyin; AI tam kodu üretir, açıklar, güvenlik tarar. Tamamen yerel çalışır."
+        },
+        {
+          "no": "03",
+          "title": "Türkçe paket yöneticisi",
+          "body": "kur, güncelle, kaldır — kısa biçim: kr, gnc, kld. 5 000+ paket KAPiTaN Pazar'da. NPM, PyPI, Cargo, Go uyumlu."
+        },
+        {
+          "no": "04",
+          "title": "Önderlenmiş zincirler",
+          "body": "Python 3.12, Rust 1.75, Go 1.21, Node 20. Docker, Podman, Git, VS Code tabanlı KodDüzenleyici Pro önyüklü."
+        }
+      ],
+      "devTools": [
+        { "name": "Kod Düzenleyici", "category": "IDE", "cmd": "kod" },
+        { "name": "Hata Ayıklayıcı", "category": "Debug", "cmd": "ayıkla" },
+        { "name": "Uçbirim Pro", "category": "Terminal", "cmd": "uçbirim" },
+        { "name": "Git Yöneticisi", "category": "VCS", "cmd": "gitdurum" },
+        { "name": "Docker", "category": "Container", "cmd": "konteynerler" },
+        { "name": "Veritabanı", "category": "Database", "cmd": "veritabanı" },
+        { "name": "API Test", "category": "Testing", "cmd": "apitest" },
+        { "name": "Derleyici", "category": "Build", "cmd": "derle" },
+        { "name": "Profiler", "category": "Perf", "cmd": "performans" },
+        { "name": "Belgeleyici", "category": "Docs", "cmd": "belge" }
+      ],
+      "devSpecs": [
+        { "label": "Çekirdek", "value": "Linux 6.8.0-kapitan (özel)" },
+        { "label": "Varsayılan kabuk", "value": "kapitan-sh 1.4" },
+        { "label": "Paket yöneticisi", "value": "pazar-cli" },
+        { "label": "Önyüklü diller", "value": "Python 3.12 · Rust 1.75 · Go 1.21 · Node 20" },
+        { "label": "Önyüklü IDE", "value": "KodDüzenleyici Pro (VS Code tabanlı)" },
+        { "label": "Yapay zekâ motoru", "value": "KAPiTaN AI v2.1 (yerel + bulut)" },
+        { "label": "GPU desteği", "value": "NVIDIA CUDA · AMD ROCm" },
+        { "label": "Konteyner", "value": "Docker · Podman" },
+        { "label": "Veritabanları", "value": "PostgreSQL 16 · Redis 7 · SQLite" },
+        { "label": "Sürüm kontrolü", "value": "Git 2.43" },
+        { "label": "Minimum RAM", "value": "8 GB (16 GB önerilir)" },
+        { "label": "Minimum disk", "value": "50 GB SSD" }
+      ]
+    },
+    {
+      "id": "ofis",
+      "no": "02",
+      "name": "Ofis",
+      "slug": "/surumler/ofis",
+      "accent": "saffron",
+      "tagline": "İşinizi Türkçe yapın.",
+      "lede": "Tam ofis paketi, akıllı e-posta, AI yazı asistanı. DOCX, XLSX, PPTX uyumlu.",
+      "requirements": {
+        "ramMinGb": 4,
+        "ramMinLabel": "4 GB",
+        "diskMinGb": 30,
+        "diskMinLabel": "30 GB",
+        "arch": ["x86_64", "arm64"]
+      },
+      "apps": "30+",
+      "cmdMetapackage": "kur kapitan-ofis",
+      "edition_command_target": 160,
+      "commandCount": null,
+      "bootTime": "~18 sn",
+      "features": {
+        "ai": "planned",
+        "terminal": "basic",
+        "officeSuite": "planned",
+        "packageManager": "planned",
+        "preinstalledApps": 30
+      },
+      "iso": {
+        "filename": "kapitan-0.1.0-alpha-ofis.iso",
+        "sizeBytes": null,
+        "sizeLabel": null,
+        "available": false
+      },
+      "marketing": {
+        "showDownloadCta": false,
+        "downloadLabel": "Yakında"
+      },
+      "ofisSuite": [
+        {
+          "name": "KelimeIşlem Pro",
+          "desc": "Türkçe imla denetimi, 50+ şablon. DOCX, ODT uyumlu. AI özetleme ve çeviri.",
+          "cmd": "belge",
+          "icon": "¶"
+        },
+        {
+          "name": "HesapTablosu Pro",
+          "desc": "Formüller Türkçe: TOPLA, ORTALAMA, EĞER. Grafik, pivot, XLSX uyumlu.",
+          "cmd": "tablo",
+          "icon": "∑"
+        },
+        {
+          "name": "SunumAracı",
+          "desc": "30+ Türkçe tema, geçiş, animasyon. PPTX uyumlu. AI taslak.",
+          "cmd": "sunum",
+          "icon": "◉"
+        },
+        {
+          "name": "NotDefteri",
+          "desc": "AI kategorilendirme, sesli not (Türkçe), senkron.",
+          "cmd": "not",
+          "icon": "⎙"
+        }
+      ],
+      "bundledApps": [
+        { "name": "KelimeIşlem", "icon": "¶" },
+        { "name": "HesapTablosu", "icon": "∑" },
+        { "name": "SunumAracı", "icon": "◉" },
+        { "name": "EpostaYöneticisi", "icon": "@" },
+        { "name": "Takvim", "icon": "⌛" },
+        { "name": "NotDefteri", "icon": "⎙" },
+        { "name": "HesapMakinesi", "icon": "#" },
+        { "name": "Tarayıcı", "icon": "⌂" },
+        { "name": "Sözlük", "icon": "Α" },
+        { "name": "PDFOkuyucu", "icon": "▤" },
+        { "name": "ResimGörüntü", "icon": "◇" },
+        { "name": "MüzikÇalar", "icon": "♪" }
+      ]
+    },
+    {
+      "id": "bar",
+      "no": "03",
+      "name": "Bar",
+      "slug": "/surumler/bar",
+      "accent": "jade",
+      "tagline": "Sadece ihtiyacınız olan.",
+      "lede": "Sadece sekiz uygulama. 15 saniyede açılır, eski donanımda bile rahat çalışır.",
+      "requirements": {
+        "ramMinGb": 2,
+        "ramMinLabel": "2 GB",
+        "diskMinGb": 15,
+        "diskMinLabel": "15 GB",
+        "arch": ["x86_64"]
+      },
+      "apps": "8",
+      "cmdMetapackage": "kur kapitan-bar",
+      "edition_command_target": 84,
+      "commandCount": null,
+      "bootTime": "~15 sn",
+      "features": {
+        "ai": false,
+        "terminal": false,
+        "officeSuite": false,
+        "packageManager": false,
+        "preinstalledApps": 8
+      },
+      "iso": {
+        "filename": "kapitan-0.1.0-alpha-bar.iso",
+        "sizeBytes": null,
+        "sizeLabel": null,
+        "available": false
+      },
+      "marketing": {
+        "showDownloadCta": false,
+        "downloadLabel": "Yakında"
+      },
+      "stats": [
+        { "value": "15 sn", "label": "Açılış süresi" },
+        { "value": "380 MB", "label": "Boş RAM kullanımı" },
+        { "value": "+%40", "label": "Daha uzun pil" }
+      ],
+      "bundledApps": [
+        { "name": "Tarayıcı", "cmd": "tarayıcı", "desc": "Chromium tabanlı, reklam engelleyici", "icon": "⌂" },
+        { "name": "Medya Oynatıcı", "cmd": "medya", "desc": "Tüm formatlar, Türkçe altyazı", "icon": "►" },
+        { "name": "Dosya Yöneticisi", "cmd": "dosyalar", "desc": "Türkçe komutlarla dosya yönetimi", "icon": "⎘" },
+        { "name": "Hesap Makinesi", "cmd": "hesap", "desc": "Bilimsel + finansal mod", "icon": "#" },
+        { "name": "Not Defteri", "cmd": "not", "desc": "Basit, hızlı, çevrimdışı", "icon": "⎙" },
+        { "name": "Ayarlar", "cmd": "ayarlar", "desc": "Sistem tercihleri", "icon": "◎" },
+        { "name": "Güvenlik", "cmd": "güvenlik", "desc": "Güncellemeler, güvenlik duvarı", "icon": "⏚" },
+        { "name": "Yardım", "cmd": "yardım", "desc": "Türkçe kılavuz", "icon": "?" }
+      ],
+      "excludedApps": [
+        "Uçbirim",
+        "Ofis paketi",
+        "Paket yöneticisi",
+        "Geliştirme araçları",
+        "Oyun merkezi",
+        "Sosyal medya"
+      ],
+      "useCases": [
+        {
+          "title": "Kiosk sistemleri",
+          "body": "ATM'ler, bilgi ekranları, self-servis terminaller.",
+          "icon": "⌧"
+        },
+        {
+          "title": "Ev kullanıcıları",
+          "body": "İnternet, e-posta, medya — temel ihtiyaçlar.",
+          "icon": "⌂"
+        },
+        {
+          "title": "Eski bilgisayarlar",
+          "body": "10+ yıllık donanımda bile hızlı çalışır.",
+          "icon": "◉"
+        }
+      ]
+    }
+  ],
+  "compareRows": [
+    {
+      "key": "targetUser",
+      "label": "Hedef kullanıcı",
+      "gelistirici": "Yazılımcılar, AI/ML",
+      "ofis": "Ofis çalışanları, öğrenciler",
+      "bar": "Kiosk, ev, eski donanım"
+    },
+    {
+      "key": "preinstalledApps",
+      "label": "Önyüklü uygulama",
+      "resolver": "edition.apps",
+      "gelistirici": "45+",
+      "ofis": "30+",
+      "bar": "8"
+    },
+    {
+      "key": "commandCount",
+      "label": "Türkçe komut",
+      "resolver": "edition.edition_command_target",
+      "aspirational": true,
+      "gelistirici": 218,
+      "ofis": 160,
+      "bar": 84
+    },
+    {
+      "key": "ai",
+      "label": "Yapay zekâ",
+      "gelistirici": "Tam (kod + sohbet)",
+      "ofis": "Kısmî (yazı asistanı)",
+      "bar": "Yok"
+    },
+    {
+      "key": "officeSuite",
+      "label": "Ofis paketi",
+      "gelistirici": "Yok",
+      "ofis": "Tam (KelimeIşlem, vb.)",
+      "bar": "Yok"
+    },
+    {
+      "key": "terminal",
+      "label": "Uçbirim",
+      "gelistirici": "Gelişmiş, çoklu sekme",
+      "ofis": "Temel",
+      "bar": "Yok"
+    },
+    {
+      "key": "ramMin",
+      "label": "Minimum RAM",
+      "resolver": "edition.requirements.ramMinLabel",
+      "gelistirici": "8 GB",
+      "ofis": "4 GB",
+      "bar": "2 GB"
+    },
+    {
+      "key": "bootTime",
+      "label": "Açılış süresi",
+      "resolver": "edition.bootTime",
+      "gelistirici": "~22 sn",
+      "ofis": "~18 sn",
+      "bar": "~15 sn"
+    },
+    {
+      "key": "license",
+      "label": "Lisans",
+      "gelistirici": "GPL-3.0",
+      "ofis": "GPL-3.0",
+      "bar": "GPL-3.0"
+    },
+    {
+      "key": "price",
+      "label": "Fiyat",
+      "gelistirici": "Ücretsiz",
+      "ofis": "Ücretsiz",
+      "bar": "Ücretsiz"
+    }
+  ]
+}

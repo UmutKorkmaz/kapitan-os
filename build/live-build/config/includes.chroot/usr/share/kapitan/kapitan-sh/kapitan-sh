@@ -1,0 +1,165 @@
+#!/usr/bin/env bash
+# kapitan-sh — KAPiTaN OS Turkish command layer (bash MVP)
+# Login shell wrapper with POSIX-compatible dispatch.
+
+set -o pipefail
+
+KAPITAN_SH_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export KAPITAN_SH_ROOT
+
+# Default language mode: ikili (Turkish + short + POSIX)
+export KAPITAN_DIL="${KAPITAN_DIL:-ikili}"
+export KAPITAN_COMMANDS_JSON="${KAPITAN_COMMANDS_JSON:-${KAPITAN_SH_ROOT}/data/commands.json}"
+
+# User override: ~/.kapitan/dil
+if [[ -f "${HOME}/.kapitan/dil" ]]; then
+  KAPITAN_DIL="$(<"${HOME}/.kapitan/dil")"
+  export KAPITAN_DIL
+fi
+
+# Source library modules
+# shellcheck source=lib/resolve.sh
+source "${KAPITAN_SH_ROOT}/lib/resolve.sh"
+# shellcheck source=lib/help.sh
+source "${KAPITAN_SH_ROOT}/lib/help.sh"
+# shellcheck source=lib/dispatch.sh
+source "${KAPITAN_SH_ROOT}/lib/dispatch.sh"
+
+if ! kapitan_load_registry; then
+  exit 1
+fi
+
+_kapitan_prompt() {
+  local host cwd mode
+  host="$(hostname -s 2>/dev/null || hostname 2>/dev/null || printf 'kapitan')"
+  cwd="$(basename "$PWD")"
+  mode="${KAPITAN_DIL}"
+  printf 'kapitan@%s %s [%s] › ' "$host" "$cwd" "$mode"
+}
+
+_kapitan_welcome() {
+  printf 'KAPiTaN OS kabuğu (kapitan-sh) — mod: %s\n' "${KAPITAN_DIL}"
+  printf 'Yardım için: yardım\n'
+}
+
+_kapitan_interactive_loop() {
+  local line=""
+
+  _kapitan_welcome
+
+  while true; do
+    if ! IFS= read -e -r -p "$(_kapitan_prompt)" line; then
+      printf '\n'
+      break
+    fi
+
+    [[ -z "${line//[[:space:]]/}" ]] && continue
+
+    case "$line" in
+      exit|çık|quit)
+        break
+        ;;
+      yardım|yardim|help)
+        kapitan_yardim
+        continue
+        ;;
+    esac
+
+    kapitan_dispatch_line "$line" || true
+  done
+}
+
+_kapitan_run_login() {
+  # Source system profile when invoked as login shell.
+  if [[ -f /etc/profile ]]; then
+    # shellcheck source=/dev/null
+    source /etc/profile
+  fi
+  if [[ -f "${HOME}/.profile" ]]; then
+    # shellcheck source=/dev/null
+    source "${HOME}/.profile"
+  fi
+  if [[ -f "${HOME}/.bashrc" ]]; then
+    # shellcheck source=/dev/null
+    source "${HOME}/.bashrc"
+  fi
+}
+
+_kapitan_usage() {
+  cat <<'EOF'
+Kullanım: kapitan-sh [SEÇENEKLER]
+
+  -c KOMUT    Tek komut çalıştır (ör. kapitan-sh -c "listele -la")
+  -h, --help  Bu yardım mesajı
+  -i          Etkileşimli kabuk (varsayılan)
+  -l          Giriş kabuğu olarak başlat
+
+Ortam değişkenleri:
+  KAPITAN_DIL=posix|turkce|ikili   Komut çözümleme modu (varsayılan: ikili)
+  KAPITAN_COMMANDS_JSON              commands.json yolu
+  KAPITAN_SH_DISABLE=1               Otomatik başlatmayı devre dışı bırak
+
+Örnekler:
+  kapitan-sh -c "gir /tmp && nerede"
+  kapitan-sh -c "listele"
+  KAPITAN_DIL=turkce kapitan-sh -c "nerede"
+EOF
+}
+
+main() {
+  local interactive=1
+  local login_shell=0
+  local cmd=""
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -c)
+        shift
+        cmd="${1:-}"
+        interactive=0
+        shift
+        ;;
+      -i)
+        interactive=1
+        shift
+        ;;
+      -l|--login)
+        login_shell=1
+        shift
+        ;;
+      -h|--help)
+        _kapitan_usage
+        exit 0
+        ;;
+      --)
+        shift
+        break
+        ;;
+      *)
+        # Remaining args treated as -c command
+        cmd="$*"
+        interactive=0
+        break
+        ;;
+    esac
+  done
+
+  if (( login_shell )); then
+    _kapitan_run_login
+  fi
+
+  if (( interactive )); then
+    _kapitan_interactive_loop
+    exit 0
+  fi
+
+  if [[ -z "$cmd" ]]; then
+    _kapitan_usage >&2
+    exit 1
+  fi
+
+  kapitan_dispatch_line "$cmd"
+  exit $?
+}
+
+main "$@"

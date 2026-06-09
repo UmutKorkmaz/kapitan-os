@@ -1,0 +1,1726 @@
+{
+  "version": "0.1.0-alpha",
+  "source": "packages/commands/commands.json",
+  "generated_at": "2026-06-09T06:36:49.607Z",
+  "totalCommands": 66,
+  "lookup": {
+    "listele": {
+      "posix": "ls",
+      "type": "kapitan",
+      "group": "dosya"
+    },
+    "lst": {
+      "posix": "ls",
+      "type": "short",
+      "group": "dosya"
+    },
+    "ls": {
+      "posix": "ls",
+      "type": "posix",
+      "group": "dosya"
+    },
+    "gir": {
+      "posix": "cd",
+      "type": "kapitan",
+      "group": "dosya"
+    },
+    "gr": {
+      "posix": "cd",
+      "type": "short",
+      "group": "dosya"
+    },
+    "cd": {
+      "posix": "cd",
+      "type": "posix",
+      "group": "dosya"
+    },
+    "nerede": {
+      "posix": "pwd",
+      "type": "kapitan",
+      "group": "dosya"
+    },
+    "nr": {
+      "posix": "pwd",
+      "type": "short",
+      "group": "dosya"
+    },
+    "pwd": {
+      "posix": "pwd",
+      "type": "posix",
+      "group": "dosya"
+    },
+    "klasör": {
+      "posix": "mkdir",
+      "type": "kapitan",
+      "group": "dosya"
+    },
+    "kls": {
+      "posix": "mkdir",
+      "type": "short",
+      "group": "dosya"
+    },
+    "mkdir": {
+      "posix": "mkdir",
+      "type": "posix",
+      "group": "dosya"
+    },
+    "sök": {
+      "posix": "rmdir",
+      "type": "kapitan",
+      "group": "dosya"
+    },
+    "sk": {
+      "posix": "rmdir",
+      "type": "short",
+      "group": "dosya"
+    },
+    "rmdir": {
+      "posix": "rmdir",
+      "type": "posix",
+      "group": "dosya"
+    },
+    "kopyala": {
+      "posix": "cp",
+      "type": "kapitan",
+      "group": "dosya"
+    },
+    "kp": {
+      "posix": "cp",
+      "type": "short",
+      "group": "dosya"
+    },
+    "cp": {
+      "posix": "cp",
+      "type": "posix",
+      "group": "dosya"
+    },
+    "taşı": {
+      "posix": "mv",
+      "type": "kapitan",
+      "group": "dosya"
+    },
+    "tş": {
+      "posix": "mv",
+      "type": "short",
+      "group": "dosya"
+    },
+    "mv": {
+      "posix": "mv",
+      "type": "posix",
+      "group": "dosya"
+    },
+    "sil": {
+      "posix": "rm",
+      "type": "kapitan",
+      "group": "dosya"
+    },
+    "sl": {
+      "posix": "rm",
+      "type": "short",
+      "group": "dosya"
+    },
+    "rm": {
+      "posix": "rm",
+      "type": "posix",
+      "group": "dosya"
+    },
+    "oluştur": {
+      "posix": "touch",
+      "type": "kapitan",
+      "group": "dosya"
+    },
+    "olş": {
+      "posix": "touch",
+      "type": "short",
+      "group": "dosya"
+    },
+    "touch": {
+      "posix": "touch",
+      "type": "posix",
+      "group": "dosya"
+    },
+    "oku": {
+      "posix": "cat",
+      "type": "kapitan",
+      "group": "dosya"
+    },
+    "ok": {
+      "posix": "cat",
+      "type": "short",
+      "group": "dosya"
+    },
+    "cat": {
+      "posix": "cat",
+      "type": "posix",
+      "group": "dosya"
+    },
+    "bul": {
+      "posix": "find",
+      "type": "kapitan",
+      "group": "dosya"
+    },
+    "bl": {
+      "posix": "find",
+      "type": "short",
+      "group": "dosya"
+    },
+    "find": {
+      "posix": "find",
+      "type": "posix",
+      "group": "dosya"
+    },
+    "bağla": {
+      "posix": "ln",
+      "type": "kapitan",
+      "group": "dosya"
+    },
+    "bğ": {
+      "posix": "ln",
+      "type": "short",
+      "group": "dosya"
+    },
+    "ln": {
+      "posix": "ln",
+      "type": "posix",
+      "group": "dosya"
+    },
+    "sistem": {
+      "posix": "uname",
+      "type": "kapitan",
+      "group": "sistem"
+    },
+    "sis": {
+      "posix": "uname",
+      "type": "short",
+      "group": "sistem"
+    },
+    "uname": {
+      "posix": "uname",
+      "type": "posix",
+      "group": "sistem"
+    },
+    "canlı": {
+      "posix": "top",
+      "type": "kapitan",
+      "group": "sistem"
+    },
+    "cnl": {
+      "posix": "top",
+      "type": "short",
+      "group": "sistem"
+    },
+    "top": {
+      "posix": "top",
+      "type": "posix",
+      "group": "sistem"
+    },
+    "işlemler": {
+      "posix": "ps",
+      "type": "kapitan",
+      "group": "sistem"
+    },
+    "işl": {
+      "posix": "ps",
+      "type": "short",
+      "group": "sistem"
+    },
+    "ps": {
+      "posix": "ps",
+      "type": "posix",
+      "group": "sistem"
+    },
+    "durdur": {
+      "posix": "kill",
+      "type": "kapitan",
+      "group": "sistem"
+    },
+    "drd": {
+      "posix": "kill",
+      "type": "short",
+      "group": "sistem"
+    },
+    "kill": {
+      "posix": "kill",
+      "type": "posix",
+      "group": "sistem"
+    },
+    "disk": {
+      "posix": "df",
+      "type": "kapitan",
+      "group": "sistem"
+    },
+    "dsk": {
+      "posix": "df",
+      "type": "short",
+      "group": "sistem"
+    },
+    "df": {
+      "posix": "df",
+      "type": "posix",
+      "group": "sistem"
+    },
+    "boyut": {
+      "posix": "du",
+      "type": "kapitan",
+      "group": "sistem"
+    },
+    "byt": {
+      "posix": "du",
+      "type": "short",
+      "group": "sistem"
+    },
+    "du": {
+      "posix": "du",
+      "type": "posix",
+      "group": "sistem"
+    },
+    "bellek": {
+      "posix": "free",
+      "type": "kapitan",
+      "group": "sistem"
+    },
+    "blk": {
+      "posix": "free",
+      "type": "short",
+      "group": "sistem"
+    },
+    "free": {
+      "posix": "free",
+      "type": "posix",
+      "group": "sistem"
+    },
+    "kapat": {
+      "posix": "shutdown",
+      "type": "kapitan",
+      "group": "sistem"
+    },
+    "kpt": {
+      "posix": "shutdown",
+      "type": "short",
+      "group": "sistem"
+    },
+    "shutdown": {
+      "posix": "shutdown",
+      "type": "posix",
+      "group": "sistem"
+    },
+    "yenile": {
+      "posix": "reboot",
+      "type": "kapitan",
+      "group": "sistem"
+    },
+    "yn": {
+      "posix": "reboot",
+      "type": "short",
+      "group": "sistem"
+    },
+    "reboot": {
+      "posix": "reboot",
+      "type": "posix",
+      "group": "sistem"
+    },
+    "tarih": {
+      "posix": "date",
+      "type": "kapitan",
+      "group": "sistem"
+    },
+    "trh": {
+      "posix": "date",
+      "type": "short",
+      "group": "sistem"
+    },
+    "date": {
+      "posix": "date",
+      "type": "posix",
+      "group": "sistem"
+    },
+    "benim": {
+      "posix": "whoami",
+      "type": "kapitan",
+      "group": "sistem"
+    },
+    "ben": {
+      "posix": "whoami",
+      "type": "short",
+      "group": "sistem"
+    },
+    "whoami": {
+      "posix": "whoami",
+      "type": "posix",
+      "group": "sistem"
+    },
+    "geçmiş": {
+      "posix": "history",
+      "type": "kapitan",
+      "group": "sistem"
+    },
+    "gcş": {
+      "posix": "history",
+      "type": "short",
+      "group": "sistem"
+    },
+    "history": {
+      "posix": "history",
+      "type": "posix",
+      "group": "sistem"
+    },
+    "dene": {
+      "posix": "ping",
+      "type": "kapitan",
+      "group": "ag"
+    },
+    "dn": {
+      "posix": "ping",
+      "type": "short",
+      "group": "ag"
+    },
+    "ping": {
+      "posix": "ping",
+      "type": "posix",
+      "group": "ag"
+    },
+    "iste": {
+      "posix": "curl",
+      "type": "kapitan",
+      "group": "ag"
+    },
+    "ist": {
+      "posix": "curl",
+      "type": "short",
+      "group": "ag"
+    },
+    "curl": {
+      "posix": "curl",
+      "type": "posix",
+      "group": "ag"
+    },
+    "indir": {
+      "posix": "wget",
+      "type": "kapitan",
+      "group": "ag"
+    },
+    "ind": {
+      "posix": "wget",
+      "type": "short",
+      "group": "ag"
+    },
+    "wget": {
+      "posix": "wget",
+      "type": "posix",
+      "group": "ag"
+    },
+    "ağ": {
+      "posix": "ip a",
+      "type": "short",
+      "group": "ag"
+    },
+    "ip": {
+      "posix": "ip a",
+      "type": "posix",
+      "group": "ag"
+    },
+    "bağlan": {
+      "posix": "ssh",
+      "type": "kapitan",
+      "group": "ag"
+    },
+    "bğl": {
+      "posix": "ssh",
+      "type": "short",
+      "group": "ag"
+    },
+    "ssh": {
+      "posix": "ssh",
+      "type": "posix",
+      "group": "ag"
+    },
+    "aktar": {
+      "posix": "scp",
+      "type": "kapitan",
+      "group": "ag"
+    },
+    "akt": {
+      "posix": "scp",
+      "type": "short",
+      "group": "ag"
+    },
+    "scp": {
+      "posix": "scp",
+      "type": "posix",
+      "group": "ag"
+    },
+    "sunucu": {
+      "posix": "hostname",
+      "type": "kapitan",
+      "group": "ag"
+    },
+    "snv": {
+      "posix": "hostname",
+      "type": "short",
+      "group": "ag"
+    },
+    "hostname": {
+      "posix": "hostname",
+      "type": "posix",
+      "group": "ag"
+    },
+    "bağlantı": {
+      "posix": "netstat",
+      "type": "kapitan",
+      "group": "ag"
+    },
+    "bnt": {
+      "posix": "netstat",
+      "type": "short",
+      "group": "ag"
+    },
+    "netstat": {
+      "posix": "netstat",
+      "type": "posix",
+      "group": "ag"
+    },
+    "kur": {
+      "posix": "apt install",
+      "type": "kapitan",
+      "group": "paket"
+    },
+    "kr": {
+      "posix": "apt install",
+      "type": "short",
+      "group": "paket"
+    },
+    "apt": {
+      "posix": "apt install",
+      "type": "posix",
+      "group": "paket"
+    },
+    "kaldır": {
+      "posix": "apt remove",
+      "type": "kapitan",
+      "group": "paket"
+    },
+    "kld": {
+      "posix": "apt remove",
+      "type": "short",
+      "group": "paket"
+    },
+    "güncelle": {
+      "posix": "apt update",
+      "type": "kapitan",
+      "group": "paket"
+    },
+    "gnc": {
+      "posix": "apt update",
+      "type": "short",
+      "group": "paket"
+    },
+    "yükselt": {
+      "posix": "apt upgrade",
+      "type": "kapitan",
+      "group": "paket"
+    },
+    "yks": {
+      "posix": "apt upgrade",
+      "type": "short",
+      "group": "paket"
+    },
+    "tara": {
+      "posix": "apt search",
+      "type": "kapitan",
+      "group": "paket"
+    },
+    "tr": {
+      "posix": "apt search",
+      "type": "short",
+      "group": "paket"
+    },
+    "kurulu": {
+      "posix": "apt list",
+      "type": "kapitan",
+      "group": "paket"
+    },
+    "krl": {
+      "posix": "apt list",
+      "type": "short",
+      "group": "paket"
+    },
+    "incele": {
+      "posix": "apt show",
+      "type": "kapitan",
+      "group": "paket"
+    },
+    "inc": {
+      "posix": "apt show",
+      "type": "short",
+      "group": "paket"
+    },
+    "ara": {
+      "posix": "grep",
+      "type": "kapitan",
+      "group": "metin"
+    },
+    "ar": {
+      "posix": "grep",
+      "type": "short",
+      "group": "metin"
+    },
+    "grep": {
+      "posix": "grep",
+      "type": "posix",
+      "group": "metin"
+    },
+    "baş": {
+      "posix": "head",
+      "type": "kapitan",
+      "group": "metin"
+    },
+    "bş": {
+      "posix": "head",
+      "type": "short",
+      "group": "metin"
+    },
+    "head": {
+      "posix": "head",
+      "type": "posix",
+      "group": "metin"
+    },
+    "son": {
+      "posix": "tail",
+      "type": "kapitan",
+      "group": "metin"
+    },
+    "sn": {
+      "posix": "tail",
+      "type": "short",
+      "group": "metin"
+    },
+    "tail": {
+      "posix": "tail",
+      "type": "posix",
+      "group": "metin"
+    },
+    "sırala": {
+      "posix": "sort",
+      "type": "kapitan",
+      "group": "metin"
+    },
+    "srl": {
+      "posix": "sort",
+      "type": "short",
+      "group": "metin"
+    },
+    "sort": {
+      "posix": "sort",
+      "type": "posix",
+      "group": "metin"
+    },
+    "say": {
+      "posix": "wc",
+      "type": "kapitan",
+      "group": "metin"
+    },
+    "sy": {
+      "posix": "wc",
+      "type": "short",
+      "group": "metin"
+    },
+    "wc": {
+      "posix": "wc",
+      "type": "posix",
+      "group": "metin"
+    },
+    "fark": {
+      "posix": "diff",
+      "type": "kapitan",
+      "group": "metin"
+    },
+    "frk": {
+      "posix": "diff",
+      "type": "short",
+      "group": "metin"
+    },
+    "diff": {
+      "posix": "diff",
+      "type": "posix",
+      "group": "metin"
+    },
+    "değiştir": {
+      "posix": "sed",
+      "type": "kapitan",
+      "group": "metin"
+    },
+    "dğş": {
+      "posix": "sed",
+      "type": "short",
+      "group": "metin"
+    },
+    "sed": {
+      "posix": "sed",
+      "type": "posix",
+      "group": "metin"
+    },
+    "kes": {
+      "posix": "cut",
+      "type": "kapitan",
+      "group": "metin"
+    },
+    "ks": {
+      "posix": "cut",
+      "type": "short",
+      "group": "metin"
+    },
+    "cut": {
+      "posix": "cut",
+      "type": "posix",
+      "group": "metin"
+    },
+    "gez": {
+      "posix": "less",
+      "type": "kapitan",
+      "group": "metin"
+    },
+    "gz": {
+      "posix": "less",
+      "type": "short",
+      "group": "metin"
+    },
+    "less": {
+      "posix": "less",
+      "type": "posix",
+      "group": "metin"
+    },
+    "yaz": {
+      "posix": "echo",
+      "type": "kapitan",
+      "group": "metin"
+    },
+    "yz": {
+      "posix": "echo",
+      "type": "short",
+      "group": "metin"
+    },
+    "echo": {
+      "posix": "echo",
+      "type": "posix",
+      "group": "metin"
+    },
+    "durum": {
+      "posix": "git status",
+      "type": "kapitan",
+      "group": "git"
+    },
+    "dur": {
+      "posix": "git status",
+      "type": "short",
+      "group": "git"
+    },
+    "git": {
+      "posix": "git status",
+      "type": "posix",
+      "group": "git"
+    },
+    "hazırla": {
+      "posix": "git add",
+      "type": "kapitan",
+      "group": "git"
+    },
+    "hzr": {
+      "posix": "git add",
+      "type": "short",
+      "group": "git"
+    },
+    "kaydet": {
+      "posix": "git commit",
+      "type": "kapitan",
+      "group": "git"
+    },
+    "kyd": {
+      "posix": "git commit",
+      "type": "short",
+      "group": "git"
+    },
+    "gönder": {
+      "posix": "git push",
+      "type": "kapitan",
+      "group": "git"
+    },
+    "gnd": {
+      "posix": "git push",
+      "type": "short",
+      "group": "git"
+    },
+    "çek": {
+      "posix": "git pull",
+      "type": "kapitan",
+      "group": "git"
+    },
+    "çk": {
+      "posix": "git pull",
+      "type": "short",
+      "group": "git"
+    },
+    "klonla": {
+      "posix": "git clone",
+      "type": "kapitan",
+      "group": "git"
+    },
+    "kln": {
+      "posix": "git clone",
+      "type": "short",
+      "group": "git"
+    },
+    "günlük": {
+      "posix": "git log",
+      "type": "kapitan",
+      "group": "git"
+    },
+    "gnl": {
+      "posix": "git log",
+      "type": "short",
+      "group": "git"
+    },
+    "dal": {
+      "posix": "git branch",
+      "type": "kapitan",
+      "group": "git"
+    },
+    "dl": {
+      "posix": "git branch",
+      "type": "short",
+      "group": "git"
+    },
+    "geç": {
+      "posix": "git checkout",
+      "type": "kapitan",
+      "group": "git"
+    },
+    "gç": {
+      "posix": "git checkout",
+      "type": "short",
+      "group": "git"
+    },
+    "birleştir": {
+      "posix": "git merge",
+      "type": "kapitan",
+      "group": "git"
+    },
+    "blş": {
+      "posix": "git merge",
+      "type": "short",
+      "group": "git"
+    },
+    "raf": {
+      "posix": "git stash",
+      "type": "kapitan",
+      "group": "git"
+    },
+    "rf": {
+      "posix": "git stash",
+      "type": "short",
+      "group": "git"
+    },
+    "sıfırla": {
+      "posix": "git reset",
+      "type": "kapitan",
+      "group": "git"
+    },
+    "sfr": {
+      "posix": "git reset",
+      "type": "short",
+      "group": "git"
+    },
+    "sor": {
+      "posix": "—",
+      "type": "kapitan",
+      "group": "ai"
+    },
+    "sr": {
+      "posix": "—",
+      "type": "short",
+      "group": "ai"
+    },
+    "—": {
+      "posix": "—",
+      "type": "posix",
+      "group": "ai"
+    },
+    "kodla": {
+      "posix": "—",
+      "type": "kapitan",
+      "group": "ai"
+    },
+    "kd": {
+      "posix": "—",
+      "type": "short",
+      "group": "ai"
+    },
+    "açıkla": {
+      "posix": "—",
+      "type": "kapitan",
+      "group": "ai"
+    },
+    "ack": {
+      "posix": "—",
+      "type": "short",
+      "group": "ai"
+    },
+    "özet": {
+      "posix": "—",
+      "type": "kapitan",
+      "group": "ai"
+    },
+    "öz": {
+      "posix": "—",
+      "type": "short",
+      "group": "ai"
+    },
+    "çevir": {
+      "posix": "—",
+      "type": "kapitan",
+      "group": "ai"
+    },
+    "çv": {
+      "posix": "—",
+      "type": "short",
+      "group": "ai"
+    }
+  },
+  "posixResponses": {
+    "ls": [
+      "rapor.docx · 12 KB · 17/05",
+      "sunum.pptx · 4.1 MB · dün",
+      "notlar.md · 3 KB · 09:14",
+      "projeler/ · klasör"
+    ],
+    "cd": [
+      "dizin değiştirildi → /ev/sen/projeler"
+    ],
+    "pwd": [
+      "/ev/sen"
+    ],
+    "mkdir": [
+      "[simülasyon] klasör (kls) → mkdir",
+      "  Yeni klasör oluştur"
+    ],
+    "rmdir": [
+      "[simülasyon] sök (sk) → rmdir",
+      "  Boş klasörü kaldır"
+    ],
+    "cp": [
+      "[simülasyon] kopyala (kp) → cp",
+      "  Dosya ya da klasör kopyala"
+    ],
+    "mv": [
+      "[simülasyon] taşı (tş) → mv",
+      "  Dosya ya da klasör taşı"
+    ],
+    "rm": [
+      "[simülasyon] sil (sl) → rm",
+      "  Dosya ya da klasör sil"
+    ],
+    "touch": [
+      "[simülasyon] oluştur (olş) → touch",
+      "  Boş dosya oluştur ya da zaman damgasını güncelle"
+    ],
+    "cat": [
+      "[simülasyon] oku (ok) → cat",
+      "  Dosya içeriğini ekrana yazdır"
+    ],
+    "find": [
+      "[simülasyon] bul (bl) → find",
+      "  Dosya sisteminde dosya ara"
+    ],
+    "ln": [
+      "[simülasyon] bağla (bğ) → ln",
+      "  Sembolik ya da sabit bağlantı oluştur"
+    ],
+    "uname": [
+      "KAPiTaN OS 0.1.0-alpha — önizleme",
+      "Çekirdek: 6.8.0-kapitan",
+      "Bellek: 14.2/16 GB · CPU: %23"
+    ],
+    "top": [
+      "[simülasyon] canlı (cnl) → top",
+      "  Çalışan işlemleri canlı izle"
+    ],
+    "ps": [
+      "[simülasyon] işlemler (işl) → ps",
+      "  Anlık işlem listesini göster"
+    ],
+    "kill": [
+      "[simülasyon] durdur (drd) → kill",
+      "  Bir işlemi sonlandır"
+    ],
+    "df": [
+      "[simülasyon] disk (dsk) → df",
+      "  Disk doluluğunu göster"
+    ],
+    "du": [
+      "[simülasyon] boyut (byt) → du",
+      "  Klasör disk boyutunu hesapla"
+    ],
+    "free": [
+      "[simülasyon] bellek (blk) → free",
+      "  RAM ve takas bellek kullanımını göster"
+    ],
+    "shutdown": [
+      "[simülasyon] kapat (kpt) → shutdown",
+      "  Sistemi kapat"
+    ],
+    "reboot": [
+      "[simülasyon] yenile (yn) → reboot",
+      "  Sistemi yeniden başlat"
+    ],
+    "date": [
+      "09.06.2026 09:36:49"
+    ],
+    "whoami": [
+      "[simülasyon] benim (ben) → whoami",
+      "  Aktif kullanıcı adını göster"
+    ],
+    "history": [
+      "[simülasyon] geçmiş (gcş) → history",
+      "  Komut geçmişini listele"
+    ],
+    "ping": [
+      "[simülasyon] dene (dn) → ping",
+      "  Bir sunucuya erişimi sına"
+    ],
+    "curl": [
+      "[simülasyon] iste (ist) → curl",
+      "  HTTP isteği gönder"
+    ],
+    "wget": [
+      "[simülasyon] indir (ind) → wget",
+      "  Bağlantıdan dosya indir"
+    ],
+    "ip a": [
+      "arayüz: wlan0 · etkin",
+      "IP: 192.168.1.42",
+      "hız: 145 Mbps · gecikme: 8 ms"
+    ],
+    "ssh": [
+      "[simülasyon] bağlan (bğl) → ssh",
+      "  Uzak sunucuya güvenli bağlan"
+    ],
+    "scp": [
+      "[simülasyon] aktar (akt) → scp",
+      "  Uzak sunucuya dosya aktar"
+    ],
+    "hostname": [
+      "[simülasyon] sunucu (snv) → hostname",
+      "  Makine adını göster"
+    ],
+    "netstat": [
+      "[simülasyon] bağlantı (bnt) → netstat",
+      "  Ağ bağlantılarını listele"
+    ],
+    "apt install": [
+      "kullanım: kur <paket-adı>",
+      "örnek: kur kod-duzenleyici-pro"
+    ],
+    "apt remove": [
+      "[simülasyon] kaldır (kld) → apt remove",
+      "  Kurulu yazılımı kaldır"
+    ],
+    "apt update": [
+      "[simülasyon] güncelle (gnc) → apt update",
+      "  Paket listesini güncelle"
+    ],
+    "apt upgrade": [
+      "[simülasyon] yükselt (yks) → apt upgrade",
+      "  Tüm yazılımları en son sürüme yükselt"
+    ],
+    "apt search": [
+      "arama: \"kod\" — 3 sonuç",
+      "  1. KodDüzenleyici Pro ★4.9",
+      "  2. KodDüzenleyici Lite ★4.3",
+      "  3. KodAna ★4.1"
+    ],
+    "apt list": [
+      "[simülasyon] kurulu (krl) → apt list",
+      "  Kurulu yazılımları listele"
+    ],
+    "apt show": [
+      "[simülasyon] incele (inc) → apt show",
+      "  Yazılım hakkında detay göster"
+    ],
+    "grep": [
+      "[simülasyon] ara (ar) → grep",
+      "  Dosya içeriğinde metin ara"
+    ],
+    "head": [
+      "[simülasyon] baş (bş) → head",
+      "  Dosyanın ilk satırlarını göster"
+    ],
+    "tail": [
+      "[simülasyon] son (sn) → tail",
+      "  Dosyanın son satırlarını göster"
+    ],
+    "sort": [
+      "[simülasyon] sırala (srl) → sort",
+      "  Satırları alfabetik ya da sayısal sırala"
+    ],
+    "wc": [
+      "[simülasyon] say (sy) → wc",
+      "  Satır, kelime ve karakter sayısını göster"
+    ],
+    "diff": [
+      "[simülasyon] fark (frk) → diff",
+      "  İki dosya arasındaki farkı göster"
+    ],
+    "sed": [
+      "[simülasyon] değiştir (dğş) → sed",
+      "  Metin içinde bul-değiştir işlemi yap"
+    ],
+    "cut": [
+      "[simülasyon] kes (ks) → cut",
+      "  Satırdan belirli sütunları kes"
+    ],
+    "less": [
+      "[simülasyon] gez (gz) → less",
+      "  Dosyayı sayfa sayfa görüntüle"
+    ],
+    "echo": [
+      "[simülasyon] yaz (yz) → echo",
+      "  Metni ekrana ya da dosyaya yazdır"
+    ],
+    "git status": [
+      "[simülasyon] durum → git status",
+      "  Çalışma ağacının durumunu göster"
+    ],
+    "git add": [
+      "[simülasyon] hazırla → git add",
+      "  Değişiklikleri kayıt için hazırla"
+    ],
+    "git commit": [
+      "[simülasyon] kaydet → git commit",
+      "  Hazırlanan değişiklikleri kaydet"
+    ],
+    "git push": [
+      "[simülasyon] gönder → git push",
+      "  Değişiklikleri uzak depoya gönder"
+    ],
+    "git pull": [
+      "[simülasyon] çek → git pull",
+      "  Uzak depodan değişiklikleri çek"
+    ],
+    "git clone": [
+      "[simülasyon] klonla → git clone",
+      "  Uzak depoyu yerel makineye kopyala"
+    ],
+    "git log": [
+      "[simülasyon] günlük → git log",
+      "  Kayıt geçmişini listele"
+    ],
+    "git branch": [
+      "[simülasyon] dal → git branch",
+      "  Dalları listele ya da yeni dal oluştur"
+    ],
+    "git checkout": [
+      "[simülasyon] geç → git checkout",
+      "  Dal ya da dosyaya geç"
+    ],
+    "git merge": [
+      "[simülasyon] birleştir → git merge",
+      "  İki dalı birleştir"
+    ],
+    "git stash": [
+      "[simülasyon] raf → git stash",
+      "  Değişiklikleri geçici olarak rafa kaldır"
+    ],
+    "git reset": [
+      "[simülasyon] sıfırla → git reset",
+      "  Hazırlama alanını ya da kayıtları sıfırla"
+    ],
+    "—": [
+      "KAPiTaN AI: Lütfen sorunuzu komuttan sonra yazın.",
+      "örnek: sor \"neden Türkçe?\""
+    ]
+  },
+  "tr_cmds": {
+    "listele": [
+      "rapor.docx · 12 KB · 17/05",
+      "sunum.pptx · 4.1 MB · dün",
+      "notlar.md · 3 KB · 09:14",
+      "projeler/ · klasör"
+    ],
+    "lst": [
+      "rapor.docx · 12 KB · 17/05",
+      "sunum.pptx · 4.1 MB · dün",
+      "notlar.md · 3 KB · 09:14",
+      "projeler/ · klasör"
+    ],
+    "gir": [
+      "dizin değiştirildi → /ev/sen/projeler"
+    ],
+    "gr": [
+      "dizin değiştirildi → /ev/sen/projeler"
+    ],
+    "nerede": [
+      "/ev/sen"
+    ],
+    "nr": [
+      "/ev/sen"
+    ],
+    "klasör": [
+      "[simülasyon] klasör (kls) → mkdir",
+      "  Yeni klasör oluştur"
+    ],
+    "kls": [
+      "[simülasyon] klasör (kls) → mkdir",
+      "  Yeni klasör oluştur"
+    ],
+    "sök": [
+      "[simülasyon] sök (sk) → rmdir",
+      "  Boş klasörü kaldır"
+    ],
+    "sk": [
+      "[simülasyon] sök (sk) → rmdir",
+      "  Boş klasörü kaldır"
+    ],
+    "kopyala": [
+      "[simülasyon] kopyala (kp) → cp",
+      "  Dosya ya da klasör kopyala"
+    ],
+    "kp": [
+      "[simülasyon] kopyala (kp) → cp",
+      "  Dosya ya da klasör kopyala"
+    ],
+    "taşı": [
+      "[simülasyon] taşı (tş) → mv",
+      "  Dosya ya da klasör taşı"
+    ],
+    "tş": [
+      "[simülasyon] taşı (tş) → mv",
+      "  Dosya ya da klasör taşı"
+    ],
+    "sil": [
+      "[simülasyon] sil (sl) → rm",
+      "  Dosya ya da klasör sil"
+    ],
+    "sl": [
+      "[simülasyon] sil (sl) → rm",
+      "  Dosya ya da klasör sil"
+    ],
+    "oluştur": [
+      "[simülasyon] oluştur (olş) → touch",
+      "  Boş dosya oluştur ya da zaman damgasını güncelle"
+    ],
+    "olş": [
+      "[simülasyon] oluştur (olş) → touch",
+      "  Boş dosya oluştur ya da zaman damgasını güncelle"
+    ],
+    "oku": [
+      "[simülasyon] oku (ok) → cat",
+      "  Dosya içeriğini ekrana yazdır"
+    ],
+    "ok": [
+      "[simülasyon] oku (ok) → cat",
+      "  Dosya içeriğini ekrana yazdır"
+    ],
+    "bul": [
+      "[simülasyon] bul (bl) → find",
+      "  Dosya sisteminde dosya ara"
+    ],
+    "bl": [
+      "[simülasyon] bul (bl) → find",
+      "  Dosya sisteminde dosya ara"
+    ],
+    "bağla": [
+      "[simülasyon] bağla (bğ) → ln",
+      "  Sembolik ya da sabit bağlantı oluştur"
+    ],
+    "bğ": [
+      "[simülasyon] bağla (bğ) → ln",
+      "  Sembolik ya da sabit bağlantı oluştur"
+    ],
+    "sistem": [
+      "KAPiTaN OS 0.1.0-alpha — önizleme",
+      "Çekirdek: 6.8.0-kapitan",
+      "Bellek: 14.2/16 GB · CPU: %23"
+    ],
+    "sis": [
+      "KAPiTaN OS 0.1.0-alpha — önizleme",
+      "Çekirdek: 6.8.0-kapitan",
+      "Bellek: 14.2/16 GB · CPU: %23"
+    ],
+    "canlı": [
+      "[simülasyon] canlı (cnl) → top",
+      "  Çalışan işlemleri canlı izle"
+    ],
+    "cnl": [
+      "[simülasyon] canlı (cnl) → top",
+      "  Çalışan işlemleri canlı izle"
+    ],
+    "işlemler": [
+      "[simülasyon] işlemler (işl) → ps",
+      "  Anlık işlem listesini göster"
+    ],
+    "işl": [
+      "[simülasyon] işlemler (işl) → ps",
+      "  Anlık işlem listesini göster"
+    ],
+    "durdur": [
+      "[simülasyon] durdur (drd) → kill",
+      "  Bir işlemi sonlandır"
+    ],
+    "drd": [
+      "[simülasyon] durdur (drd) → kill",
+      "  Bir işlemi sonlandır"
+    ],
+    "disk": [
+      "[simülasyon] disk (dsk) → df",
+      "  Disk doluluğunu göster"
+    ],
+    "dsk": [
+      "[simülasyon] disk (dsk) → df",
+      "  Disk doluluğunu göster"
+    ],
+    "boyut": [
+      "[simülasyon] boyut (byt) → du",
+      "  Klasör disk boyutunu hesapla"
+    ],
+    "byt": [
+      "[simülasyon] boyut (byt) → du",
+      "  Klasör disk boyutunu hesapla"
+    ],
+    "bellek": [
+      "[simülasyon] bellek (blk) → free",
+      "  RAM ve takas bellek kullanımını göster"
+    ],
+    "blk": [
+      "[simülasyon] bellek (blk) → free",
+      "  RAM ve takas bellek kullanımını göster"
+    ],
+    "kapat": [
+      "[simülasyon] kapat (kpt) → shutdown",
+      "  Sistemi kapat"
+    ],
+    "kpt": [
+      "[simülasyon] kapat (kpt) → shutdown",
+      "  Sistemi kapat"
+    ],
+    "yenile": [
+      "[simülasyon] yenile (yn) → reboot",
+      "  Sistemi yeniden başlat"
+    ],
+    "yn": [
+      "[simülasyon] yenile (yn) → reboot",
+      "  Sistemi yeniden başlat"
+    ],
+    "tarih": [
+      "09.06.2026 09:36:49"
+    ],
+    "trh": [
+      "09.06.2026 09:36:49"
+    ],
+    "benim": [
+      "[simülasyon] benim (ben) → whoami",
+      "  Aktif kullanıcı adını göster"
+    ],
+    "ben": [
+      "[simülasyon] benim (ben) → whoami",
+      "  Aktif kullanıcı adını göster"
+    ],
+    "geçmiş": [
+      "[simülasyon] geçmiş (gcş) → history",
+      "  Komut geçmişini listele"
+    ],
+    "gcş": [
+      "[simülasyon] geçmiş (gcş) → history",
+      "  Komut geçmişini listele"
+    ],
+    "dene": [
+      "[simülasyon] dene (dn) → ping",
+      "  Bir sunucuya erişimi sına"
+    ],
+    "dn": [
+      "[simülasyon] dene (dn) → ping",
+      "  Bir sunucuya erişimi sına"
+    ],
+    "iste": [
+      "[simülasyon] iste (ist) → curl",
+      "  HTTP isteği gönder"
+    ],
+    "ist": [
+      "[simülasyon] iste (ist) → curl",
+      "  HTTP isteği gönder"
+    ],
+    "indir": [
+      "[simülasyon] indir (ind) → wget",
+      "  Bağlantıdan dosya indir"
+    ],
+    "ind": [
+      "[simülasyon] indir (ind) → wget",
+      "  Bağlantıdan dosya indir"
+    ],
+    "ağ": [
+      "arayüz: wlan0 · etkin",
+      "IP: 192.168.1.42",
+      "hız: 145 Mbps · gecikme: 8 ms"
+    ],
+    "bağlan": [
+      "[simülasyon] bağlan (bğl) → ssh",
+      "  Uzak sunucuya güvenli bağlan"
+    ],
+    "bğl": [
+      "[simülasyon] bağlan (bğl) → ssh",
+      "  Uzak sunucuya güvenli bağlan"
+    ],
+    "aktar": [
+      "[simülasyon] aktar (akt) → scp",
+      "  Uzak sunucuya dosya aktar"
+    ],
+    "akt": [
+      "[simülasyon] aktar (akt) → scp",
+      "  Uzak sunucuya dosya aktar"
+    ],
+    "sunucu": [
+      "[simülasyon] sunucu (snv) → hostname",
+      "  Makine adını göster"
+    ],
+    "snv": [
+      "[simülasyon] sunucu (snv) → hostname",
+      "  Makine adını göster"
+    ],
+    "bağlantı": [
+      "[simülasyon] bağlantı (bnt) → netstat",
+      "  Ağ bağlantılarını listele"
+    ],
+    "bnt": [
+      "[simülasyon] bağlantı (bnt) → netstat",
+      "  Ağ bağlantılarını listele"
+    ],
+    "kur": [
+      "kullanım: kur <paket-adı>",
+      "örnek: kur kod-duzenleyici-pro"
+    ],
+    "kr": [
+      "kullanım: kur <paket-adı>",
+      "örnek: kur kod-duzenleyici-pro"
+    ],
+    "kaldır": [
+      "[simülasyon] kaldır (kld) → apt remove",
+      "  Kurulu yazılımı kaldır"
+    ],
+    "kld": [
+      "[simülasyon] kaldır (kld) → apt remove",
+      "  Kurulu yazılımı kaldır"
+    ],
+    "güncelle": [
+      "[simülasyon] güncelle (gnc) → apt update",
+      "  Paket listesini güncelle"
+    ],
+    "gnc": [
+      "[simülasyon] güncelle (gnc) → apt update",
+      "  Paket listesini güncelle"
+    ],
+    "yükselt": [
+      "[simülasyon] yükselt (yks) → apt upgrade",
+      "  Tüm yazılımları en son sürüme yükselt"
+    ],
+    "yks": [
+      "[simülasyon] yükselt (yks) → apt upgrade",
+      "  Tüm yazılımları en son sürüme yükselt"
+    ],
+    "tara": [
+      "arama: \"kod\" — 3 sonuç",
+      "  1. KodDüzenleyici Pro ★4.9",
+      "  2. KodDüzenleyici Lite ★4.3",
+      "  3. KodAna ★4.1"
+    ],
+    "tr": [
+      "arama: \"kod\" — 3 sonuç",
+      "  1. KodDüzenleyici Pro ★4.9",
+      "  2. KodDüzenleyici Lite ★4.3",
+      "  3. KodAna ★4.1"
+    ],
+    "kurulu": [
+      "[simülasyon] kurulu (krl) → apt list",
+      "  Kurulu yazılımları listele"
+    ],
+    "krl": [
+      "[simülasyon] kurulu (krl) → apt list",
+      "  Kurulu yazılımları listele"
+    ],
+    "incele": [
+      "[simülasyon] incele (inc) → apt show",
+      "  Yazılım hakkında detay göster"
+    ],
+    "inc": [
+      "[simülasyon] incele (inc) → apt show",
+      "  Yazılım hakkında detay göster"
+    ],
+    "ara": [
+      "[simülasyon] ara (ar) → grep",
+      "  Dosya içeriğinde metin ara"
+    ],
+    "ar": [
+      "[simülasyon] ara (ar) → grep",
+      "  Dosya içeriğinde metin ara"
+    ],
+    "baş": [
+      "[simülasyon] baş (bş) → head",
+      "  Dosyanın ilk satırlarını göster"
+    ],
+    "bş": [
+      "[simülasyon] baş (bş) → head",
+      "  Dosyanın ilk satırlarını göster"
+    ],
+    "son": [
+      "[simülasyon] son (sn) → tail",
+      "  Dosyanın son satırlarını göster"
+    ],
+    "sn": [
+      "[simülasyon] son (sn) → tail",
+      "  Dosyanın son satırlarını göster"
+    ],
+    "sırala": [
+      "[simülasyon] sırala (srl) → sort",
+      "  Satırları alfabetik ya da sayısal sırala"
+    ],
+    "srl": [
+      "[simülasyon] sırala (srl) → sort",
+      "  Satırları alfabetik ya da sayısal sırala"
+    ],
+    "say": [
+      "[simülasyon] say (sy) → wc",
+      "  Satır, kelime ve karakter sayısını göster"
+    ],
+    "sy": [
+      "[simülasyon] say (sy) → wc",
+      "  Satır, kelime ve karakter sayısını göster"
+    ],
+    "fark": [
+      "[simülasyon] fark (frk) → diff",
+      "  İki dosya arasındaki farkı göster"
+    ],
+    "frk": [
+      "[simülasyon] fark (frk) → diff",
+      "  İki dosya arasındaki farkı göster"
+    ],
+    "değiştir": [
+      "[simülasyon] değiştir (dğş) → sed",
+      "  Metin içinde bul-değiştir işlemi yap"
+    ],
+    "dğş": [
+      "[simülasyon] değiştir (dğş) → sed",
+      "  Metin içinde bul-değiştir işlemi yap"
+    ],
+    "kes": [
+      "[simülasyon] kes (ks) → cut",
+      "  Satırdan belirli sütunları kes"
+    ],
+    "ks": [
+      "[simülasyon] kes (ks) → cut",
+      "  Satırdan belirli sütunları kes"
+    ],
+    "gez": [
+      "[simülasyon] gez (gz) → less",
+      "  Dosyayı sayfa sayfa görüntüle"
+    ],
+    "gz": [
+      "[simülasyon] gez (gz) → less",
+      "  Dosyayı sayfa sayfa görüntüle"
+    ],
+    "yaz": [
+      "[simülasyon] yaz (yz) → echo",
+      "  Metni ekrana ya da dosyaya yazdır"
+    ],
+    "yz": [
+      "[simülasyon] yaz (yz) → echo",
+      "  Metni ekrana ya da dosyaya yazdır"
+    ],
+    "durum": [
+      "[simülasyon] durum → git status",
+      "  Çalışma ağacının durumunu göster"
+    ],
+    "dur": [
+      "[simülasyon] durum → git status",
+      "  Çalışma ağacının durumunu göster"
+    ],
+    "hazırla": [
+      "[simülasyon] hazırla → git add",
+      "  Değişiklikleri kayıt için hazırla"
+    ],
+    "hzr": [
+      "[simülasyon] hazırla → git add",
+      "  Değişiklikleri kayıt için hazırla"
+    ],
+    "kaydet": [
+      "[simülasyon] kaydet → git commit",
+      "  Hazırlanan değişiklikleri kaydet"
+    ],
+    "kyd": [
+      "[simülasyon] kaydet → git commit",
+      "  Hazırlanan değişiklikleri kaydet"
+    ],
+    "gönder": [
+      "[simülasyon] gönder → git push",
+      "  Değişiklikleri uzak depoya gönder"
+    ],
+    "gnd": [
+      "[simülasyon] gönder → git push",
+      "  Değişiklikleri uzak depoya gönder"
+    ],
+    "çek": [
+      "[simülasyon] çek → git pull",
+      "  Uzak depodan değişiklikleri çek"
+    ],
+    "çk": [
+      "[simülasyon] çek → git pull",
+      "  Uzak depodan değişiklikleri çek"
+    ],
+    "klonla": [
+      "[simülasyon] klonla → git clone",
+      "  Uzak depoyu yerel makineye kopyala"
+    ],
+    "kln": [
+      "[simülasyon] klonla → git clone",
+      "  Uzak depoyu yerel makineye kopyala"
+    ],
+    "günlük": [
+      "[simülasyon] günlük → git log",
+      "  Kayıt geçmişini listele"
+    ],
+    "gnl": [
+      "[simülasyon] günlük → git log",
+      "  Kayıt geçmişini listele"
+    ],
+    "dal": [
+      "[simülasyon] dal → git branch",
+      "  Dalları listele ya da yeni dal oluştur"
+    ],
+    "dl": [
+      "[simülasyon] dal → git branch",
+      "  Dalları listele ya da yeni dal oluştur"
+    ],
+    "geç": [
+      "[simülasyon] geç → git checkout",
+      "  Dal ya da dosyaya geç"
+    ],
+    "gç": [
+      "[simülasyon] geç → git checkout",
+      "  Dal ya da dosyaya geç"
+    ],
+    "birleştir": [
+      "[simülasyon] birleştir → git merge",
+      "  İki dalı birleştir"
+    ],
+    "blş": [
+      "[simülasyon] birleştir → git merge",
+      "  İki dalı birleştir"
+    ],
+    "raf": [
+      "[simülasyon] raf → git stash",
+      "  Değişiklikleri geçici olarak rafa kaldır"
+    ],
+    "rf": [
+      "[simülasyon] raf → git stash",
+      "  Değişiklikleri geçici olarak rafa kaldır"
+    ],
+    "sıfırla": [
+      "[simülasyon] sıfırla → git reset",
+      "  Hazırlama alanını ya da kayıtları sıfırla"
+    ],
+    "sfr": [
+      "[simülasyon] sıfırla → git reset",
+      "  Hazırlama alanını ya da kayıtları sıfırla"
+    ],
+    "sor": [
+      "KAPiTaN AI: Lütfen sorunuzu komuttan sonra yazın.",
+      "örnek: sor \"neden Türkçe?\""
+    ],
+    "sr": [
+      "KAPiTaN AI: Lütfen sorunuzu komuttan sonra yazın.",
+      "örnek: sor \"neden Türkçe?\""
+    ],
+    "kodla": [
+      "KAPiTaN AI: Lütfen sorunuzu komuttan sonra yazın.",
+      "örnek: sor \"neden Türkçe?\""
+    ],
+    "kd": [
+      "KAPiTaN AI: Lütfen sorunuzu komuttan sonra yazın.",
+      "örnek: sor \"neden Türkçe?\""
+    ],
+    "açıkla": [
+      "KAPiTaN AI: Lütfen sorunuzu komuttan sonra yazın.",
+      "örnek: sor \"neden Türkçe?\""
+    ],
+    "ack": [
+      "KAPiTaN AI: Lütfen sorunuzu komuttan sonra yazın.",
+      "örnek: sor \"neden Türkçe?\""
+    ],
+    "özet": [
+      "KAPiTaN AI: Lütfen sorunuzu komuttan sonra yazın.",
+      "örnek: sor \"neden Türkçe?\""
+    ],
+    "öz": [
+      "KAPiTaN AI: Lütfen sorunuzu komuttan sonra yazın.",
+      "örnek: sor \"neden Türkçe?\""
+    ],
+    "çevir": [
+      "KAPiTaN AI: Lütfen sorunuzu komuttan sonra yazın.",
+      "örnek: sor \"neden Türkçe?\""
+    ],
+    "çv": [
+      "KAPiTaN AI: Lütfen sorunuzu komuttan sonra yazın.",
+      "örnek: sor \"neden Türkçe?\""
+    ],
+    "yardım": [
+      "kullanılabilir komutlar:",
+      "  listele (lst) · sistem (sis) · yardım · tara (tr) · sor (sr) · temizle (tmz) · gir (gr)",
+      "",
+      "tam liste: /komutlar (66 komut) — belgeler: /belgeler"
+    ],
+    "yardim": [
+      "kullanılabilir komutlar:",
+      "  listele (lst) · sistem (sis) · yardım · tara (tr) · sor (sr) · temizle (tmz) · gir (gr)",
+      "",
+      "tam liste: /komutlar (66 komut) — belgeler: /belgeler"
+    ],
+    "temizle": [
+      "__clear__"
+    ],
+    "tmz": [
+      "__clear__"
+    ],
+    "pazarara": [
+      "«pazarara» kaldırıldı. Bunun yerine «tara» kullanın."
+    ],
+    "pza": [
+      "«pza» kaldırıldı. Bunun yerine «tara» kullanın."
+    ],
+    "git": [
+      "«git» artık cd için kullanılmıyor.",
+      "Dizin için «gir» (gr), sürüm kontrolü için «durum» (dur) kullanın."
+    ],
+    "gt": [
+      "«git» artık cd için kullanılmıyor.",
+      "Dizin için «gir» (gr), sürüm kontrolü için «durum» (dur) kullanın."
+    ],
+    "klasörsil": [
+      "«klasörsil» kaldırıldı. Bunun yerine «sök» kullanın."
+    ],
+    "klss": [
+      "«klss» kaldırıldı. Bunun yerine «sök» kullanın."
+    ],
+    "uzakkopyala": [
+      "«uzakkopyala» kaldırıldı. Bunun yerine «aktar» kullanın."
+    ],
+    "uzk": [
+      "«uzk» kaldırıldı. Bunun yerine «aktar» kullanın."
+    ],
+    "yeniden": [
+      "«yeniden» kaldırıldı. Bunun yerine «yenile» kullanın."
+    ]
+  },
+  "quick": [
+    "sistem",
+    "listele",
+    "tara",
+    "yardım",
+    "temizle"
+  ]
+}

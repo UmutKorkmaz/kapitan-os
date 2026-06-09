@@ -1,0 +1,22 @@
+# KAPiTaN OS — minimal chroot packages (Phase 1 alpha skeleton)
+# See: docs/KAPiTaN OS BUILD PLAN.md §3.5.3
+
+# Locale support (tr_TR.UTF-8 generated in chroot hook)
+locales
+
+# Core shell utilities
+bash
+coreutils
+jq
+
+# Git — collision test: `git` must not be aliased to `gir`
+git
+
+# Smoke-test utilities
+sudo
+curl
+
+# Live system boot infrastructure (usually pulled by live-build; explicit for skeleton)
+live-boot
+live-config
+live-config-systemd

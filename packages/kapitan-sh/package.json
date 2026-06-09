@@ -1,0 +1,30 @@
+{
+  "name": "@kapitan/kapitan-sh",
+  "version": "0.1.0-alpha",
+  "description": "KAPiTaN OS Turkish command layer — bash MVP shell wrapper",
+  "type": "module",
+  "bin": {
+    "kapitan-sh": "./kapitan-sh"
+  },
+  "scripts": {
+    "test": "bash -n kapitan-sh && bash -n lib/resolve.sh && bash -n lib/dispatch.sh && bash -n lib/help.sh",
+    "smoke": "./kapitan-sh -c 'listele' && ./kapitan-sh -c 'nerede' && ./kapitan-sh -c 'gir /tmp && nerede'"
+  },
+  "keywords": [
+    "kapitan",
+    "shell",
+    "turkish",
+    "posix",
+    "bash"
+  ],
+  "license": "MIT",
+  "engines": {
+    "bash": ">=3.2"
+  },
+  "files": [
+    "kapitan-sh",
+    "lib/",
+    "data/commands.json",
+    "README.md"
+  ]
+}

@@ -1,0 +1,110 @@
+name: live-build-smoke
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'build/**'
+      - 'distro/**'
+      - 'packages/kapitan-sh/**'
+      - 'packages/commands/**'
+      - '.github/workflows/live-build-smoke.yml'
+      - 'package.json'
+      - 'Makefile'
+
+jobs:
+  sync-and-dry-run:
+    name: sync-iso-assets + dry-run
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate commands
+        run: npm run validate:commands
+
+      - name: Sync ISO image assets
+        run: npm run sync:iso-assets
+
+      - name: Verify includes.chroot layout
+        run: |
+          set -euo pipefail
+          base=build/live-build/config/includes.chroot
+          test -f "$base/usr/share/kapitan/commands.json"
+          test -f "$base/usr/share/kapitan/kapitan-sh/kapitan-sh"
+          test -f "$base/usr/share/kapitan/kapitan-sh/lib/resolve.sh"
+          test -x "$base/usr/local/bin/kapitan-sh"
+          test -f "$base/etc/os-release"
+          test -f "$base/etc/kapitan/VERSION"
+          grep -q 'KAPiTaN OS' "$base/etc/os-release"
+          grep -q 'KAPITAN_COMMANDS_JSON' "$base/etc/profile.d/kapitan.sh"
+          test -f build/live-build/config/package-lists/kapitan.list.chroot
+          jq -e '.path_guard | length > 0' "$base/usr/share/kapitan/commands.json" >/dev/null
+          echo "includes.chroot layout OK"
+
+      - name: Install live-build (dry-run prerequisites)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y live-build jq
+
+      - name: Dry-run ISO build wrapper
+        run: npm run dry-run:iso
+
+  # Full ISO build — manual only (long-running, needs ~15GB disk)
+  build-iso:
+    name: build-iso (manual)
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache/CodeQL /usr/local/share/boost
+          sudo docker image prune --all --force 2>/dev/null || true
+          df -h /
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y live-build debootstrap squashfs-tools xorriso isolinux syslinux-common jq
+          npm ci
+          npm run validate:commands
+          npm run sync:iso-assets
+
+      - name: Build ISO
+        run: sudo -E bash build/live-build/build.sh
+
+      - name: Verify ISO artifact
+        run: |
+          set -euo pipefail
+          iso=build/artifacts/kapitan-v0.1.0-alpha-amd64.iso
+          test -f "$iso"
+          size=$(stat -c%s "$iso")
+          test "$size" -gt 104857600
+          sha256sum "$iso" | tee "$iso.sha256"
+
+      - name: Upload ISO artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kapitan-v0.1.0-alpha-amd64
+          path: build/artifacts/kapitan-v0.1.0-alpha-amd64.iso
+          retention-days: 7

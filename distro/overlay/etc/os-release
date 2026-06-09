@@ -1,0 +1,9 @@
+PRETTY_NAME="KAPiTaN OS 0.1.0-alpha"
+NAME="KAPiTaN OS"
+VERSION="0.1.0-alpha"
+VERSION_ID="0.1.0-alpha"
+ID=kapitan
+ID_LIKE=debian
+HOME_URL="https://kapitan.os/"
+SUPPORT_URL="https://kapitan.os/topluluk"
+LOCALE_DEFAULT=tr_TR.UTF-8

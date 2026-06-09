@@ -1,0 +1,49 @@
+.sim-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sand);
+  border: 1px dashed var(--ink-line-2);
+  padding: 3px 8px;
+  border-radius: 4px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.sim-badge .ldot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--saffron, #e8b23e);
+  flex-shrink: 0;
+}
+
+.sim-badge--pill {
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+
+.sim-badge--banner {
+  display: flex;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid var(--ink-line);
+  background: var(--ink-3);
+  font-size: 13px;
+  color: var(--fg-soft);
+  letter-spacing: 0.08em;
+}
+
+.sim-banner {
+  padding: 12px 16px;
+  background: var(--ink-3);
+  border-bottom: 1px solid var(--ink-line);
+  font-size: 13px;
+  color: var(--fg-soft);
+}

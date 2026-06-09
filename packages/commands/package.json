@@ -1,0 +1,22 @@
+{
+  "name": "@kapitan/commands",
+  "version": "0.1.0-alpha",
+  "description": "Canonical KAPiTaN OS command catalog (SSOT)",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./commands.json": "./commands.json"
+  },
+  "files": [
+    "commands.json",
+    "schema.json",
+    "src"
+  ],
+  "scripts": {
+    "validate": "node scripts/validate.mjs"
+  },
+  "devDependencies": {
+    "ajv": "^8.17.1"
+  }
+}

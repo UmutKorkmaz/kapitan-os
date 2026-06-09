@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+export KAPITAN_COMMANDS_JSON="${KAPITAN_COMMANDS_JSON:-/usr/share/kapitan/commands.json}"
+exec /usr/share/kapitan/kapitan-sh/kapitan-sh "$@"

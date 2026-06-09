@@ -1,0 +1,25 @@
+{
+  "productName": "KAPiTaN OS",
+  "version": "0.1.0-alpha",
+  "versionShort": "0.1-α",
+  "channel": "alpha",
+  "channelLabel": "ALFA",
+  "locale": "tr-TR",
+  "status": "alpha",
+  "show_simulation_badges": true,
+  "ssot_command_count": 66,
+  "aspirational_targets": {
+    "bar": 84,
+    "ofis": 160,
+    "gelistirici": 218
+  },
+  "simulation": {
+    "badge": "SİMÜLASYON",
+    "disclaimer": "Bu önizleme gerçek KAPiTaN OS değildir. Davranışlar yaklaşık modelleme amaçlıdır."
+  },
+  "features": {
+    "isoDownload": false,
+    "communityMetrics": false,
+    "marketplaceLive": false
+  }
+}
