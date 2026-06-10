@@ -1,0 +1,29 @@
+{
+  "name": "@kapitan/kapitan-ai",
+  "version": "0.1.0-alpha",
+  "private": true,
+  "description": "KAPiTaN OS Türkçe komut asistanı — güvenlik zırhı (iskelet; model yakında)",
+  "bin": {
+    "kapitan-ai": "./kapitan-ai"
+  },
+  "scripts": {
+    "test": "bash -n kapitan-ai && bash -n lib/risk.sh",
+    "test:bats": "bats tests"
+  },
+  "keywords": [
+    "kapitan",
+    "ai",
+    "turkish",
+    "command-assistant",
+    "safety"
+  ],
+  "license": "GPL-3.0-only",
+  "engines": {
+    "bash": ">=3.2"
+  },
+  "files": [
+    "kapitan-ai",
+    "lib/",
+    "README.md"
+  ]
+}

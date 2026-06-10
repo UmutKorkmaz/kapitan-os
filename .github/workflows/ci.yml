@@ -51,6 +51,9 @@ jobs:
       - name: Run pazar tests
         run: npm run test:pazar
 
+      - name: Run kapitan-ai tests
+        run: npm run test:ai
+
   build-website:
     name: build-website
     runs-on: ubuntu-latest
