@@ -20,3 +20,15 @@ curl
 live-boot
 live-config
 live-config-systemd
+
+# Hardware enablement — Wi-Fi/network + CPU microcode so the ISO actually works
+# on real laptops (Debian live ships these by default; non-free-firmware enabled
+# in auto/config). Without firmware-iwlwifi/realtek/atheros/brcm80211 most laptop
+# Wi-Fi is dead — fatal for the Bar "old hardware" target.
+firmware-linux
+firmware-iwlwifi
+firmware-realtek
+firmware-atheros
+firmware-brcm80211
+intel-microcode
+amd64-microcode
