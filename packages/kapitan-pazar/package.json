@@ -1,0 +1,29 @@
+{
+  "name": "@kapitan/kapitan-pazar",
+  "version": "0.1.0-alpha",
+  "private": true,
+  "description": "KAPiTaN OS Türkçe paket yöneticisi — Stage 1 apt sarmalayıcı",
+  "bin": {
+    "pazar": "./pazar"
+  },
+  "scripts": {
+    "test": "bash -n pazar",
+    "test:bats": "bats tests"
+  },
+  "keywords": [
+    "kapitan",
+    "pazar",
+    "package-manager",
+    "turkish",
+    "apt"
+  ],
+  "license": "GPL-3.0-only",
+  "engines": {
+    "bash": ">=3.2"
+  },
+  "files": [
+    "pazar",
+    "data/",
+    "README.md"
+  ]
+}

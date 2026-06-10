@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+sim=0; op=""; args=()
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -s) sim=1; shift;;
+    -y|-q|-qq) shift;;
+    --) shift;;
+    update|install|remove|upgrade|dist-upgrade|autoremove) [[ -z "$op" ]] && op="$1"; shift;;
+    *) args+=("$1"); shift;;
+  esac
+done
+case "$op" in
+  update)
+    if [[ "${MOCK_OFFLINE:-0}" == 1 ]]; then echo "E: Could not resolve 'deb.debian.org'" >&2; exit 100; fi
+    echo "Hit:1 http://deb.debian.org bookworm InRelease"; echo "Reading package lists... Done"; exit 0;;
+  install)
+    for p in "${args[@]}"; do [[ "$p" == badpkg ]] && { echo "E: Unable to locate package badpkg" >&2; exit 100; }; done
+    if (( sim )); then for p in "${args[@]}"; do echo "Inst $p (1.0 Debian:bookworm [amd64])"; echo "Conf $p (1.0 Debian:bookworm [amd64])"; done; exit 0; fi
+    for p in "${args[@]}"; do echo "Setting up $p (1.0) ..."; done; exit 0;;
+  remove)
+    if (( sim )); then for p in "${args[@]}"; do echo "Remv $p (1.0 Debian:bookworm [amd64])"; done; exit 0; fi
+    for p in "${args[@]}"; do echo "Removing $p (1.0) ..."; done; exit 0;;
+  upgrade) if (( sim )); then echo "Inst foo (2.0 Debian:bookworm [amd64])"; echo "Conf foo (2.0 Debian:bookworm [amd64])"; else echo "Setting up foo (2.0) ..."; fi; exit 0;;
+  autoremove) if (( sim )); then echo "Remv oldlib (1.0 Debian:bookworm [amd64])"; else echo "Removing oldlib (1.0) ..."; fi; exit 0;;
+  *) echo "mock apt-get: unknown op '$op'" >&2; exit 2;;
+esac

@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+printf 'bash\t5.2.15-2\ncoreutils\t9.1-1\n'; exit 0

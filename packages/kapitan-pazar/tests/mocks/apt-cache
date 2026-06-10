@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+op="$1"; shift
+term=""; for a in "$@"; do [[ "$a" == "--" ]] && continue; term="$a"; done
+case "$op" in
+  search) [[ "$term" == zzznomatch ]] && exit 0; echo "xterm - X terminal emulator"; echo "rxvt-unicode - RXVT-like terminal emulator"; exit 0;;
+  show) echo "Package: $term"; echo "Version: 1.0"; echo "Description-tr: sahte"; exit 0;;
+  *) exit 2;;
+esac

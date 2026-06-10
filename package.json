@@ -13,13 +13,14 @@
     "check:commands": "node packages/commands/scripts/generate-runtime.mjs --check",
     "validate:commands": "node packages/commands/scripts/validate.mjs",
     "test:shell": "bats packages/kapitan-sh/tests",
+    "test:pazar": "bats packages/kapitan-pazar/tests",
     "build:website": "npm run build -w website",
     "sync:iso-assets": "bash build/scripts/sync-image-assets.sh",
     "build:iso": "bash build/live-build/build.sh",
     "build:live": "bash build/live-build/build.sh",
     "dry-run:iso": "bash build/live-build/build.sh --dry-run",
     "qemu:smoke": "bash build/scripts/qemu-smoke.sh",
-    "ci": "npm run check:commands && npm run validate:commands && npm run test:shell && npm run build:website"
+    "ci": "npm run check:commands && npm run validate:commands && npm run test:shell && npm run test:pazar && npm run build:website"
   },
   "engines": {
     "node": ">=20"

@@ -48,6 +48,9 @@ jobs:
       - name: Run shell tests
         run: npm run test:shell
 
+      - name: Run pazar tests
+        run: npm run test:pazar
+
   build-website:
     name: build-website
     runs-on: ubuntu-latest
