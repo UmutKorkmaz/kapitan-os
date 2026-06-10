@@ -254,6 +254,20 @@ function AIPrompt({ placeholder = 'AI\'ya Türkçe bir şey sorun…', presets =
     const prompt = (text ?? q).trim();
     if (!prompt) return;
     setLoading(true); setErr(null); setOut('');
+    // KAPiTaN AI is not built yet. The real `sor` runs a local model (Ollama)
+    // on the installed system; this box is only a preview. On GitHub Pages
+    // window.claude is undefined, so guard it instead of throwing a raw error.
+    const hasBackend =
+      typeof window !== 'undefined' && typeof window.claude?.complete === 'function';
+    if (!hasBackend) {
+      setOut(
+        'KAPiTaN AI henüz hazır değil. Gerçek "sor" komutu, kurulu sistemde ' +
+        'yerel bir model (Ollama) ile çalışacak ve veriniz cihazda kalacak. ' +
+        'Bu kutu yalnızca bir önizlemedir.'
+      );
+      setLoading(false);
+      return;
+    }
     try {
       const sys = 'Sen KAPiTaN AI adlı, KAPiTaN OS (Türkçe komutlu açık kaynak işletim sistemi) için tasarlanmış kısa, samimi, doğal Türkçe konuşan bir asistansın. Yanıtların 3–5 cümleyi geçmesin. Sadece Türkçe yanıtla; gerektiğinde Türkçe komut örnekleri ver (örn. listele, sistem, kur, sor — kısa biçim: lst, sis, kr, sr). Noktalı sözdizimini kullanma.';
       const resp = await window.claude.complete({
@@ -262,8 +276,8 @@ function AIPrompt({ placeholder = 'AI\'ya Türkçe bir şey sorun…', presets =
         ]
       });
       setOut(resp);
-    } catch (e) {
-      setErr(String(e?.message || e));
+    } catch {
+      setErr('KAPiTaN AI önizlemesi şu an kullanılamıyor. Gerçek sürümde yerel model ile çalışacak.');
     } finally {
       setLoading(false);
     }
@@ -292,7 +306,7 @@ function AIPrompt({ placeholder = 'AI\'ya Türkçe bir şey sorun…', presets =
             KAPiTaN AI · sor
           </span>
         </div>
-        <span style={{fontFamily:'var(--mono)', fontSize:10, color:'var(--sand)'}}>YEREL · {loading ? 'YANIT…' : 'HAZIR'}</span>
+        <span style={{fontFamily:'var(--mono)', fontSize:10, color:'var(--sand)'}}>ÖNİZLEME · {loading ? 'YANIT…' : 'PLANLANAN'}</span>
       </div>
 
       <div style={{padding:'22px 22px'}}>

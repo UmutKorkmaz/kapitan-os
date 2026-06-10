@@ -618,7 +618,7 @@ function HomeEditions() {
                     {c.tag}
                   </span>
                   <span className="mono" style={{ color: 'var(--sand)', fontSize: 11 }}>
-                    {c.size}
+                    hedef · {c.size}
                   </span>
                 </div>
                 <h3
@@ -924,8 +924,8 @@ function HomeWhy() {
     },
     {
       n: '02',
-      t: 'Yerel yapay zekâ',
-      b: 'KAPiTaN AI bilgisayarınızda çalışır. Veriniz cihazdan çıkmaz, bulut zorunluluğu yoktur.',
+      t: 'Yerel yapay zekâ (hedef)',
+      b: 'KAPiTaN AI, kurulu sistemde yerel bir model (Ollama) ile çalışacak şekilde tasarlanıyor; hedef, verinin cihazda kalması ve bulutun yalnızca opsiyonel olması. Henüz geliştirme aşamasında.',
     },
     {
       n: '03',
