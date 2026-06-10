@@ -2,6 +2,7 @@
 
 import { Link, PageHead, SectionHead } from '../components/Shell';
 import GithubReleaseLink from '../components/GithubReleaseLink.jsx';
+import SimulationBadge from '../components/SimulationBadge.jsx';
 import { MandalaBg, TileBand, CornerOrnament } from '../components/Ornaments';
 import { AIPrompt, LiveTerminal } from '../components/Interactive';
 import { getEditionById, formatCommandTarget } from '@data/editions';
@@ -26,6 +27,7 @@ export default function Gelistirici() {
           <GithubReleaseLink className="btn btn-crimson">{downloadLabel} →</GithubReleaseLink>
           <Link to="/komutlar" className="btn btn-line">Komutları incele</Link>
           <span className="pill"><span className="ldot"/>YAPAY ZEKÂ DESTEKLİ</span>
+          <SimulationBadge />
         </div>
       </PageHead>
 

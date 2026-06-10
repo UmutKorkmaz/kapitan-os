@@ -2,6 +2,7 @@
 
 import { Link, PageHead, SectionHead } from '../components/Shell';
 import GithubReleaseLink from '../components/GithubReleaseLink.jsx';
+import SimulationBadge from '../components/SimulationBadge.jsx';
 import { MandalaBg, SectionOrnament, TileBand } from '../components/Ornaments';
 import { getEditionById } from '@data/editions';
 
@@ -23,6 +24,7 @@ export default function Bar() {
         <div style={{display:'flex', gap:12, marginTop:36, flexWrap:'wrap', alignItems:'center'}}>
           <GithubReleaseLink className="btn btn-crimson" style={{background:'var(--jade)', boxShadow:'0 12px 30px -10px rgba(63,142,99,0.4)'}}>{downloadLabel} →</GithubReleaseLink>
           <span className="pill pill--jade"><span className="ldot"/>TEMİZ VE SADE</span>
+          <SimulationBadge />
         </div>
       </PageHead>
 

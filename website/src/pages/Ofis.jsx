@@ -2,6 +2,7 @@
 
 import { Link, PageHead, SectionHead } from '../components/Shell';
 import GithubReleaseLink from '../components/GithubReleaseLink.jsx';
+import SimulationBadge from '../components/SimulationBadge.jsx';
 import { HexRosette, MandalaBg, TileBand } from '../components/Ornaments';
 import { getEditionById } from '@data/editions';
 
@@ -23,6 +24,7 @@ export default function Ofis() {
           <GithubReleaseLink className="btn btn-crimson" style={{background:'var(--saffron)', color:'var(--ink)', boxShadow:'0 12px 30px -10px rgba(232,178,62,0.4)'}}>{downloadLabel} →</GithubReleaseLink>
           <Link to="/surumler" className="btn btn-line">Karşılaştır</Link>
           <span className="pill pill--saffron"><span className="ldot"/>ÜRETKENLİK ODAKLI</span>
+          <SimulationBadge />
         </div>
       </PageHead>
 
