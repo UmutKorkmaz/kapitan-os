@@ -27,6 +27,9 @@ jobs:
         working-directory: packages/commands/scripts
         run: node validate.mjs
 
+      - name: Check runtime registry is generated (no SSOT drift)
+        run: npm run check:commands
+
   test-shell:
     name: test-shell
     runs-on: ubuntu-latest

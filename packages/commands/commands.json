@@ -155,11 +155,11 @@
     { "id": "git-stash", "posix": "git stash", "kapitan": "raf", "short": "rf", "description": "Değişiklikleri geçici olarak rafa kaldır", "group": "git", "phase": 1, "implemented": false },
     { "id": "git-reset", "posix": "git reset", "kapitan": "sıfırla", "short": "sfr", "description": "Hazırlama alanını ya da kayıtları sıfırla", "group": "git", "phase": 1, "implemented": false },
 
-    { "id": "ai-sor", "posix": null, "kapitan": "sor", "short": "sr", "description": "AI'ya Türkçe ile soru sor", "group": "ai", "phase": 1, "implemented": false },
-    { "id": "ai-kodla", "posix": null, "kapitan": "kodla", "short": "kd", "description": "Açıklamadan kod üret", "group": "ai", "phase": 1, "implemented": false },
-    { "id": "ai-acikla", "posix": null, "kapitan": "açıkla", "short": "ack", "description": "Bir komutu ya da hatayı açıkla", "group": "ai", "phase": 1, "implemented": false },
-    { "id": "ai-ozet", "posix": null, "kapitan": "özet", "short": "öz", "description": "Bir dosyayı ya da metni özetle", "group": "ai", "phase": 1, "implemented": false },
-    { "id": "ai-cevir", "posix": null, "kapitan": "çevir", "short": "çv", "description": "50+ dil arası çeviri yap", "group": "ai", "phase": 1, "implemented": false }
+    { "id": "ai-sor", "posix": "kapitan-ai sor", "kapitan": "sor", "short": "sr", "description": "AI'ya Türkçe ile soru sor", "group": "ai", "phase": 1, "implemented": false },
+    { "id": "ai-kodla", "posix": "kapitan-ai kodla", "kapitan": "kodla", "short": "kd", "description": "Açıklamadan kod üret", "group": "ai", "phase": 1, "implemented": false },
+    { "id": "ai-acikla", "posix": "kapitan-ai acikla", "kapitan": "açıkla", "short": "ack", "description": "Bir komutu ya da hatayı açıkla", "group": "ai", "phase": 1, "implemented": false },
+    { "id": "ai-ozet", "posix": "kapitan-ai ozet", "kapitan": "özet", "short": "öz", "description": "Bir dosyayı ya da metni özetle", "group": "ai", "phase": 1, "implemented": false },
+    { "id": "ai-cevir", "posix": "kapitan-ai cevir", "kapitan": "çevir", "short": "çv", "description": "50+ dil arası çeviri yap", "group": "ai", "phase": 1, "implemented": false }
   ],
   "meta": {
     "totalCommands": 66,

@@ -9,6 +9,8 @@
     "packages/*"
   ],
   "scripts": {
+    "generate:commands": "node packages/commands/scripts/generate-runtime.mjs",
+    "check:commands": "node packages/commands/scripts/generate-runtime.mjs --check",
     "validate:commands": "node packages/commands/scripts/validate.mjs",
     "test:shell": "bats packages/kapitan-sh/tests",
     "build:website": "npm run build -w website",
@@ -17,7 +19,7 @@
     "build:live": "bash build/live-build/build.sh",
     "dry-run:iso": "bash build/live-build/build.sh --dry-run",
     "qemu:smoke": "bash build/scripts/qemu-smoke.sh",
-    "ci": "npm run validate:commands && npm run test:shell && npm run build:website"
+    "ci": "npm run check:commands && npm run validate:commands && npm run test:shell && npm run build:website"
   },
   "engines": {
     "node": ">=20"
