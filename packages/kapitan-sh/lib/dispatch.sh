@@ -9,6 +9,37 @@ KAPITAN_DISPATCH_LOADED=1
 KAPITAN_COMPOUND_PARTS=()
 KAPITAN_COMPOUND_OPS=()
 
+# Full-shell mode is opt-in. Default "safe" mode refuses command/process
+# substitution so a Turkish alias (or an AI-proposed command) cannot smuggle
+# hidden command execution into an argument.
+kapitan_shell_allowed() {
+  [[ "${KAPITAN_ALLOW_SHELL:-0}" == "1" || "${KAPITAN_SHELL_MODE:-safe}" == "full" ]]
+}
+
+# Quote-aware scan for command/process substitution ($(...), `...`, <(...),
+# >(...)) outside single quotes (single quotes make them inert). Returns 0 if
+# any active substitution is present.
+kapitan_has_command_substitution() {
+  local s="$1"
+  local n=${#s} i=0 ch nx in_single=0
+  while (( i < n )); do
+    ch="${s:i:1}"
+    if (( in_single )); then
+      [[ "$ch" == "'" ]] && in_single=0
+      ((i++)); continue
+    fi
+    case "$ch" in
+      "'") in_single=1 ;;
+      '`') return 0 ;;
+      '$') nx="${s:i+1:1}"; [[ "$nx" == "(" ]] && return 0 ;;
+      '<') nx="${s:i+1:1}"; [[ "$nx" == "(" ]] && return 0 ;;
+      '>') nx="${s:i+1:1}"; [[ "$nx" == "(" ]] && return 0 ;;
+    esac
+    ((i++))
+  done
+  return 1
+}
+
 kapitan_is_meta_command() {
   case "$1" in
     yardım|yardim|help) return 0 ;;
@@ -93,8 +124,10 @@ kapitan_transform_segment() {
     return 0
   fi
 
-  if ! posix="$(kapitan_resolve_token "$first")"; then
-    return $?
+  posix="$(kapitan_resolve_token "$first")"
+  local _rc=$?
+  if (( _rc != 0 )); then
+    return "$_rc"
   fi
 
   printf '%s%s%s' "$lead" "$posix" "$rest"
@@ -195,8 +228,10 @@ kapitan_transform_line() {
   for (( i=0; i<${#KAPITAN_COMPOUND_PARTS[@]}; i++ )); do
     part="${KAPITAN_COMPOUND_PARTS[$i]}"
     if [[ -n "${part//[[:space:]]/}" ]]; then
-      if ! transformed="$(kapitan_transform_segment "$part")"; then
-        return $?
+      transformed="$(kapitan_transform_segment "$part")"
+      local _rc=$?
+      if (( _rc != 0 )); then
+        return "$_rc"
       fi
       full+="$transformed"
     fi
@@ -225,8 +260,19 @@ kapitan_dispatch_line() {
     return $?
   fi
 
-  if ! transformed="$(kapitan_transform_line "$line")"; then
-    return $?
+  # Safety: command/process substitution can hide arbitrary execution inside an
+  # argument (e.g. `listele $(rm -rf ~)`), bypassing the resolver and path_guard.
+  # Refuse it unless the user explicitly opts into full-shell mode.
+  if ! kapitan_shell_allowed && kapitan_has_command_substitution "$line"; then
+    printf 'kapitan-sh: güvenlik — komut, güvenli modda kapalı bir kabuk özelliği içeriyor («$(...)», «`...`» veya «<(...)»).\n' >&2
+    printf 'İzin vermek için (tam kabuk, korumasız): KAPITAN_ALLOW_SHELL=1\n' >&2
+    return 2
+  fi
+
+  transformed="$(kapitan_transform_line "$line")"
+  local _rc=$?
+  if (( _rc != 0 )); then
+    return "$_rc"
   fi
 
   eval "$transformed"
