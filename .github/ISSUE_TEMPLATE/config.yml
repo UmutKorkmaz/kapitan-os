@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Güvenlik açığı · Security vulnerability
+    url: https://github.com/UmutKorkmaz/kapitan-os/security/advisories/new
+    about: Güvenlik açıklarını herkese açık issue olarak AÇMAYIN — özel advisory açın (bkz. SECURITY.md).
+  - name: Soru / tartışma · Questions
+    url: https://github.com/UmutKorkmaz/kapitan-os/discussions
+    about: Genel sorular ve fikirler için GitHub Discussions.
