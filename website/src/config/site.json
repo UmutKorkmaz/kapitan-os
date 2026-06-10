@@ -23,6 +23,11 @@
   },
   "features": {
     "communityMetrics": false,
-    "marketplaceLive": false
+    "marketplaceLive": false,
+    "ai_live": false,
+    "pazar_live": false,
+    "editions_live": false,
+    "custom_kernel": false,
+    "installer_live": false
   }
 }

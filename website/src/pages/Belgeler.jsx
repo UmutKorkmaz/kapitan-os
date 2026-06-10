@@ -157,7 +157,7 @@ export default function Belgeler() {
                 <h2 style={{ marginTop: 20 }}>
                   Üç komut, beş <em>dakika</em>.
                 </h2>
-                <p>ISO'nuz yandıysa, açılışta hoş geldin sihirbazı sizi karşılar. Aşağıdaki üç komut kabuğun nasıl çalıştığını gösterir.</p>
+                <p>ISO'nuz yandıysa, canlı sistem doğrudan açılır. Aşağıdaki üç komut kabuğun nasıl çalıştığını gösterir.</p>
                 <pre className="doc-code">
                   <span className="c-prompt">›</span> <span className="c-cmd">sistem</span>
                   {'\n'}
@@ -211,7 +211,7 @@ export default function Belgeler() {
                   üzerinden indirin. SHA-256 özeti sürüm notlarında yer alır.
                 </Callout>
 
-                <p>KAPiTaN OS yan yana ya da tek başına kurulabilir. Bilgisayarınızda Windows ya da macOS varsa, dual-boot sihirbazı verilerinize dokunmadan kurulum yapar.</p>
+                <p><strong>Hedef:</strong> KAPiTaN OS yan yana ya da tek başına kurulabilecek; Windows ya da macOS varsa dual-boot sihirbazı verilerinize dokunmadan kurulum yapacak. <em>0.1-alpha şimdilik yalnızca canlı (live) imajdır — USB'den deneyebilirsiniz; kurulum sihirbazı henüz yoktur, planlanıyor.</em></p>
 
                 <h3>1. ISO'yu indirin</h3>
                 <p>
@@ -231,16 +231,16 @@ export default function Belgeler() {
                 <pre className="doc-code">
                   <span className="c-comment"># Linux / macOS</span>
                   {'\n'}
-                  <span className="c-cmd">sudo dd if=kapitan-{VERSION}-gelistirici.iso of=/dev/diskN bs=4M status=progress</span>
+                  <span className="c-cmd">sudo dd if=kapitan-v0.1.0-alpha-amd64.iso of=/dev/diskN bs=4M status=progress</span>
                   {'\n\n'}
                   <span className="c-comment"># Windows: Rufus, balenaEtcher ya da Ventoy kullanın</span>
                 </pre>
 
                 <h3>3. Hedef makineyi USB'den başlatın</h3>
-                <p>Açılışta hoş geldin sihirbazı sorduğu üç şeyi yanıtlayın: dil, klavye, disk düzeni.</p>
+                <p>0.1-alpha canlı imajı doğrudan açılır; kurulmadan denenir. <em>(Hedef: açılışta dil, klavye ve disk düzenini soran hoş geldin sihirbazı.)</em></p>
 
-                <Callout tone="warn" title="Önemli">
-                  Dual-boot kurarken bölümleme adımında <code>"yan yana kur"</code> seçeneğini işaretleyin. "Diski tamamen sil" Windows / macOS dahil her şeyi siler — geri alınamaz.
+                <Callout tone="warn" title="Hedef — henüz mevcut değil">
+                  Kurulum sihirbazı geldiğinde dual-boot için bölümleme adımında <code>"yan yana kur"</code> seçeneğini işaretleyeceksiniz. "Diski tamamen sil" Windows / macOS dahil her şeyi siler — geri alınamaz.
                 </Callout>
 
                 <h3>Donanım gereksinimleri</h3>
