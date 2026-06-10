@@ -3,7 +3,7 @@
   "version": "0.1.0-alpha",
   "private": true,
   "description": "KAPiTaN OS — Türkçe komut katmanlı açık kaynak Linux dağıtımı",
-  "license": "GPL-3.0",
+  "license": "GPL-3.0-only",
   "workspaces": [
     "website",
     "packages/*"

@@ -17,7 +17,7 @@
     "posix",
     "bash"
   ],
-  "license": "MIT",
+  "license": "GPL-3.0-only",
   "engines": {
     "bash": ">=3.2"
   },
