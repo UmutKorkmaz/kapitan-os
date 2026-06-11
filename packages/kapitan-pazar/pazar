@@ -189,7 +189,7 @@ EOF
 }
 
 main() {
-  local args=() a
+  local args=()
   while [[ $# -gt 0 ]]; do
     case "$1" in
       -e|--evet) PAZAR_ASSUME_YES=1; shift ;;

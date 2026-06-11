@@ -22,7 +22,6 @@ KAPITAN_BUILTINS="cd pwd echo export unset source alias unalias type declare loc
 
 kapitan_map_set() {
   local ns="$1" key="$2" val="$3"
-  local -a keys_ref vals_ref
   case "$ns" in
     short)
       KAPITAN_MAP_SHORT_KEYS[${#KAPITAN_MAP_SHORT_KEYS[@]}]="$key"

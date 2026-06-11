@@ -217,7 +217,7 @@ kapitan_tokenize_compound() {
 
 kapitan_transform_line() {
   local line="$1"
-  local transformed="" full="" part op i
+  local transformed="" full="" part i
 
   kapitan_tokenize_compound "$line"
 
