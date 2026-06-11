@@ -19,21 +19,21 @@
     "source": { "type": "string", "minLength": 1 },
     "groups": {
       "type": "array",
-      "minItems": 7,
-      "maxItems": 7,
+      "minItems": 1,
+      "maxItems": 32,
       "items": { "$ref": "#/definitions/group" }
     },
     "commands": {
       "type": "array",
-      "minItems": 66,
-      "maxItems": 66,
+      "minItems": 1,
+      "maxItems": 512,
       "items": { "$ref": "#/definitions/command" }
     },
     "meta": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "totalCommands": { "type": "integer", "const": 66 },
+        "totalCommands": { "type": "integer", "minimum": 1 },
         "status": { "type": "string" },
         "lastReviewed": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" }
       }
@@ -47,8 +47,7 @@
       "properties": {
         "key": {
           "type": "string",
-          "pattern": "^[a-z][a-z0-9_]{0,15}$",
-          "enum": ["dosya", "sistem", "ag", "paket", "metin", "git", "ai"]
+          "pattern": "^[a-z][a-z0-9_]{0,15}$"
         },
         "label": { "type": "string", "minLength": 1 },
         "glyph": { "type": "string", "minLength": 1 },
@@ -92,7 +91,7 @@
         "description": { "type": "string", "minLength": 1, "maxLength": 120 },
         "group": {
           "type": "string",
-          "enum": ["dosya", "sistem", "ag", "paket", "metin", "git", "ai"]
+          "pattern": "^[a-z][a-z0-9_]{0,15}$"
         },
         "phase": { "type": "integer", "minimum": 1 },
         "implemented": { "type": "boolean" },
@@ -108,6 +107,28 @@
         "collision_warnings": {
           "type": "array",
           "items": { "$ref": "#/definitions/collisionWarning" }
+        },
+        "path_guard": {
+          "type": "string",
+          "description": "Path pattern to guard against (e.g. /etc, /usr, /dev/sd*)"
+        },
+        "handler": {
+          "type": "string",
+          "description": "Handler name for shell dispatch or fallback"
+        },
+        "risk_tier": {
+          "type": "string",
+          "enum": ["safe", "caution", "destructive"],
+          "description": "Static risk classification for AI command proposals"
+        },
+        "edition_availability": {
+          "type": "object",
+          "additionalProperties": { "type": "boolean" },
+          "description": "Per-edition availability (e.g. {Bar: true, Ofis: false})"
+        },
+        "posix_argv": {
+          "type": "string",
+          "description": "Expanded POSIX argv (if different from posix mapping)"
         }
       }
     },

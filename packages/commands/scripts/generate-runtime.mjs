@@ -60,16 +60,23 @@ function buildRuntime() {
     );
   }
 
-  const commands = canonical.commands.map((c) => ({
-    id: c.id,
-    posix: c.posix,
-    kapitan: c.kapitan,
-    short: c.short,
-    description: c.description,
-    group: c.group,
-    phase: c.phase,
-    implemented: implemented.has(c.id),
-  }));
+  const commands = canonical.commands.map((c) => {
+    const cmd = {
+      id: c.id,
+      posix: c.posix,
+      kapitan: c.kapitan,
+      short: c.short,
+      description: c.description,
+      group: c.group,
+      phase: c.phase,
+      implemented: implemented.has(c.id),
+    };
+    if (c.handler !== undefined) cmd.handler = c.handler;
+    if (c.risk_tier !== undefined) cmd.risk_tier = c.risk_tier;
+    if (c.edition_availability !== undefined) cmd.edition_availability = c.edition_availability;
+    if (c.posix_argv !== undefined) cmd.posix_argv = c.posix_argv;
+    return cmd;
+  });
 
   return {
     _generated:
