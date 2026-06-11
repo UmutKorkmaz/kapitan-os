@@ -6,6 +6,9 @@ on:
       - '**'
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   validate-commands:
     name: validate-commands
@@ -27,6 +30,9 @@ jobs:
         working-directory: packages/commands/scripts
         run: node validate.mjs
 
+      - name: Check runtime registry is generated (no SSOT drift)
+        run: npm run check:commands
+
   test-shell:
     name: test-shell
     runs-on: ubuntu-latest
@@ -41,6 +47,12 @@ jobs:
 
       - name: Run shell tests
         run: npm run test:shell
+
+      - name: Run pazar tests
+        run: npm run test:pazar
+
+      - name: Run kapitan-ai tests
+        run: npm run test:ai
 
   build-website:
     name: build-website

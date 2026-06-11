@@ -70,4 +70,4 @@ F0 (Temel) fazı için ayrıntılı hedefler: **Bölüm 7 — Faz 1: Temel** (`d
 
 ## Lisans
 
-GPL-3.0 — bkz. dağıtım paketleri ve `LICENSE` (F0 sonrası).
+GPL-3.0-only — tam metin için bkz. [`LICENSE`](LICENSE).

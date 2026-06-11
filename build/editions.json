@@ -18,13 +18,13 @@
         "ramRecommendedLabel": "16 GB önerilir",
         "diskMinGb": 50,
         "diskMinLabel": "50 GB SSD",
-        "arch": ["x86_64", "arm64"]
+        "arch": ["x86_64"]
       },
       "apps": "45+",
       "cmdMetapackage": "kur kapitan-gelistirici",
       "edition_command_target": 218,
       "commandCount": null,
-      "bootTime": "~22 sn",
+      "bootTime": "hedef ~22 sn",
       "features": {
         "ai": "planned",
         "terminal": "advanced",
@@ -56,12 +56,12 @@
         {
           "no": "03",
           "title": "Türkçe paket yöneticisi",
-          "body": "kur, güncelle, kaldır — kısa biçim: kr, gnc, kld. 5 000+ paket KAPiTaN Pazar'da. NPM, PyPI, Cargo, Go uyumlu."
+          "body": "Hedef: kur, güncelle, kaldır — kısa biçim: kr, gnc, kld. pazar, Debian/apt depoları üzerine Türkçe bir sarmalayıcı olarak planlanıyor."
         },
         {
           "no": "04",
           "title": "Önderlenmiş zincirler",
-          "body": "Python 3.12, Rust 1.75, Go 1.21, Node 20. Docker, Podman, Git, VS Code tabanlı KodDüzenleyici Pro önyüklü."
+          "body": "Hedef: Python, Rust, Go, Node ile Docker, Podman, Git ve bir kod düzenleyici önyüklü gelecek. Sürümler Debian 12 deposundan gelir."
         }
       ],
       "devTools": [
@@ -77,16 +77,16 @@
         { "name": "Belgeleyici", "category": "Docs", "cmd": "belge" }
       ],
       "devSpecs": [
-        { "label": "Çekirdek", "value": "Linux 6.8.0-kapitan (özel)" },
-        { "label": "Varsayılan kabuk", "value": "kapitan-sh 1.4" },
-        { "label": "Paket yöneticisi", "value": "pazar-cli" },
-        { "label": "Önyüklü diller", "value": "Python 3.12 · Rust 1.75 · Go 1.21 · Node 20" },
-        { "label": "Önyüklü IDE", "value": "KodDüzenleyici Pro (VS Code tabanlı)" },
-        { "label": "Yapay zekâ motoru", "value": "KAPiTaN AI v2.1 (yerel + bulut)" },
-        { "label": "GPU desteği", "value": "NVIDIA CUDA · AMD ROCm" },
-        { "label": "Konteyner", "value": "Docker · Podman" },
-        { "label": "Veritabanları", "value": "PostgreSQL 16 · Redis 7 · SQLite" },
-        { "label": "Sürüm kontrolü", "value": "Git 2.43" },
+        { "label": "Çekirdek", "value": "Linux (Debian 12 tabanlı)" },
+        { "label": "Varsayılan kabuk", "value": "kapitan-sh (alfa)" },
+        { "label": "Paket yöneticisi", "value": "Hedef: pazar (apt sarmalayıcı)" },
+        { "label": "Önyüklü diller", "value": "Hedef: Python · Rust · Go · Node" },
+        { "label": "Önyüklü IDE", "value": "Hedef: kod düzenleyici" },
+        { "label": "Yapay zekâ motoru", "value": "Hedef: KAPiTaN AI (yerel model)" },
+        { "label": "GPU desteği", "value": "Hedef: GPU desteği" },
+        { "label": "Konteyner", "value": "Hedef: Docker · Podman" },
+        { "label": "Veritabanları", "value": "Hedef: PostgreSQL · Redis · SQLite" },
+        { "label": "Sürüm kontrolü", "value": "Git (Debian sürümü)" },
         { "label": "Minimum RAM", "value": "8 GB (16 GB önerilir)" },
         { "label": "Minimum disk", "value": "50 GB SSD" }
       ]
@@ -104,13 +104,13 @@
         "ramMinLabel": "4 GB",
         "diskMinGb": 30,
         "diskMinLabel": "30 GB",
-        "arch": ["x86_64", "arm64"]
+        "arch": ["x86_64"]
       },
       "apps": "30+",
       "cmdMetapackage": "kur kapitan-ofis",
       "edition_command_target": 160,
       "commandCount": null,
-      "bootTime": "~18 sn",
+      "bootTime": "hedef ~18 sn",
       "features": {
         "ai": "planned",
         "terminal": "basic",
@@ -188,7 +188,7 @@
       "cmdMetapackage": "kur kapitan-bar",
       "edition_command_target": 84,
       "commandCount": null,
-      "bootTime": "~15 sn",
+      "bootTime": "hedef ~15 sn",
       "features": {
         "ai": false,
         "terminal": false,
@@ -306,9 +306,9 @@
       "key": "bootTime",
       "label": "Açılış süresi",
       "resolver": "edition.bootTime",
-      "gelistirici": "~22 sn",
-      "ofis": "~18 sn",
-      "bar": "~15 sn"
+      "gelistirici": "hedef ~22 sn",
+      "ofis": "hedef ~18 sn",
+      "bar": "hedef ~15 sn"
     },
     {
       "key": "license",

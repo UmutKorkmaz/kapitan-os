@@ -53,7 +53,7 @@ export default function Topluluk() {
       >
         <div style={{ display: 'flex', gap: 12, marginTop: 36, flexWrap: 'wrap' }}>
           <a href="#join" className="btn btn-crimson">
-            Foruma katıl →
+            Topluluğa katıl →
           </a>
           <a href="#contrib" className="btn btn-line">
             Katkıda bulun
@@ -356,17 +356,14 @@ export default function Topluluk() {
             Sorunuzu <em>sorun</em>.
           </h2>
           <p className="lede reveal delay-1" style={{ marginInline: 'auto', marginTop: 24 }}>
-            Türkçe sorulara Türkçe yanıtlar. Forum alpha sonrası açılacak; şimdilik GitHub Issues ve Discord üzerinden geri bildirim alıyoruz.
+            Türkçe sorulara Türkçe yanıtlar. Özel forum bir hedef; şimdilik geri bildirim ve sorular GitHub üzerinden alınıyor.
           </p>
           <div className="reveal delay-2" style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 40, flexWrap: 'wrap' }}>
-            <a href="#" className="btn btn-crimson">
-              forum.kapitan.org.tr →
+            <a href="https://github.com/UmutKorkmaz/kapitan-os/issues" target="_blank" rel="noopener noreferrer" className="btn btn-crimson">
+              GitHub Issues →
             </a>
-            <a href="#" className="btn btn-line">
-              Discord
-            </a>
-            <a href="#" className="btn btn-ghost">
-              IRC #kapitan
+            <a href="https://github.com/UmutKorkmaz/kapitan-os/discussions" target="_blank" rel="noopener noreferrer" className="btn btn-line">
+              GitHub Discussions
             </a>
           </div>
         </div>

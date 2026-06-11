@@ -1,91 +1,724 @@
 {
-  "version": "1.0.0",
+  "_generated": "AUTO-GENERATED from packages/commands/commands.json + implemented-overlay.json by scripts/generate-runtime.mjs — DO NOT EDIT. Run `npm run generate:commands`.",
+  "version": "1.0.0-alpha",
   "locale": "tr_TR",
   "groups": [
-    { "key": "dosya", "label": "Dosya & Dizin", "glyph": "⎘", "order": 1 },
-    { "key": "sistem", "label": "Sistem", "glyph": "⚙", "order": 2 },
-    { "key": "ag", "label": "Ağ", "glyph": "🌐", "order": 3 },
-    { "key": "paket", "label": "Paket & Pazar", "glyph": "📦", "order": 4 },
-    { "key": "metin", "label": "Metin", "glyph": "📝", "order": 5 },
-    { "key": "git", "label": "Git", "glyph": "⎇", "order": 6 },
-    { "key": "ai", "label": "Yapay Zekâ", "glyph": "🤖", "order": 7 }
-  ],
-  "path_guard": [
-    "git", "curl", "wget", "ssh", "scp", "sed", "awk",
-    "python3", "node", "cargo", "go"
+    {
+      "key": "dosya",
+      "label": "Dosya & Dizin",
+      "glyph": "⎘",
+      "order": 1
+    },
+    {
+      "key": "sistem",
+      "label": "Sistem",
+      "glyph": "◎",
+      "order": 2
+    },
+    {
+      "key": "ag",
+      "label": "Ağ",
+      "glyph": "≈",
+      "order": 3
+    },
+    {
+      "key": "paket",
+      "label": "Paket & Pazar",
+      "glyph": "⌂",
+      "order": 4
+    },
+    {
+      "key": "metin",
+      "label": "Metin",
+      "glyph": "¶",
+      "order": 5
+    },
+    {
+      "key": "git",
+      "label": "Git",
+      "glyph": "⎇",
+      "order": 6
+    },
+    {
+      "key": "ai",
+      "label": "Yapay Zekâ",
+      "glyph": "K",
+      "order": 7
+    }
   ],
   "commands": [
-    { "id": "ls", "posix": "ls", "kapitan": "listele", "short": "lst", "description": "Dizindeki dosyaları listele", "group": "dosya", "phase": 1, "implemented": true },
-    { "id": "cd", "posix": "cd", "kapitan": "gir", "short": "gr", "description": "Çalışma dizinini değiştir", "group": "dosya", "phase": 1, "implemented": true },
-    { "id": "pwd", "posix": "pwd", "kapitan": "nerede", "short": "nr", "description": "Şu anki dizini yazdır", "group": "dosya", "phase": 1, "implemented": true },
-    { "id": "mkdir", "posix": "mkdir", "kapitan": "klasör", "short": "kls", "description": "Yeni klasör oluştur", "group": "dosya", "phase": 1, "implemented": true },
-    { "id": "rmdir", "posix": "rmdir", "kapitan": "sök", "short": "sk", "description": "Boş klasörü kaldır", "group": "dosya", "phase": 1, "implemented": true },
-    { "id": "cp", "posix": "cp", "kapitan": "kopyala", "short": "kp", "description": "Dosya ya da klasör kopyala", "group": "dosya", "phase": 1, "implemented": true },
-    { "id": "mv", "posix": "mv", "kapitan": "taşı", "short": "tş", "description": "Dosya ya da klasör taşı", "group": "dosya", "phase": 1, "implemented": true },
-    { "id": "rm", "posix": "rm", "kapitan": "sil", "short": "sl", "description": "Dosya ya da klasör sil", "group": "dosya", "phase": 1, "implemented": true },
-    { "id": "touch", "posix": "touch", "kapitan": "oluştur", "short": "olş", "description": "Boş dosya oluştur ya da zaman damgasını güncelle", "group": "dosya", "phase": 1, "implemented": true },
-    { "id": "cat", "posix": "cat", "kapitan": "oku", "short": "ok", "description": "Dosya içeriğini ekrana yazdır", "group": "dosya", "phase": 1, "implemented": true },
-    { "id": "find", "posix": "find", "kapitan": "bul", "short": "bl", "description": "Dosya sisteminde dosya ara", "group": "dosya", "phase": 1, "implemented": true },
-    { "id": "ln", "posix": "ln", "kapitan": "bağla", "short": "bğ", "description": "Sembolik ya da sabit bağlantı oluştur", "group": "dosya", "phase": 1, "implemented": true },
-
-    { "id": "uname", "posix": "uname", "kapitan": "sistem", "short": "sis", "description": "İşletim sistemi bilgisini yazdır", "group": "sistem", "phase": 1, "implemented": true },
-    { "id": "top", "posix": "top", "kapitan": "canlı", "short": "cnl", "description": "Çalışan işlemleri canlı izle", "group": "sistem", "phase": 1, "implemented": false },
-    { "id": "ps", "posix": "ps", "kapitan": "işlemler", "short": "işl", "description": "Anlık işlem listesini göster", "group": "sistem", "phase": 1, "implemented": false },
-    { "id": "kill", "posix": "kill", "kapitan": "durdur", "short": "drd", "description": "Bir işlemi sonlandır", "group": "sistem", "phase": 1, "implemented": false },
-    { "id": "df", "posix": "df", "kapitan": "disk", "short": "dsk", "description": "Disk doluluğunu göster", "group": "sistem", "phase": 1, "implemented": false },
-    { "id": "du", "posix": "du", "kapitan": "boyut", "short": "byt", "description": "Klasör disk boyutunu hesapla", "group": "sistem", "phase": 1, "implemented": false },
-    { "id": "free", "posix": "free", "kapitan": "bellek", "short": "blk", "description": "RAM ve takas bellek kullanımını göster", "group": "sistem", "phase": 1, "implemented": false },
-    { "id": "shutdown", "posix": "shutdown", "kapitan": "kapat", "short": "kpt", "description": "Sistemi kapat", "group": "sistem", "phase": 1, "implemented": false },
-    { "id": "reboot", "posix": "reboot", "kapitan": "yenile", "short": "yn", "description": "Sistemi yeniden başlat", "group": "sistem", "phase": 1, "implemented": false },
-    { "id": "date", "posix": "date", "kapitan": "tarih", "short": "trh", "description": "Tarih ve saati göster", "group": "sistem", "phase": 1, "implemented": true },
-    { "id": "whoami", "posix": "whoami", "kapitan": "benim", "short": "ben", "description": "Aktif kullanıcı adını göster", "group": "sistem", "phase": 1, "implemented": true },
-    { "id": "history", "posix": "history", "kapitan": "geçmiş", "short": "gcş", "description": "Komut geçmişini listele", "group": "sistem", "phase": 1, "implemented": false },
-
-    { "id": "ping", "posix": "ping", "kapitan": "dene", "short": "dn", "description": "Bir sunucuya erişimi sına", "group": "ag", "phase": 1, "implemented": false },
-    { "id": "curl", "posix": "curl", "kapitan": "iste", "short": "ist", "description": "HTTP isteği gönder", "group": "ag", "phase": 1, "implemented": false },
-    { "id": "wget", "posix": "wget", "kapitan": "indir", "short": "ind", "description": "Bağlantıdan dosya indir", "group": "ag", "phase": 1, "implemented": false },
-    { "id": "ip-a", "posix": "ip a", "kapitan": "ağ", "short": "ağ", "description": "Ağ arayüzlerini listele", "group": "ag", "phase": 1, "implemented": false },
-    { "id": "ssh", "posix": "ssh", "kapitan": "bağlan", "short": "bğl", "description": "Uzak sunucuya güvenli bağlan", "group": "ag", "phase": 1, "implemented": false },
-    { "id": "scp", "posix": "scp", "kapitan": "aktar", "short": "akt", "description": "Uzak sunucuya dosya aktar", "group": "ag", "phase": 1, "implemented": false },
-    { "id": "hostname", "posix": "hostname", "kapitan": "sunucu", "short": "snv", "description": "Makine adını göster", "group": "ag", "phase": 1, "implemented": false },
-    { "id": "netstat", "posix": "netstat", "kapitan": "bağlantı", "short": "bnt", "description": "Ağ bağlantılarını listele", "group": "ag", "phase": 1, "implemented": false },
-
-    { "id": "apt-install", "posix": "apt install", "kapitan": "kur", "short": "kr", "description": "Pazardan yazılım kur", "group": "paket", "phase": 1, "implemented": true },
-    { "id": "apt-remove", "posix": "apt remove", "kapitan": "kaldır", "short": "kld", "description": "Kurulu yazılımı kaldır", "group": "paket", "phase": 1, "implemented": true },
-    { "id": "apt-update", "posix": "apt update", "kapitan": "güncelle", "short": "gnc", "description": "Paket listesini güncelle", "group": "paket", "phase": 1, "implemented": true },
-    { "id": "apt-upgrade", "posix": "apt upgrade", "kapitan": "yükselt", "short": "yks", "description": "Tüm yazılımları en son sürüme yükselt", "group": "paket", "phase": 1, "implemented": true },
-    { "id": "apt-search", "posix": "apt search", "kapitan": "tara", "short": "tr", "description": "Pazarda yazılım ara", "group": "paket", "phase": 1, "implemented": true },
-    { "id": "apt-list", "posix": "apt list", "kapitan": "kurulu", "short": "krl", "description": "Kurulu yazılımları listele", "group": "paket", "phase": 1, "implemented": true },
-    { "id": "apt-show", "posix": "apt show", "kapitan": "incele", "short": "inc", "description": "Yazılım hakkında detay göster", "group": "paket", "phase": 1, "implemented": true },
-
-    { "id": "grep", "posix": "grep", "kapitan": "ara", "short": "ar", "description": "Dosya içeriğinde metin ara", "group": "metin", "phase": 1, "implemented": true },
-    { "id": "head", "posix": "head", "kapitan": "baş", "short": "bş", "description": "Dosyanın ilk satırlarını göster", "group": "metin", "phase": 1, "implemented": true },
-    { "id": "tail", "posix": "tail", "kapitan": "son", "short": "sn", "description": "Dosyanın son satırlarını göster", "group": "metin", "phase": 1, "implemented": true },
-    { "id": "sort", "posix": "sort", "kapitan": "sırala", "short": "srl", "description": "Satırları alfabetik ya da sayısal sırala", "group": "metin", "phase": 1, "implemented": false },
-    { "id": "wc", "posix": "wc", "kapitan": "say", "short": "sy", "description": "Satır, kelime ve karakter sayısını göster", "group": "metin", "phase": 1, "implemented": false },
-    { "id": "diff", "posix": "diff", "kapitan": "fark", "short": "frk", "description": "İki dosya arasındaki farkı göster", "group": "metin", "phase": 1, "implemented": false },
-    { "id": "sed", "posix": "sed", "kapitan": "değiştir", "short": "dğş", "description": "Metin içinde bul-değiştir işlemi yap", "group": "metin", "phase": 1, "implemented": false },
-    { "id": "cut", "posix": "cut", "kapitan": "kes", "short": "ks", "description": "Satırdan belirli sütunları kes", "group": "metin", "phase": 1, "implemented": false },
-    { "id": "less", "posix": "less", "kapitan": "gez", "short": "gz", "description": "Dosyayı sayfa sayfa görüntüle", "group": "metin", "phase": 1, "implemented": false },
-    { "id": "echo", "posix": "echo", "kapitan": "yaz", "short": "yz", "description": "Metni ekrana ya da dosyaya yazdır", "group": "metin", "phase": 1, "implemented": true },
-
-    { "id": "git-status", "posix": "git status", "kapitan": "durum", "short": "dur", "description": "Çalışma ağacının durumunu göster", "group": "git", "phase": 1, "implemented": false },
-    { "id": "git-add", "posix": "git add", "kapitan": "hazırla", "short": "hzr", "description": "Değişiklikleri kayıt için hazırla", "group": "git", "phase": 1, "implemented": false },
-    { "id": "git-commit", "posix": "git commit", "kapitan": "kaydet", "short": "kyd", "description": "Hazırlanan değişiklikleri kaydet", "group": "git", "phase": 1, "implemented": false },
-    { "id": "git-push", "posix": "git push", "kapitan": "gönder", "short": "gnd", "description": "Değişiklikleri uzak depoya gönder", "group": "git", "phase": 1, "implemented": false },
-    { "id": "git-pull", "posix": "git pull", "kapitan": "çek", "short": "çk", "description": "Uzak depodan değişiklikleri çek", "group": "git", "phase": 1, "implemented": false },
-    { "id": "git-clone", "posix": "git clone", "kapitan": "klonla", "short": "kln", "description": "Uzak depoyu yerel makineye kopyala", "group": "git", "phase": 1, "implemented": false },
-    { "id": "git-log", "posix": "git log", "kapitan": "günlük", "short": "gnl", "description": "Kayıt geçmişini listele", "group": "git", "phase": 1, "implemented": false },
-    { "id": "git-branch", "posix": "git branch", "kapitan": "dal", "short": "dl", "description": "Dalları listele ya da yeni dal oluştur", "group": "git", "phase": 1, "implemented": false },
-    { "id": "git-checkout", "posix": "git checkout", "kapitan": "geç", "short": "gç", "description": "Dal ya da dosyaya geç", "group": "git", "phase": 1, "implemented": false },
-    { "id": "git-merge", "posix": "git merge", "kapitan": "birleştir", "short": "blş", "description": "İki dalı birleştir", "group": "git", "phase": 1, "implemented": false },
-    { "id": "git-stash", "posix": "git stash", "kapitan": "raf", "short": "rf", "description": "Değişiklikleri geçici olarak rafa kaldır", "group": "git", "phase": 1, "implemented": false },
-    { "id": "git-reset", "posix": "git reset", "kapitan": "sıfırla", "short": "sfr", "description": "Hazırlama alanını ya da kayıtları sıfırla", "group": "git", "phase": 1, "implemented": false },
-
-    { "id": "ai-ask", "posix": "kapitan-ai ask", "kapitan": "sor", "short": "sr", "description": "AI'ya Türkçe ile soru sor", "group": "ai", "phase": 1, "implemented": false },
-    { "id": "ai-code", "posix": "kapitan-ai code", "kapitan": "kodla", "short": "kd", "description": "Açıklamadan kod üret", "group": "ai", "phase": 1, "implemented": false },
-    { "id": "ai-explain", "posix": "kapitan-ai explain", "kapitan": "açıkla", "short": "ack", "description": "Bir komutu ya da hatayı açıkla", "group": "ai", "phase": 1, "implemented": false },
-    { "id": "ai-summarize", "posix": "kapitan-ai summarize", "kapitan": "özet", "short": "öz", "description": "Bir dosyayı ya da metni özetle", "group": "ai", "phase": 1, "implemented": false },
-    { "id": "ai-translate", "posix": "kapitan-ai translate", "kapitan": "çevir", "short": "çv", "description": "50+ dil arası çeviri yap", "group": "ai", "phase": 1, "implemented": false }
+    {
+      "id": "ls",
+      "posix": "ls",
+      "kapitan": "listele",
+      "short": "lst",
+      "description": "Dizindeki dosyaları listele",
+      "group": "dosya",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "cd",
+      "posix": "cd",
+      "kapitan": "gir",
+      "short": "gr",
+      "description": "Çalışma dizinini değiştir",
+      "group": "dosya",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "pwd",
+      "posix": "pwd",
+      "kapitan": "nerede",
+      "short": "nr",
+      "description": "Şu anki dizini yazdır",
+      "group": "dosya",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "mkdir",
+      "posix": "mkdir",
+      "kapitan": "klasör",
+      "short": "kls",
+      "description": "Yeni klasör oluştur",
+      "group": "dosya",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "rmdir",
+      "posix": "rmdir",
+      "kapitan": "sök",
+      "short": "sk",
+      "description": "Boş klasörü kaldır",
+      "group": "dosya",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "cp",
+      "posix": "cp",
+      "kapitan": "kopyala",
+      "short": "kp",
+      "description": "Dosya ya da klasör kopyala",
+      "group": "dosya",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "mv",
+      "posix": "mv",
+      "kapitan": "taşı",
+      "short": "tş",
+      "description": "Dosya ya da klasör taşı",
+      "group": "dosya",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "rm",
+      "posix": "rm",
+      "kapitan": "sil",
+      "short": "sl",
+      "description": "Dosya ya da klasör sil",
+      "group": "dosya",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "touch",
+      "posix": "touch",
+      "kapitan": "oluştur",
+      "short": "olş",
+      "description": "Boş dosya oluştur ya da zaman damgasını güncelle",
+      "group": "dosya",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "cat",
+      "posix": "cat",
+      "kapitan": "oku",
+      "short": "ok",
+      "description": "Dosya içeriğini ekrana yazdır",
+      "group": "dosya",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "find",
+      "posix": "find",
+      "kapitan": "bul",
+      "short": "bl",
+      "description": "Dosya sisteminde dosya ara",
+      "group": "dosya",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "ln",
+      "posix": "ln",
+      "kapitan": "bağla",
+      "short": "bğ",
+      "description": "Sembolik ya da sabit bağlantı oluştur",
+      "group": "dosya",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "uname",
+      "posix": "uname",
+      "kapitan": "sistem",
+      "short": "sis",
+      "description": "İşletim sistemi bilgisini yazdır",
+      "group": "sistem",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "top",
+      "posix": "top",
+      "kapitan": "canlı",
+      "short": "cnl",
+      "description": "Çalışan işlemleri canlı izle",
+      "group": "sistem",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "ps",
+      "posix": "ps",
+      "kapitan": "işlemler",
+      "short": "işl",
+      "description": "Anlık işlem listesini göster",
+      "group": "sistem",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "kill",
+      "posix": "kill",
+      "kapitan": "durdur",
+      "short": "drd",
+      "description": "Bir işlemi sonlandır",
+      "group": "sistem",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "df",
+      "posix": "df",
+      "kapitan": "disk",
+      "short": "dsk",
+      "description": "Disk doluluğunu göster",
+      "group": "sistem",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "du",
+      "posix": "du",
+      "kapitan": "boyut",
+      "short": "byt",
+      "description": "Klasör disk boyutunu hesapla",
+      "group": "sistem",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "free",
+      "posix": "free",
+      "kapitan": "bellek",
+      "short": "blk",
+      "description": "RAM ve takas bellek kullanımını göster",
+      "group": "sistem",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "shutdown",
+      "posix": "shutdown",
+      "kapitan": "kapat",
+      "short": "kpt",
+      "description": "Sistemi kapat",
+      "group": "sistem",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "reboot",
+      "posix": "reboot",
+      "kapitan": "yenile",
+      "short": "yn",
+      "description": "Sistemi yeniden başlat",
+      "group": "sistem",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "date",
+      "posix": "date",
+      "kapitan": "tarih",
+      "short": "trh",
+      "description": "Tarih ve saati göster",
+      "group": "sistem",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "whoami",
+      "posix": "whoami",
+      "kapitan": "benim",
+      "short": "ben",
+      "description": "Aktif kullanıcı adını göster",
+      "group": "sistem",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "history",
+      "posix": "history",
+      "kapitan": "geçmiş",
+      "short": "gcş",
+      "description": "Komut geçmişini listele",
+      "group": "sistem",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "ping",
+      "posix": "ping",
+      "kapitan": "dene",
+      "short": "dn",
+      "description": "Bir sunucuya erişimi sına",
+      "group": "ag",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "curl",
+      "posix": "curl",
+      "kapitan": "iste",
+      "short": "ist",
+      "description": "HTTP isteği gönder",
+      "group": "ag",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "wget",
+      "posix": "wget",
+      "kapitan": "indir",
+      "short": "ind",
+      "description": "Bağlantıdan dosya indir",
+      "group": "ag",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "ip-a",
+      "posix": "ip a",
+      "kapitan": "ağ",
+      "short": "ağ",
+      "description": "Ağ arayüzlerini listele",
+      "group": "ag",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "ssh",
+      "posix": "ssh",
+      "kapitan": "bağlan",
+      "short": "bğl",
+      "description": "Uzak sunucuya güvenli bağlan",
+      "group": "ag",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "scp",
+      "posix": "scp",
+      "kapitan": "aktar",
+      "short": "akt",
+      "description": "Uzak sunucuya dosya aktar",
+      "group": "ag",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "hostname",
+      "posix": "hostname",
+      "kapitan": "sunucu",
+      "short": "snv",
+      "description": "Makine adını göster",
+      "group": "ag",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "netstat",
+      "posix": "netstat",
+      "kapitan": "bağlantı",
+      "short": "bnt",
+      "description": "Ağ bağlantılarını listele",
+      "group": "ag",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "apt-install",
+      "posix": "apt install",
+      "kapitan": "kur",
+      "short": "kr",
+      "description": "Pazardan yazılım kur",
+      "group": "paket",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "apt-remove",
+      "posix": "apt remove",
+      "kapitan": "kaldır",
+      "short": "kld",
+      "description": "Kurulu yazılımı kaldır",
+      "group": "paket",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "apt-update",
+      "posix": "apt update",
+      "kapitan": "güncelle",
+      "short": "gnc",
+      "description": "Paket listesini güncelle",
+      "group": "paket",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "apt-upgrade",
+      "posix": "apt upgrade",
+      "kapitan": "yükselt",
+      "short": "yks",
+      "description": "Tüm yazılımları en son sürüme yükselt",
+      "group": "paket",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "apt-search",
+      "posix": "apt search",
+      "kapitan": "tara",
+      "short": "tr",
+      "description": "Pazarda yazılım ara",
+      "group": "paket",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "apt-list",
+      "posix": "apt list",
+      "kapitan": "kurulu",
+      "short": "krl",
+      "description": "Kurulu yazılımları listele",
+      "group": "paket",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "apt-show",
+      "posix": "apt show",
+      "kapitan": "incele",
+      "short": "inc",
+      "description": "Yazılım hakkında detay göster",
+      "group": "paket",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "grep",
+      "posix": "grep",
+      "kapitan": "ara",
+      "short": "ar",
+      "description": "Dosya içeriğinde metin ara",
+      "group": "metin",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "head",
+      "posix": "head",
+      "kapitan": "baş",
+      "short": "bş",
+      "description": "Dosyanın ilk satırlarını göster",
+      "group": "metin",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "tail",
+      "posix": "tail",
+      "kapitan": "son",
+      "short": "sn",
+      "description": "Dosyanın son satırlarını göster",
+      "group": "metin",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "sort",
+      "posix": "sort",
+      "kapitan": "sırala",
+      "short": "srl",
+      "description": "Satırları alfabetik ya da sayısal sırala",
+      "group": "metin",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "wc",
+      "posix": "wc",
+      "kapitan": "say",
+      "short": "sy",
+      "description": "Satır, kelime ve karakter sayısını göster",
+      "group": "metin",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "diff",
+      "posix": "diff",
+      "kapitan": "fark",
+      "short": "frk",
+      "description": "İki dosya arasındaki farkı göster",
+      "group": "metin",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "sed",
+      "posix": "sed",
+      "kapitan": "değiştir",
+      "short": "dğş",
+      "description": "Metin içinde bul-değiştir işlemi yap",
+      "group": "metin",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "cut",
+      "posix": "cut",
+      "kapitan": "kes",
+      "short": "ks",
+      "description": "Satırdan belirli sütunları kes",
+      "group": "metin",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "less",
+      "posix": "less",
+      "kapitan": "gez",
+      "short": "gz",
+      "description": "Dosyayı sayfa sayfa görüntüle",
+      "group": "metin",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "echo",
+      "posix": "echo",
+      "kapitan": "yaz",
+      "short": "yz",
+      "description": "Metni ekrana ya da dosyaya yazdır",
+      "group": "metin",
+      "phase": 1,
+      "implemented": true
+    },
+    {
+      "id": "git-status",
+      "posix": "git status",
+      "kapitan": "durum",
+      "short": "dur",
+      "description": "Çalışma ağacının durumunu göster",
+      "group": "git",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "git-add",
+      "posix": "git add",
+      "kapitan": "hazırla",
+      "short": "hzr",
+      "description": "Değişiklikleri kayıt için hazırla",
+      "group": "git",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "git-commit",
+      "posix": "git commit",
+      "kapitan": "kaydet",
+      "short": "kyd",
+      "description": "Hazırlanan değişiklikleri kaydet",
+      "group": "git",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "git-push",
+      "posix": "git push",
+      "kapitan": "gönder",
+      "short": "gnd",
+      "description": "Değişiklikleri uzak depoya gönder",
+      "group": "git",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "git-pull",
+      "posix": "git pull",
+      "kapitan": "çek",
+      "short": "çk",
+      "description": "Uzak depodan değişiklikleri çek",
+      "group": "git",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "git-clone",
+      "posix": "git clone",
+      "kapitan": "klonla",
+      "short": "kln",
+      "description": "Uzak depoyu yerel makineye kopyala",
+      "group": "git",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "git-log",
+      "posix": "git log",
+      "kapitan": "günlük",
+      "short": "gnl",
+      "description": "Kayıt geçmişini listele",
+      "group": "git",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "git-branch",
+      "posix": "git branch",
+      "kapitan": "dal",
+      "short": "dl",
+      "description": "Dalları listele ya da yeni dal oluştur",
+      "group": "git",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "git-checkout",
+      "posix": "git checkout",
+      "kapitan": "geç",
+      "short": "gç",
+      "description": "Dal ya da dosyaya geç",
+      "group": "git",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "git-merge",
+      "posix": "git merge",
+      "kapitan": "birleştir",
+      "short": "blş",
+      "description": "İki dalı birleştir",
+      "group": "git",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "git-stash",
+      "posix": "git stash",
+      "kapitan": "raf",
+      "short": "rf",
+      "description": "Değişiklikleri geçici olarak rafa kaldır",
+      "group": "git",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "git-reset",
+      "posix": "git reset",
+      "kapitan": "sıfırla",
+      "short": "sfr",
+      "description": "Hazırlama alanını ya da kayıtları sıfırla",
+      "group": "git",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "ai-sor",
+      "posix": "kapitan-ai sor",
+      "kapitan": "sor",
+      "short": "sr",
+      "description": "AI'ya Türkçe ile soru sor",
+      "group": "ai",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "ai-kodla",
+      "posix": "kapitan-ai kodla",
+      "kapitan": "kodla",
+      "short": "kd",
+      "description": "Açıklamadan kod üret",
+      "group": "ai",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "ai-acikla",
+      "posix": "kapitan-ai acikla",
+      "kapitan": "açıkla",
+      "short": "ack",
+      "description": "Bir komutu ya da hatayı açıkla",
+      "group": "ai",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "ai-ozet",
+      "posix": "kapitan-ai ozet",
+      "kapitan": "özet",
+      "short": "öz",
+      "description": "Bir dosyayı ya da metni özetle",
+      "group": "ai",
+      "phase": 1,
+      "implemented": false
+    },
+    {
+      "id": "ai-cevir",
+      "posix": "kapitan-ai cevir",
+      "kapitan": "çevir",
+      "short": "çv",
+      "description": "50+ dil arası çeviri yap",
+      "group": "ai",
+      "phase": 1,
+      "implemented": false
+    }
+  ],
+  "path_guard": [
+    "git",
+    "curl",
+    "wget",
+    "ssh",
+    "scp",
+    "sed",
+    "awk",
+    "python3",
+    "node",
+    "cargo",
+    "go"
   ]
 }

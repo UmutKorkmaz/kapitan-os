@@ -1,0 +1,223 @@
+#!/usr/bin/env bash
+# pazar — KAPiTaN OS Türkçe paket yöneticisi (Stage 1: dürüst apt sarmalayıcı)
+#
+# Stage 1, Debian/KAPiTaN apt depoları üzerine Türkçe bir kabuktur. Kararlı
+# arayüzleri (apt-get / apt-cache / dpkg-query) sarar; asla `apt` porcelain'ini
+# script içinde kullanmaz. Değiştiren işlemler önce ayrıcalıksız bir plan üretir,
+# Türkçe gösterir, onay ister, sonra `sudo apt-get ... -y` ile uygular.
+#
+# Komutlar: kur kaldır güncelle yükselt tara incele kurulu temizle kaynaklar
+# Bayraklar: -e/--evet (onay atla)  --plan (yalnız plan)  --json  -h/--help
+
+set -o pipefail
+
+PAZAR_ASSUME_YES=0
+PAZAR_JSON=0
+PAZAR_PLAN_ONLY=0
+
+# Türkçe karakterleri ASCII'ye katlayarak alt komutları eşle (kaldır≡kaldir).
+_pazar_fold() {
+  local s="$1"
+  s="${s//ı/i}"; s="${s//İ/i}"; s="${s//ş/s}"; s="${s//Ş/s}"
+  s="${s//ğ/g}"; s="${s//Ğ/g}"; s="${s//ü/u}"; s="${s//Ü/u}"
+  s="${s//ö/o}"; s="${s//Ö/o}"; s="${s//ç/c}"; s="${s//Ç/c}"
+  printf '%s' "$s"
+}
+
+_pazar_die() { printf 'pazar: %s\n' "$1" >&2; return "${2:-2}"; }
+
+# sudo önekini yazdır; root değilsek ve sudo yoksa 77 ile dön.
+_pazar_root_prefix() {
+  if [[ "$(id -u)" -eq 0 ]]; then printf ''; return 0; fi
+  if command -v sudo >/dev/null 2>&1; then printf 'sudo'; return 0; fi
+  printf 'pazar: yönetici yetkisi gerekli; sudo kurulu mu?\n' >&2
+  return 77
+}
+
+# apt-get çıktısından Türkçe tanı üret.
+_pazar_apt_error() {
+  local rc="$1" out="$2"
+  case "$out" in
+    *"Could not get lock"*|*"dpkg was interrupted"*|*"being used by another process"*)
+      printf 'pazar: paket sistemi şu an meşgul (başka bir apt/dpkg çalışıyor olabilir). Birazdan tekrar deneyin.\n' >&2 ;;
+    *"Could not resolve"*|*"Temporary failure resolving"*|*"Failed to fetch"*)
+      printf 'pazar: ağ hatası — internet bağlantınızı kontrol edin, sonra «pazar güncelle» deneyin.\n' >&2 ;;
+    *"Unable to locate package"*|*"has no installation candidate"*)
+      printf 'pazar: paket bulunamadı. «pazar tara <terim>» ile arayın.\n' >&2 ;;
+    *) : ;;
+  esac
+  return "$rc"
+}
+
+_pazar_confirm() {
+  local reply
+  printf 'Devam edilsin mi? [e/H] ' >&2
+  IFS= read -r reply || return 1
+  case "$(_pazar_fold "$reply")" in
+    e|evet|E|EVET|y|Y|yes) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+_pazar_render_plan() {
+  local op="$1" plan="$2"
+  printf '— pazar planı (%s) —\n' "$op"
+  # apt-get -s satırlarını sadeleştir (Inst/Remv/Conf).
+  printf '%s\n' "$plan" | grep -E '^(Inst|Remv|Purg|Conf) ' || printf '(değişiklik yok)\n'
+}
+
+_pazar_plan_json() {
+  local op="$1" plan="$2" inst remv
+  inst="$(printf '%s\n' "$plan" | grep -E '^Inst ' | awk '{print $2}' | paste -sd, - 2>/dev/null)"
+  remv="$(printf '%s\n' "$plan" | grep -E '^(Remv|Purg) ' | awk '{print $2}' | paste -sd, - 2>/dev/null)"
+  printf '{"op":"%s","install":[%s],"remove":[%s]}\n' \
+    "$op" "$(_pazar_csv_quote "$inst")" "$(_pazar_csv_quote "$remv")"
+}
+_pazar_csv_quote() {
+  [[ -z "$1" ]] && return 0
+  local IFS=,; local out=""
+  for p in $1; do out+="\"$p\","; done
+  printf '%s' "${out%,}"
+}
+
+# Değiştiren işlemlerin ortak akışı: plan → (json) → onay → uygula.
+_pazar_mutate() {
+  local op="$1"; shift
+  local plan prc
+  plan="$(apt-get -s "$op" "$@" 2>&1)"; prc=$?
+  if (( prc != 0 )); then printf '%s\n' "$plan" >&2; _pazar_apt_error "$prc" "$plan"; return "$prc"; fi
+
+  if (( PAZAR_JSON )); then
+    _pazar_plan_json "$op" "$plan"
+  else
+    _pazar_render_plan "$op" "$plan"
+  fi
+  (( PAZAR_PLAN_ONLY )) && return 0
+
+  if (( ! PAZAR_ASSUME_YES )); then
+    if [[ ! -t 0 ]]; then
+      _pazar_die "onay gerekiyor ama girdi etkileşimli değil; «--evet» kullanın." 1; return 1
+    fi
+    _pazar_confirm || { printf 'İptal edildi.\n'; return 1; }
+  fi
+
+  local pfx; pfx="$(_pazar_root_prefix)" || return 77
+  local out rc
+  out="$( ${pfx:+$pfx }apt-get "$op" -y -- "$@" 2>&1)"; rc=$?
+  printf '%s\n' "$out"
+  (( rc != 0 )) && _pazar_apt_error "$rc" "$out"
+  return "$rc"
+}
+
+pazar_kur()     { (( $# )) || { _pazar_die 'paket adı gerekli: pazar kur <paket>'; return 2; }; _pazar_mutate install "$@"; }
+pazar_kaldir()  { (( $# )) || { _pazar_die 'paket adı gerekli: pazar kaldır <paket>'; return 2; }; _pazar_mutate remove "$@"; }
+pazar_yukselt() { _pazar_mutate upgrade "$@"; }
+pazar_temizle() { _pazar_mutate autoremove "$@"; }
+
+pazar_guncelle() {
+  # update: plan yok, kök gerekir, depo meta verisini yeniler.
+  local pfx; pfx="$(_pazar_root_prefix)" || return 77
+  local out rc
+  out="$( ${pfx:+$pfx }apt-get update 2>&1)"; rc=$?
+  printf '%s\n' "$out"
+  (( rc != 0 )) && _pazar_apt_error "$rc" "$out"
+  return "$rc"
+}
+
+pazar_tara() {
+  (( $# )) || { _pazar_die 'arama terimi gerekli: pazar tara <terim>'; return 2; }
+  local out; out="$(apt-cache search -- "$@" 2>&1)"; local rc=$?
+  if (( rc == 0 )) && [[ -z "$out" ]]; then
+    printf 'pazar: «%s» için sonuç yok. (Not: Debian paket açıklamalarının Türkçe kapsamı sınırlıdır; İngilizce terim deneyin.)\n' "$*" >&2
+    return 0
+  fi
+  printf '%s\n' "$out"
+  return "$rc"
+}
+
+pazar_incele() {
+  (( $# )) || { _pazar_die 'paket adı gerekli: pazar incele <paket>'; return 2; }
+  apt-cache show -- "$@"
+}
+
+pazar_kurulu() {
+  # Kararlı arayüz: dpkg-query (apt list değil).
+  if (( $# )); then
+    dpkg-query -W -f='${Package}\t${Version}\t${Status}\n' "$@" 2>/dev/null
+  else
+    dpkg-query -W -f='${Package}\t${Version}\n' 2>/dev/null
+  fi
+}
+
+pazar_kaynaklar() {
+  # Salt-okunur: yapılandırılmış apt kaynaklarını listele.
+  local f
+  for f in /etc/apt/sources.list /etc/apt/sources.list.d/*; do
+    [[ -f "$f" ]] || continue
+    printf '# %s\n' "$f"
+    grep -vE '^\s*(#|$)' "$f" 2>/dev/null || true
+  done
+}
+
+pazar_usage() {
+  cat <<'EOF'
+pazar — KAPiTaN OS Türkçe paket yöneticisi (alfa · apt sarmalayıcı)
+
+Kullanım: pazar [SEÇENEK] <komut> [paket...]
+
+Komutlar:
+  kur <paket>       Paket kur            (apt-get install)
+  kaldır <paket>    Paketi kaldır        (apt-get remove)
+  güncelle          Depo listesini yenile (apt-get update)
+  yükselt           Paketleri yükselt    (apt-get upgrade)
+  tara <terim>      Paket ara            (apt-cache search)
+  incele <paket>    Paket ayrıntısı      (apt-cache show)
+  kurulu [paket]    Kurulu paketleri listele (dpkg-query)
+  temizle           Gereksizleri kaldır  (apt-get autoremove)
+  kaynaklar         Apt kaynaklarını göster (salt-okunur)
+
+Seçenekler:
+  -e, --evet   Onay sormadan uygula
+      --plan   Yalnızca planı göster, uygulama
+      --json   Planı JSON olarak yaz (kapitan-ai için)
+  -h, --help   Bu yardım
+
+Notlar:
+  • Değiştiren komutlar önce planı gösterir, onay ister, sonra «sudo apt-get … -y».
+  • ASCII yazım da kabul edilir: kaldir, guncelle, yukselt.
+EOF
+}
+
+main() {
+  local args=() a
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -e|--evet) PAZAR_ASSUME_YES=1; shift ;;
+      --json) PAZAR_JSON=1; shift ;;
+      --plan) PAZAR_PLAN_ONLY=1; shift ;;
+      -h|--help) pazar_usage; exit 0 ;;
+      --) shift; while [[ $# -gt 0 ]]; do args+=("$1"); shift; done; break ;;
+      *) args+=("$1"); shift ;;
+    esac
+  done
+  set -- "${args[@]}"
+
+  local sub; sub="$(_pazar_fold "${1:-}")"
+  (( $# )) && shift
+
+  case "$sub" in
+    kur)        pazar_kur "$@" ;;
+    kaldir)     pazar_kaldir "$@" ;;
+    guncelle)   pazar_guncelle "$@" ;;
+    yukselt)    pazar_yukselt "$@" ;;
+    tara)       pazar_tara "$@" ;;
+    incele)     pazar_incele "$@" ;;
+    kurulu)     pazar_kurulu "$@" ;;
+    temizle)    pazar_temizle "$@" ;;
+    kaynaklar)  pazar_kaynaklar "$@" ;;
+    ''|yardim|help) pazar_usage ;;
+    *) printf 'pazar: bilinmeyen komut: «%s»\n' "$sub" >&2; pazar_usage >&2; exit 2 ;;
+  esac
+}
+
+main "$@"

@@ -1,0 +1,13 @@
+{
+  "_comment": "Status overlay for the canonical commands.json. The canonical commands.json is the LANGUAGE single source of truth (ids, Turkish aliases, POSIX mapping). THIS file owns per-command rollout state and the path_guard list. To turn a command on, add its canonical id to `implemented` and run `npm run generate:commands`. Never hand-edit packages/kapitan-sh/data/commands.json — it is generated from these two files and a CI gate fails on drift.",
+  "implemented": [
+    "ls", "cd", "pwd", "mkdir", "rmdir", "cp", "mv", "rm", "touch", "cat",
+    "find", "ln", "uname", "date", "whoami",
+    "apt-install", "apt-remove", "apt-update", "apt-upgrade", "apt-search",
+    "apt-list", "apt-show",
+    "grep", "head", "tail", "echo"
+  ],
+  "path_guard": [
+    "git", "curl", "wget", "ssh", "scp", "sed", "awk", "python3", "node", "cargo", "go"
+  ]
+}

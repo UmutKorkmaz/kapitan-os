@@ -1,8 +1,7 @@
 {
-  "$schema": "./schema.json",
+  "_generated": "AUTO-GENERATED from packages/commands/commands.json + implemented-overlay.json by scripts/generate-runtime.mjs — DO NOT EDIT. Run `npm run generate:commands`.",
   "version": "1.0.0-alpha",
   "locale": "tr_TR",
-  "source": "docs/command-plan.md",
   "groups": [
     {
       "key": "dosya",
@@ -66,20 +65,7 @@
       "description": "Çalışma dizinini değiştir",
       "group": "dosya",
       "phase": 1,
-      "implemented": true,
-      "replaces": {
-        "kapitan": "git",
-        "short": "gt",
-        "reason": "git VCS çakışması"
-      },
-      "collision_warnings": [
-        {
-          "type": "legacy_alias",
-          "conflicts_with": "git",
-          "severity": "critical",
-          "message": "Eski 'cd' alias'ı 'git' ile çakışıyordu; 'gir' kullanın."
-        }
-      ]
+      "implemented": true
     },
     {
       "id": "pwd",
@@ -109,12 +95,7 @@
       "description": "Boş klasörü kaldır",
       "group": "dosya",
       "phase": 1,
-      "implemented": true,
-      "replaces": {
-        "kapitan": "klasörsil",
-        "short": "klss",
-        "reason": "bileşik alias yerine doğal fiil"
-      }
+      "implemented": true
     },
     {
       "id": "cp",
@@ -184,15 +165,7 @@
       "description": "Sembolik ya da sabit bağlantı oluştur",
       "group": "dosya",
       "phase": 1,
-      "implemented": true,
-      "collision_warnings": [
-        {
-          "type": "short_ambiguity",
-          "conflicts_with": "bağlan",
-          "severity": "warning",
-          "message": "Kısa alias 'bğ' ile 'bağlan' (ssh) aynı önek paylaşır."
-        }
-      ]
+      "implemented": true
     },
     {
       "id": "uname",
@@ -282,12 +255,7 @@
       "description": "Sistemi yeniden başlat",
       "group": "sistem",
       "phase": 1,
-      "implemented": false,
-      "replaces": {
-        "kapitan": "yeniden",
-        "short": "yn",
-        "reason": "zarf yerine emir kipi"
-      }
+      "implemented": false
     },
     {
       "id": "date",
@@ -377,12 +345,7 @@
       "description": "Uzak sunucuya dosya aktar",
       "group": "ag",
       "phase": 1,
-      "implemented": false,
-      "replaces": {
-        "kapitan": "uzakkopyala",
-        "short": "uzk",
-        "reason": "uzun bileşik alias yerine tek kelime"
-      }
+      "implemented": false
     },
     {
       "id": "hostname",
@@ -452,12 +415,7 @@
       "description": "Pazarda yazılım ara",
       "group": "paket",
       "phase": 1,
-      "implemented": true,
-      "replaces": {
-        "kapitan": "pazarara",
-        "short": "pza",
-        "reason": "bileşik alias yerine doğal fiil"
-      }
+      "implemented": true
     },
     {
       "id": "apt-list",
@@ -701,7 +659,7 @@
     },
     {
       "id": "ai-sor",
-      "posix": null,
+      "posix": "kapitan-ai sor",
       "kapitan": "sor",
       "short": "sr",
       "description": "AI'ya Türkçe ile soru sor",
@@ -711,7 +669,7 @@
     },
     {
       "id": "ai-kodla",
-      "posix": null,
+      "posix": "kapitan-ai kodla",
       "kapitan": "kodla",
       "short": "kd",
       "description": "Açıklamadan kod üret",
@@ -721,7 +679,7 @@
     },
     {
       "id": "ai-acikla",
-      "posix": null,
+      "posix": "kapitan-ai acikla",
       "kapitan": "açıkla",
       "short": "ack",
       "description": "Bir komutu ya da hatayı açıkla",
@@ -731,7 +689,7 @@
     },
     {
       "id": "ai-ozet",
-      "posix": null,
+      "posix": "kapitan-ai ozet",
       "kapitan": "özet",
       "short": "öz",
       "description": "Bir dosyayı ya da metni özetle",
@@ -741,7 +699,7 @@
     },
     {
       "id": "ai-cevir",
-      "posix": null,
+      "posix": "kapitan-ai cevir",
       "kapitan": "çevir",
       "short": "çv",
       "description": "50+ dil arası çeviri yap",
@@ -750,11 +708,6 @@
       "implemented": false
     }
   ],
-  "meta": {
-    "totalCommands": 66,
-    "status": "draft-awaiting-approval",
-    "lastReviewed": "2026-05-21"
-  },
   "path_guard": [
     "git",
     "curl",

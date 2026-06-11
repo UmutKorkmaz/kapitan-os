@@ -29,30 +29,22 @@ sync_package_list() {
 }
 
 sync_commands() {
-  local ssot="${REPO_ROOT}/packages/commands/commands.json"
+  # The runtime registry is generated from the canonical commands.json + the
+  # implemented-overlay by `npm run generate:commands` (CI fails on drift), so
+  # the ISO ships a byte-identical copy — no merge. The old jq merge keyed by
+  # .id silently dropped AI implemented flags because the runtime and SSOT used
+  # disjoint AI ids (ai-ask vs ai-sor); generating both from one source fixes it.
   local runtime="${REPO_ROOT}/packages/kapitan-sh/data/commands.json"
   local dest_dir="${INCLUDES}/usr/share/kapitan"
   local dest="${dest_dir}/commands.json"
 
-  if [[ ! -f "${ssot}" ]]; then
-    die "Missing ${ssot}"
-  fi
   if [[ ! -f "${runtime}" ]]; then
-    die "Missing ${runtime}"
-  fi
-  if ! command -v jq >/dev/null 2>&1; then
-    die "jq required to merge ISO commands.json (install jq on build host)"
+    die "Missing ${runtime} (run: npm run generate:commands)"
   fi
 
   mkdir -p "${dest_dir}"
-  jq -s '
-    .[0] as $ssot | .[1] as $rt |
-    ($rt.commands | map({(.id): .implemented}) | add) as $impl |
-    $ssot
-    | .path_guard = ($rt.path_guard // ["git"])
-    | .commands |= map(. + {implemented: ($impl[.id] // false)})
-  ' "${ssot}" "${runtime}" > "${dest}"
-  log "commands.json (SSOT + runtime path_guard/implemented) → ${dest}"
+  cp "${runtime}" "${dest}"
+  log "commands.json (generated runtime) → ${dest}"
 }
 
 sync_kapitan_sh() {

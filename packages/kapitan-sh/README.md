@@ -92,6 +92,27 @@ Manuel regresyon:
 ./kapitan-sh -c "git --version"         # git VCS (cd değil!)
 ```
 
+## Güvenlik · kabuk modu
+
+Varsayılan **güvenli mod**, komut/işlem yerine koyma (`$(...)`, `` `...` ``, `<(...)`)
+içeren satırları reddeder. Böylece bir Türkçe takma ad — ya da ileride bir AI önerisi —
+bir argümanın içine gizlenmiş komut çalıştıramaz. Örnek:
+
+```bash
+./kapitan-sh -c 'listele $(rm -rf ~)'   # reddedilir (güvenli mod)
+```
+
+Tam kabuk özellikleri (yerine koyma dahil) gerektiğinde açıkça izin verin:
+
+```bash
+KAPITAN_ALLOW_SHELL=1 ./kapitan-sh -c '...'   # tam kabuk, korumasız
+# veya kalıcı: export KAPITAN_SHELL_MODE=full
+```
+
+Boru (`|`), yönlendirme (`>`), `&&`/`;` gibi özellikler güvenli modda da çalışır;
+yalnızca komut/işlem yerine koyma kapalıdır. Çözülemeyen veya henüz uygulanmamış
+komutlar `127` ile çıkar.
+
 ## Lisans
 
-MIT
+GPL-3.0-only — bkz. kök [`LICENSE`](../../LICENSE).
