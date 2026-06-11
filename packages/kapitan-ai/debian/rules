@@ -1,0 +1,10 @@
+#!/usr/bin/make -f
+%:
+	dh $@
+
+override_dh_auto_build:
+	bash -n kapitan-ai
+	bash -n lib/risk.sh
+
+override_dh_auto_test:
+	bats tests/

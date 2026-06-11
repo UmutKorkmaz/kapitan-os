@@ -1,0 +1,12 @@
+#!/usr/bin/make -f
+%:
+	dh $@
+
+override_dh_auto_build:
+	bash -n kapitan-sh
+	bash -n lib/resolve.sh
+	bash -n lib/help.sh
+	bash -n lib/dispatch.sh
+
+override_dh_auto_test:
+	bats tests/

@@ -1,0 +1,17 @@
+Source: kapitan-ai
+Section: utils
+Priority: optional
+Maintainer: Umut Korkmaz <umutkorkmaz.32@gmail.com>
+Build-Depends: debhelper-compat (= 13), bash (>= 4.0), bats
+Standards-Version: 4.6.2
+Homepage: https://github.com/UmutKorkmaz/KAPiTaN-OS
+Rules-Requires-Root: no
+
+Package: kapitan-ai
+Architecture: all
+Depends: ${misc:Depends}, bash (>= 4.0)
+Description: KAPiTaN OS Turkish AI command assistant
+ kapitan-ai is a safety-first AI command assistant for KAPiTaN OS.
+ Every proposed command passes through a static risk analysis harness,
+ is presented with a plain-Turkish explanation, and is executed only
+ via argv (never eval or bash -c) after explicit user confirmation.

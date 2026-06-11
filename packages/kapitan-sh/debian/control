@@ -1,0 +1,16 @@
+Source: kapitan-sh
+Section: shells
+Priority: optional
+Maintainer: Umut Korkmaz <umutkorkmaz.32@gmail.com>
+Build-Depends: debhelper-compat (= 13), bash (>= 4.0), bats
+Standards-Version: 4.6.2
+Homepage: https://github.com/UmutKorkmaz/KAPiTaN-OS
+Rules-Requires-Root: no
+
+Package: kapitan-sh
+Architecture: all
+Depends: ${misc:Depends}, bash (>= 4.0), jq
+Description: KAPiTaN OS Turkish command layer
+ kapitan-sh provides a Turkish-language command interface for KAPiTaN OS,
+ mapping Turkish verb aliases to standard POSIX/Linux commands. It is a
+ pure Bash login-shell wrapper with a JSON-driven command registry.

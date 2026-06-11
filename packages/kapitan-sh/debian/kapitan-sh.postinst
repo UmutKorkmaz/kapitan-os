@@ -1,0 +1,15 @@
+#!/bin/sh
+set -e
+
+SHELL_PATH=/usr/bin/kapitan-sh
+
+case "$1" in
+  configure)
+    if ! grep -qx "$SHELL_PATH" /etc/shells; then
+      echo "$SHELL_PATH" >> /etc/shells
+    fi
+    ;;
+esac
+
+#DEBHELPER#
+exit 0
