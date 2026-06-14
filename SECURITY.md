@@ -34,12 +34,32 @@ ilk yanıt ~7 gün, düzeltme aciliyete göre. Bu bir taahhüt değil, hedeftir.
 - **Yapay zekâ** (planlanan) yerel bir model ile çalışacak ve üretilen komutlar
   "çalıştırmadan önce onay" akışından geçecektir.
 
-## Paket imzalama
+## Paket imzalama · Package signing
 
-İmzalı bir apt deposu ve ISO imzaları **planlanmıştır** (bkz.
-`docs/ULTIMATE-BUILD-PLAN.md`). İmza anahtarı parmak izi, yayınlandığında burada
-ve web sitesi alt bilgisinde duyurulacaktır:
+KAPiTaN OS paketleri (`kapitan-sh`, `pazar`, `kapitan-ai`) ve apt deposu
+**GPG ile imzalanır**. Güven modeli:
+
+- **Çevrimdışı birincil anahtar (offline primary key):** Asıl güven kökü. CI'a
+  hiçbir zaman girmez; mühürlü yedeği ve iptal sertifikası (revocation cert)
+  çevrimdışı saklanır.
+- **CI imza alt anahtarı (signing subkey):** Yalnızca sürüm yayını için kullanılır.
+  Korumalı bir GitHub **Environment** (`release`) içinde tutulur — yalnızca
+  korumalı `v*` etiketlerinde ve isteğe bağlı kurucu onayıyla erişilebilir.
+- **1 yıllık alt anahtar geçerliliği** + rotasyon runbook'u: yeni alt anahtar,
+  süre bitiminden **en az 1 ay önce** `kapitan-archive-keyring` ile dağıtılır.
+
+İmza anahtarı parmak izi (fingerprint) **out-of-band** olarak burada ve web
+sitesi alt bilgisinde duyurulur. Kullanıcılar, deposu eklemeden önce indirdikleri
+açık anahtarın parmak izini bu değerle doğrulamalıdır (bkz.
+`docs/INSTALL-APT.md`).
 
 ```
-KAPiTaN OS imza anahtarı parmak izi: (henüz oluşturulmadı — alpha)
+KAPiTaN OS imza alt anahtarı parmak izi · signing subkey fingerprint:
+8XXX XXXX XXXX XXXX XXXX  XXXX XXXX XXXX XXXX XXXX
+(tam 40-hex: <FULL_40_HEX> — kurucu tarafından doldurulacak)
 ```
+
+Apt deposu ayrı bir depoda barındırılır: <https://github.com/UmutKorkmaz/kapitan-apt>
+(GitHub Pages: <https://umutkorkmaz.github.io/kapitan-apt/>). Yayın akışı,
+her `.deb` için ayrık imza (`.deb.asc`) ve imzalı bir `SHA256SUMS` üretir;
+`reprepro` `Release` dosyasını alt anahtarla imzalar.

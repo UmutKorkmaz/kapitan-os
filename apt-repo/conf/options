@@ -1,0 +1,12 @@
+# KAPiTaN OS — reprepro global options
+#
+# verbose            : extra logging in CI (helps debug publish failures).
+# basedir .          : reprepro operates relative to the repo root (this dir's parent).
+# ask-passphrase     : never set — CI passes the passphrase via gpg-agent/loopback.
+# outdir / distdir / dbdir : defaults are fine for the Pages layout (pool/ + dists/).
+#
+# We do NOT enable "Acquire-By-Hash" at the reprepro layer for alpha; the publish
+# workflow uploads pool/ BEFORE dists/ to avoid the CDN hash-mismatch window.
+
+verbose
+basedir .

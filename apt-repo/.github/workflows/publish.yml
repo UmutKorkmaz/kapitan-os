@@ -1,0 +1,227 @@
+# KAPiTaN OS apt repository — publish workflow
+#
+# Repo: UmutKorkmaz/kapitan-apt  (separate from KAPiTaN-OS — see A4 in the build plan:
+# a single Pages artifact would atomically wipe the website's, so the apt repo MUST
+# live in its own Pages site).
+#
+# What it does:
+#   1. Downloads the signed .deb assets from a KAPiTaN-OS GitHub Release.
+#   2. Verifies each .deb's detached GPG signature against the shipped public key.
+#   3. Ingests them into reprepro (conf/distributions drives signing of Release).
+#   4. Publishes pool/ FIRST, then dists/ (avoids the CDN hash-mismatch window).
+#
+# Trigger: repository_dispatch from KAPiTaN-OS publish-release.yml, OR manual.
+#
+# FOUNDER ACTION REQUIRED — configure in this repo (kapitan-apt) Settings:
+#   * Pages: source = GitHub Actions.
+#   * Environment "release" with secrets:
+#       KAPITAN_SIGNING_KEY     — ASCII-armored CI signing SUBKEY (private), for reprepro.
+#       KAPITAN_GPG_PASSPHRASE  — passphrase for that subkey.
+#   * conf/distributions SignWith must equal the subkey's 40-hex fingerprint.
+
+name: publish
+
+on:
+  # Fired by KAPiTaN-OS after it creates a signed Release.
+  repository_dispatch:
+    types: [kapitan-release-published]
+  # Manual re-publish (e.g. CDN retry, recover from a partial run).
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'KAPiTaN-OS release tag to ingest (e.g. v0.1.0-alpha)'
+        required: true
+        type: string
+
+# Pages deployment needs these; nothing else gets write.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never run two publishes at once — reprepro's DB is not concurrency-safe and a
+# half-written dists/ would break `apt update` for every user.
+concurrency:
+  group: apt-publish
+  cancel-in-progress: false
+
+env:
+  SOURCE_REPO: UmutKorkmaz/KAPiTaN-OS
+  CODENAME: alpha
+  COMPONENT: main
+
+jobs:
+  publish:
+    name: ingest-and-publish
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+      - name: Checkout kapitan-apt
+        uses: actions/checkout@v4
+
+      - name: Resolve release tag
+        id: tag
+        env:
+          DISPATCH_TAG: ${{ github.event.client_payload.release_tag }}
+          INPUT_TAG: ${{ github.event.inputs.release_tag }}
+        run: |
+          set -euo pipefail
+          tag="${DISPATCH_TAG:-${INPUT_TAG:-}}"
+          if [ -z "$tag" ]; then
+            echo "::error::No release tag provided (dispatch payload and workflow input both empty)."
+            exit 1
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "Ingesting release tag: $tag"
+
+      - name: Install tooling
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends reprepro gnupg
+
+      - name: Download signed release assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          set -euo pipefail
+          mkdir -p incoming
+          # Pull every asset: .deb packages, their .deb.asc detached sigs, and SHA256SUMS(.asc).
+          gh release download "$TAG" \
+            --repo "$SOURCE_REPO" \
+            --dir incoming \
+            --pattern '*.deb' \
+            --pattern '*.deb.asc' \
+            --pattern 'SHA256SUMS' \
+            --pattern 'SHA256SUMS.asc'
+          echo "Downloaded assets:"
+          ls -la incoming
+
+      - name: Import public key for verification
+        run: |
+          set -euo pipefail
+          if ! grep -q 'BEGIN PGP PUBLIC KEY BLOCK' kapitan-archive-keyring.asc; then
+            echo "::error::kapitan-archive-keyring.asc is still the placeholder. Founder must export the real public key."
+            exit 1
+          fi
+          gpg --batch --import kapitan-archive-keyring.asc
+
+      - name: Verify detached signatures
+        working-directory: incoming
+        run: |
+          set -euo pipefail
+          # SHA256SUMS must verify, and every .deb must have a valid detached sig.
+          if [ -f SHA256SUMS ] && [ -f SHA256SUMS.asc ]; then
+            gpg --batch --verify SHA256SUMS.asc SHA256SUMS
+            sha256sum -c SHA256SUMS
+          else
+            echo "::warning::SHA256SUMS(.asc) missing; relying on per-.deb signatures only."
+          fi
+          shopt -s nullglob
+          found=0
+          for deb in *.deb; do
+            found=1
+            echo "Verifying signature for $deb"
+            gpg --batch --verify "${deb}.asc" "$deb"
+          done
+          if [ "$found" -eq 0 ]; then
+            echo "::error::No .deb files found in release assets."
+            exit 1
+          fi
+
+      - name: Import signing subkey (private) for reprepro
+        env:
+          KAPITAN_SIGNING_KEY: ${{ secrets.KAPITAN_SIGNING_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${KAPITAN_SIGNING_KEY:-}" ]; then
+            echo "::error::KAPITAN_SIGNING_KEY secret is empty. Set it in the 'release' environment."
+            exit 1
+          fi
+          printf '%s' "$KAPITAN_SIGNING_KEY" | gpg --batch --import
+          # Allow non-interactive, loopback passphrase use by reprepro.
+          {
+            echo "allow-loopback-pinentry"
+          } >> "$HOME/.gnupg/gpg-agent.conf" 2>/dev/null || true
+          gpgconf --kill gpg-agent || true
+
+      - name: Ingest packages into reprepro
+        env:
+          KAPITAN_GPG_PASSPHRASE: ${{ secrets.KAPITAN_GPG_PASSPHRASE }}
+        run: |
+          set -euo pipefail
+          if grep -q '<FULL_40_HEX>' conf/distributions; then
+            echo "::error::conf/distributions still has the <FULL_40_HEX> placeholder. Founder must set SignWith to the subkey fingerprint."
+            exit 1
+          fi
+          # reprepro reads the passphrase via gpg loopback; export so the agent picks it up.
+          export GPG_TTY=""
+          shopt -s nullglob
+          for deb in incoming/*.deb; do
+            echo "reprepro includedeb $CODENAME $deb"
+            reprepro \
+              --gnupghome "$HOME/.gnupg" \
+              --keepunreferencedfiles \
+              -Vb . includedeb "$CODENAME" "$deb"
+          done
+          # Sanity: list what is now published.
+          reprepro -b . list "$CODENAME"
+
+      - name: Assemble Pages artifact (pool first, then dists)
+        run: |
+          set -euo pipefail
+          # CRITICAL ordering: pool/ holds the actual .debs referenced by dists/ hashes.
+          # Staging pool/ before dists/ means clients that fetch a fresh Release always
+          # find the packages it points at, closing the hash-mismatch window.
+          mkdir -p _site
+          # Ship the public key at the repo root so users can fetch it over HTTPS.
+          cp kapitan-archive-keyring.asc _site/
+          if [ -d pool ]; then
+            cp -r pool _site/pool
+          fi
+          if [ -d dists ]; then
+            cp -r dists _site/dists
+          fi
+          # Minimal landing page so the Pages root isn't a 404.
+          if [ -f README.md ]; then
+            cp README.md _site/README.md
+          fi
+          echo "Pages artifact contents:"
+          find _site -maxdepth 2 -type d | sort
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Commit updated reprepro state
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          set -euo pipefail
+          # Persist pool/, dists/, and db/ so the next publish is incremental, not a rebuild.
+          git config user.name 'kapitan-apt-bot'
+          git config user.email 'bot@kapitan-os.org'
+          git add pool dists db 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No reprepro state changes to commit."
+          else
+            git commit -m "chore(apt): publish ${TAG}"
+            git push
+          fi
+
+  deploy:
+    name: deploy-pages
+    needs: publish
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

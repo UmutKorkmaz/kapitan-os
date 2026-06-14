@@ -1,0 +1,249 @@
+# KAPiTaN OS — build, sign, and publish a release
+#
+# Builds the three Debian packages (kapitan-sh, pazar/kapitan-pazar, kapitan-ai)
+# from their debian/ scaffolds, GPG-signs each .deb plus a SHA256SUMS manifest
+# with the CI signing SUBKEY, creates a GitHub Release with the signed assets,
+# and triggers the kapitan-apt repo to publish them.
+#
+# The offline PRIMARY key never touches CI. Only the signing subkey is imported,
+# from a protected "release" Environment.
+#
+# FOUNDER ACTION REQUIRED — see CONTRIBUTING.md "Release environment" section:
+#   Environment "release" with secrets:
+#     KAPITAN_SIGNING_KEY     — ASCII-armored CI signing SUBKEY (private).
+#     KAPITAN_GPG_PASSPHRASE  — passphrase for that subkey.
+#   Optional: a separate PAT (APT_DISPATCH_TOKEN) with `repo` scope on kapitan-apt,
+#   so this workflow can fire the cross-repo dispatch. Falls back to a clear error
+#   if absent.
+
+name: publish-release
+
+on:
+  # Tag-driven: pushing a v* tag cuts a release.
+  push:
+    tags:
+      - 'v*'
+  # Manual cut (e.g. re-run after fixing a publish failure).
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to create/use (e.g. v0.1.0-alpha)'
+        required: true
+        type: string
+
+permissions:
+  contents: write   # create the GitHub Release + upload assets
+
+concurrency:
+  group: publish-release
+  cancel-in-progress: false
+
+env:
+  APT_REPO: UmutKorkmaz/kapitan-apt
+  DISPATCH_EVENT: kapitan-release-published
+
+jobs:
+  build-debs:
+    name: build-debs
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.resolve.outputs.tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve release tag
+        id: resolve
+        env:
+          INPUT_TAG: ${{ github.event.inputs.tag }}
+        run: |
+          set -euo pipefail
+          if [ -n "${INPUT_TAG:-}" ]; then
+            tag="$INPUT_TAG"
+          elif [ "${GITHUB_REF_TYPE:-}" = "tag" ]; then
+            tag="${GITHUB_REF_NAME}"
+          else
+            echo "::error::No tag available (not a tag push and no workflow_dispatch input)."
+            exit 1
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "Release tag: $tag"
+
+      - name: Install build tooling
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            debhelper devscripts build-essential dpkg-dev bats jq lintian
+
+      - name: Build .deb packages
+        run: |
+          set -euo pipefail
+          mkdir -p "$GITHUB_WORKSPACE/dist"
+          # debian/ scaffolds live one level deep under packages/<name>.
+          for pkg in kapitan-sh kapitan-pazar kapitan-ai; do
+            dir="packages/${pkg}"
+            if [ ! -d "${dir}/debian" ]; then
+              echo "::error::Missing ${dir}/debian — cannot build ${pkg}."
+              exit 1
+            fi
+            echo "::group::Building ${pkg}"
+            ( cd "${dir}" && dpkg-buildpackage -us -uc -b )
+            echo "::endgroup::"
+          done
+          # dpkg-buildpackage drops artifacts in the parent of each source dir (packages/).
+          shopt -s nullglob
+          debs=(packages/*.deb)
+          if [ "${#debs[@]}" -eq 0 ]; then
+            echo "::error::No .deb files were produced."
+            exit 1
+          fi
+          mv packages/*.deb "$GITHUB_WORKSPACE/dist/"
+          echo "Built packages:"
+          ls -la "$GITHUB_WORKSPACE/dist"
+
+      - name: Lintian (non-blocking) report
+        run: |
+          set -euo pipefail
+          for deb in dist/*.deb; do
+            echo "::group::lintian ${deb}"
+            lintian --no-tag-display-limit "$deb" || true
+            echo "::endgroup::"
+          done
+
+      - name: Upload built debs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: debs
+          path: dist/*.deb
+          if-no-files-found: error
+          retention-days: 7
+
+  sign-and-release:
+    name: sign-and-release
+    needs: build-debs
+    runs-on: ubuntu-latest
+    environment: release
+    env:
+      TAG: ${{ needs.build-debs.outputs.tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download built debs
+        uses: actions/download-artifact@v4
+        with:
+          name: debs
+          path: dist
+
+      - name: Install gnupg + gh
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends gnupg
+
+      - name: Import signing subkey
+        env:
+          KAPITAN_SIGNING_KEY: ${{ secrets.KAPITAN_SIGNING_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${KAPITAN_SIGNING_KEY:-}" ]; then
+            echo "::error::KAPITAN_SIGNING_KEY secret is empty. Set it in the 'release' environment."
+            exit 1
+          fi
+          export GNUPGHOME="$RUNNER_TEMP/gnupg"
+          mkdir -p "$GNUPGHOME"
+          chmod 700 "$GNUPGHOME"
+          echo "GNUPGHOME=$GNUPGHOME" >> "$GITHUB_ENV"
+          printf '%s' "$KAPITAN_SIGNING_KEY" | gpg --batch --import
+          echo "allow-loopback-pinentry" >> "$GNUPGHOME/gpg-agent.conf"
+          gpgconf --kill gpg-agent || true
+          # Capture the signing key id (first secret key) for explicit --local-user.
+          keyid="$(gpg --list-secret-keys --with-colons | awk -F: '/^sec:/ {print $5; exit}')"
+          if [ -z "$keyid" ]; then
+            echo "::error::No secret signing key found after import."
+            exit 1
+          fi
+          echo "SIGN_KEYID=$keyid" >> "$GITHUB_ENV"
+          echo "Imported signing key: $keyid"
+
+      - name: Sign packages and build SHA256SUMS
+        env:
+          KAPITAN_GPG_PASSPHRASE: ${{ secrets.KAPITAN_GPG_PASSPHRASE }}
+        run: |
+          set -euo pipefail
+          if [ -z "${KAPITAN_GPG_PASSPHRASE:-}" ]; then
+            echo "::error::KAPITAN_GPG_PASSPHRASE secret is empty. Set it in the 'release' environment."
+            exit 1
+          fi
+          cd dist
+          # Deterministic manifest of all release artifacts.
+          sha256sum *.deb > SHA256SUMS
+
+          sign() {
+            local file="$1"
+            gpg --batch --yes --pinentry-mode loopback \
+              --passphrase "$KAPITAN_GPG_PASSPHRASE" \
+              --local-user "$SIGN_KEYID" \
+              --detach-sign --armor --output "${file}.asc" "$file"
+            gpg --batch --verify "${file}.asc" "$file"
+          }
+
+          shopt -s nullglob
+          for deb in *.deb; do
+            echo "Signing $deb"
+            sign "$deb"
+          done
+          echo "Signing SHA256SUMS"
+          sign SHA256SUMS
+
+          echo "Release artifacts:"
+          ls -la
+
+      - name: Create GitHub Release with signed assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          notes="Signed KAPiTaN OS packages for \`${TAG}\`.
+
+          Each \`.deb\` has a detached signature (\`.deb.asc\`); \`SHA256SUMS\` is
+          signed too (\`SHA256SUMS.asc\`). Verify with the public key — see
+          \`docs/INSTALL-APT.md\`."
+          # Create the release if missing, then (re)upload assets.
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG exists — clobbering assets."
+            gh release upload "$TAG" dist/*.deb dist/*.asc dist/SHA256SUMS --clobber
+          else
+            gh release create "$TAG" \
+              --title "KAPiTaN OS ${TAG}" \
+              --notes "$notes" \
+              dist/*.deb dist/*.asc dist/SHA256SUMS
+          fi
+
+      - name: Trigger kapitan-apt publish
+        env:
+          # Cross-repo dispatch needs a PAT; the default GITHUB_TOKEN cannot
+          # dispatch to another repo. Founder adds APT_DISPATCH_TOKEN to the env.
+          APT_DISPATCH_TOKEN: ${{ secrets.APT_DISPATCH_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${APT_DISPATCH_TOKEN:-}" ]; then
+            echo "::error::APT_DISPATCH_TOKEN secret is empty. Add a PAT with 'repo' scope on ${APT_REPO} to the 'release' environment, or trigger kapitan-apt's publish workflow manually with tag ${TAG}."
+            exit 1
+          fi
+          payload=$(printf '{"event_type":"%s","client_payload":{"release_tag":"%s"}}' \
+            "$DISPATCH_EVENT" "$TAG")
+          http_code=$(curl -sS -o /tmp/dispatch.out -w '%{http_code}' \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${APT_DISPATCH_TOKEN}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${APT_REPO}/dispatches" \
+            -d "$payload")
+          if [ "$http_code" != "204" ]; then
+            echo "::error::Dispatch to ${APT_REPO} failed (HTTP ${http_code})."
+            cat /tmp/dispatch.out || true
+            exit 1
+          fi
+          echo "Dispatched ${DISPATCH_EVENT} to ${APT_REPO} for ${TAG}."
