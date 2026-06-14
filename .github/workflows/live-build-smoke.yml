@@ -167,6 +167,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y qemu-system-x86 ovmf
+          # Enumerate installed OVMF files so path detection failures self-document
+          echo "=== Installed OVMF files ==="
+          find /usr/share/OVMF /usr/share/edk2-ovmf /usr/share/edk2 -name '*.fd' 2>/dev/null | sort || true
 
       - name: Download ISO artifact
         uses: actions/download-artifact@v4
@@ -175,6 +178,10 @@ jobs:
           path: build/artifacts
 
       - name: Run dual-boot smoke test
+        env:
+          # Ubuntu 24.04 runners have no nested KVM; give each firmware mode
+          # 5 minutes to emit a kernel/init serial marker without acceleration.
+          KAPITAN_SMOKE_TIMEOUT: 300
         run: |
           bash build/scripts/qemu-smoke.sh --mode both
 

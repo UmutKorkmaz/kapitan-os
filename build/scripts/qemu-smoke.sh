@@ -41,14 +41,18 @@ log() { printf '[qemu-smoke] %s\n' "$*"; }
 die() { printf '[qemu-smoke] ERROR: %s\n' "$*" >&2; exit 1; }
 
 find_ovmf_code() {
-  # Try env var first, then standard Debian paths
+  # Try env var first, then standard paths for Debian/Ubuntu (including 4M variant on Ubuntu 24.04)
   if [[ -n "${OVMF_CODE:-}" ]]; then
     if [[ -f "$OVMF_CODE" ]]; then echo "$OVMF_CODE"; return 0; fi
     echo "qemu-smoke: OVMF_CODE env var set but file not found: $OVMF_CODE" >&2
     return 1
   fi
-  # Debian/Ubuntu paths
-  for path in /usr/share/OVMF/OVMF_CODE.fd /usr/share/edk2-ovmf/OVMF_CODE.fd; do
+  # Ubuntu 24.04 ships 4M variant; legacy Debian ships plain fd; check all
+  for path in \
+    /usr/share/OVMF/OVMF_CODE_4M.fd \
+    /usr/share/OVMF/OVMF_CODE.fd \
+    /usr/share/edk2-ovmf/OVMF_CODE.fd \
+    /usr/share/edk2/ovmf/OVMF_CODE.fd; do
     if [[ -f "$path" ]]; then echo "$path"; return 0; fi
   done
   echo "qemu-smoke: OVMF not found. Install 'ovmf' package (Debian/Ubuntu) or 'edk2-ovmf' (Fedora)" >&2
@@ -56,11 +60,15 @@ find_ovmf_code() {
 }
 
 find_ovmf_vars() {
-  # Read-only template for QEMU
+  # Read-only template for QEMU — prefer matching 4M variant
   if [[ -n "${OVMF_VARS:-}" ]]; then
     if [[ -f "$OVMF_VARS" ]]; then echo "$OVMF_VARS"; return 0; fi
   fi
-  for path in /usr/share/OVMF/OVMF_VARS.fd /usr/share/edk2-ovmf/OVMF_VARS.fd; do
+  for path in \
+    /usr/share/OVMF/OVMF_VARS_4M.fd \
+    /usr/share/OVMF/OVMF_VARS.fd \
+    /usr/share/edk2-ovmf/OVMF_VARS.fd \
+    /usr/share/edk2/ovmf/OVMF_VARS.fd; do
     if [[ -f "$path" ]]; then echo "$path"; return 0; fi
   done
   echo "qemu-smoke: OVMF_VARS template not found" >&2
@@ -111,6 +119,11 @@ run_qemu_mode() {
     -boot d
     -no-reboot
   )
+
+  # Use KVM when the device node is available — drastically cuts boot time
+  if [[ -e /dev/kvm ]] && command -v qemu-system-x86_64 >/dev/null 2>&1; then
+    qemu_cmd+=(-enable-kvm -cpu host)
+  fi
 
   if [[ "$mode" == "bios" ]]; then
     qemu_cmd+=(-machine pc)
