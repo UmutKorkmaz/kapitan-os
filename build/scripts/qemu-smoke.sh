@@ -120,8 +120,10 @@ run_qemu_mode() {
     -no-reboot
   )
 
-  # Use KVM when the device node is available — drastically cuts boot time
-  if [[ -e /dev/kvm ]] && command -v qemu-system-x86_64 >/dev/null 2>&1; then
+  # Use KVM only when the current user has read/write access to /dev/kvm.
+  # Checking just -e /dev/kvm is insufficient: GitHub Actions standard runners
+  # expose the device node but deny access, causing QEMU to exit(1) immediately.
+  if [[ -r /dev/kvm && -w /dev/kvm ]]; then
     qemu_cmd+=(-enable-kvm -cpu host)
   fi
 
