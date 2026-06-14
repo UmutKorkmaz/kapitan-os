@@ -1,0 +1,34 @@
+# Bar (Minimal) Edition — old hardware, GUI-first, <2 GB target
+# Base packages (firmware, kapitan-sh, live-boot) are in kapitan-base.list.chroot
+# This list adds: XFCE desktop + the 8 bundled GUI apps
+
+# Display manager
+lightdm
+
+# Desktop environment — core only (no bloat metapackage)
+xfce4
+xfce4-terminal
+xfce4-settings
+xfwm4
+xfdesktop4
+
+# Browser
+chromium
+
+# Media player
+mpv
+
+# Text editor
+mousepad
+
+# Calculator
+gnome-calculator
+
+# Image viewer
+ristretto
+
+# Firewall GUI
+gufw
+
+# File manager (already pulled by xfce4, explicit for clarity)
+thunar
