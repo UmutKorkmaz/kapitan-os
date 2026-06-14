@@ -4,9 +4,10 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
-ISO="${REPO_ROOT}/build/artifacts/kapitan-v0.1.0-alpha-amd64.iso"
-LOG_DIR="${REPO_ROOT}/build/smoke-logs"
+EDITION="${KAPITAN_EDITION:-bar}"
 VERSION="0.1.0-alpha"
+ISO="${REPO_ROOT}/build/artifacts/kapitan-${EDITION}-v${VERSION}-amd64.iso"
+LOG_DIR="${REPO_ROOT}/build/smoke-logs"
 TIMEOUT_SEC="${KAPITAN_SMOKE_TIMEOUT:-120}"
 INTERACTIVE=0
 DRY_RUN=0
@@ -32,7 +33,8 @@ Environment:
   OVMF_VARS               Path to OVMF_VARS.fd template (auto-detected if unset)
 
 Requires:
-  qemu-system-x86_64, ISO at build/artifacts/kapitan-v0.1.0-alpha-amd64.iso
+  qemu-system-x86_64, ISO at build/artifacts/kapitan-<edition>-v0.1.0-alpha-amd64.iso
+  Set KAPITAN_EDITION=bar|ofis|gelistirici (default: bar)
   ovmf package for UEFI mode (Debian/Ubuntu: apt-get install ovmf)
 EOF
 }
@@ -221,7 +223,7 @@ write_report() {
   local uefi_qemu_status="${3:-N/A}"
   local uefi_boot_status="${4:-N/A}"
 
-  local report_file="${LOG_DIR}/SMOKE-v${VERSION}.md"
+  local report_file="${LOG_DIR}/SMOKE-${EDITION}-v${VERSION}.md"
 
   cat > "$report_file" <<EOF
 # KAPiTaN OS Boot Smoke Test Report — v${VERSION}

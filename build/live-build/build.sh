@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
-# KAPiTaN OS — live-build wrapper (Phase 1 alpha skeleton)
+# KAPiTaN OS — live-build wrapper
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 ARTIFACTS_DIR="${REPO_ROOT}/build/artifacts"
-ISO_NAME="kapitan-v0.1.0-alpha-amd64.iso"
-ISO_SRC="live-image-amd64.hybrid.iso"
+VERSION="0.1.0-alpha"
 
 DRY_RUN=0
 
@@ -18,14 +17,16 @@ Usage:
   bash build/live-build/build.sh [OPTIONS]
 
 Options:
-  --dry-run    Validate prerequisites and sync steps only; skip lb build
-  -h, --help   Show this help
+  --edition <name>   Edition to build: bar, ofis, or gelistirici (default: bar)
+  --dry-run          Validate prerequisites and sync steps only; skip lb build
+  -h, --help         Show this help
 
 Environment:
-  KAPITAN_MIRROR   Debian mirror (passed to auto/config)
+  KAPITAN_EDITION    Edition name (overridden by --edition flag)
+  KAPITAN_MIRROR     Debian mirror (passed to auto/config)
 
 Output:
-  build/artifacts/kapitan-v0.1.0-alpha-amd64.iso
+  build/artifacts/kapitan-<edition>-v0.1.0-alpha-amd64.iso
 
 Prerequisites:
   Debian/Ubuntu amd64 host, live-build, jq, sudo, ~15 GB disk
@@ -63,6 +64,11 @@ lb_sudo() {
 parse_args() {
   while [[ $# -gt 0 ]]; do
     case "$1" in
+      --edition)
+        [[ $# -ge 2 ]] || die "--edition requires an argument"
+        export KAPITAN_EDITION="$2"
+        shift 2
+        ;;
       --dry-run)
         DRY_RUN=1
         shift
@@ -87,10 +93,13 @@ validate_commands() {
 verify_layout() {
   local base="${SCRIPT_DIR}/config"
   local includes="${base}/includes.chroot"
-  local pkg_list="${base}/package-lists/kapitan.list.chroot"
+  local edition="${KAPITAN_EDITION:-bar}"
+  local base_list="${base}/package-lists/kapitan-base.list.chroot"
+  local edition_list="${base}/package-lists/${edition}.list.chroot"
   local hook="${base}/hooks/normal/0100-kapitan.hook.chroot"
 
-  [[ -f "${pkg_list}" ]] || die "Missing ${pkg_list} — run sync-image-assets"
+  [[ -f "${base_list}" ]] || die "Missing ${base_list} — run sync-image-assets"
+  [[ -f "${edition_list}" ]] || die "Missing ${edition_list} — run sync-image-assets or check edition name"
   [[ -x "${hook}" || -f "${hook}" ]] || die "Missing chroot hook ${hook}"
   [[ -f "${includes}/usr/share/kapitan/commands.json" ]] || die "Missing synced commands.json"
   [[ -x "${includes}/usr/local/bin/kapitan-sh" ]] || die "Missing kapitan-sh wrapper in includes.chroot"
@@ -101,11 +110,18 @@ verify_layout() {
 main() {
   parse_args "$@"
 
+  # Resolve edition (export so auto/config inherits it)
+  export KAPITAN_EDITION="${KAPITAN_EDITION:-bar}"
+  local ISO_NAME="kapitan-${KAPITAN_EDITION}-v${VERSION}-amd64.iso"
+  local ISO_SRC="live-image-amd64.hybrid.iso"
+
   require_command lb "Install live-build: sudo apt install live-build"
   require_command bash "bash is required"
   require_command jq "Install jq: sudo apt install jq"
 
-  log "Repo root: ${REPO_ROOT}"
+  log "Repo root:  ${REPO_ROOT}"
+  log "Edition:    ${KAPITAN_EDITION}"
+  log "ISO name:   ${ISO_NAME}"
 
   validate_commands
   bash "${REPO_ROOT}/build/scripts/sync-image-assets.sh"

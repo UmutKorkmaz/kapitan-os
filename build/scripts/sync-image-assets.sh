@@ -16,16 +16,17 @@ die() {
   exit 1
 }
 
-sync_package_list() {
-  local src="${LB_DIR}/auto/package-lists/kapitan.list.chroot"
-  local dest_dir="${LB_DIR}/config/package-lists"
-  local dest="${dest_dir}/kapitan.list.chroot"
-  if [[ ! -f "${src}" ]]; then
-    die "Missing ${src}"
-  fi
-  mkdir -p "${dest_dir}"
-  cp "${src}" "${dest}"
-  log "package list → ${dest}"
+verify_package_lists() {
+  local edition="${KAPITAN_EDITION:-bar}"
+  local pkg_dir="${LB_DIR}/config/package-lists"
+  local base_list="${pkg_dir}/kapitan-base.list.chroot"
+  local edition_list="${pkg_dir}/${edition}.list.chroot"
+
+  [[ -f "${base_list}" ]] || die "Missing base package list: ${base_list}"
+  [[ -f "${edition_list}" ]] || die "Missing edition package list: ${edition_list} — check KAPITAN_EDITION=${edition}"
+
+  log "base package list:    ${base_list}"
+  log "edition package list: ${edition_list} (${edition})"
 }
 
 sync_commands() {
@@ -89,7 +90,7 @@ write_version_stamp() {
 }
 
 main() {
-  sync_package_list
+  verify_package_lists
   sync_commands
   sync_kapitan_sh
   sync_overlay
