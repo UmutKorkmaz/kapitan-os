@@ -24,6 +24,20 @@ Build host requirements (see BUILD PLAN §3.5.2):
 - **Disk:** ~15 GB free for chroot and binary stages
 - **Network:** Access to Debian mirrors during bootstrap
 
+### OVMF firmware (for UEFI boot testing)
+
+```bash
+# Debian/Ubuntu:
+sudo apt-get install ovmf
+# Fedora:
+sudo dnf install edk2-ovmf
+```
+
+The smoke test auto-detects OVMF paths. Set the `OVMF_CODE` env var if installed to a non-standard location.
+
+> **Secure Boot:** OUT OF SCOPE for v0.1.0-alpha. The dual-boot smoke test runs with SB disabled in firmware (the default for QEMU/OVMF). SB enforcement (shim-signed, UEFI Secure Boot keys) is Phase 2 work.
+
+
 ### Install live-build (Debian/Ubuntu)
 
 ```bash

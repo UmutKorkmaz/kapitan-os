@@ -23,7 +23,7 @@ lb config noauto \
   --debian-installer false \
   --win32-loader false \
   --binary-images iso-hybrid \
-  --bootloader grub-pc \
+  --bootloaders syslinux,grub-efi \
   --security false \
   --debootstrap-options "--include=ca-certificates" \
   --mirror-bootstrap "${KAPITAN_MIRROR}" \
