@@ -101,7 +101,7 @@ kapitan_ai_sor() {
 }
 
 kapitan_ai_needs_model() {
-  printf 'kapitan-ai: «%s» yerel model gerektirir — «kapitan-ai model kur» (yakında).\n' "$1" >&2
+  printf 'kapitan-ai: «%s» yerel model gerektirir — önce «kapitan-ai model kur» komutunu çalıştırın.\n' "$1" >&2
   return 1
 }
 
@@ -115,25 +115,91 @@ kapitan_ai_doctor() {
   if command -v ollama >/dev/null 2>&1; then
     printf '  Çalıştırıcı: ollama bulundu\n'
   else
-    printf '  Çalıştırıcı: ollama YOK (kurulması planlanıyor)\n'
+    printf '  Çalıştırıcı: ollama YOK (apt install ollama ile kurulabilir)\n'
   fi
-  printf '  Model      : kurulu değil («kapitan-ai model kur» — yakında)\n'
+  if [[ -f "$KAPITAN_AI_MODEL_PATH" ]]; then
+    printf '  Model      : %s (önbellekte mevcut)\n' "$KAPITAN_AI_MODEL_PATH"
+  else
+    printf '  Model      : kurulu değil — «kapitan-ai model kur» ile indirin\n'
+  fi
   printf '  Güvenlik   : öneriler statik risk analizinden geçer; tehlikeli komutlar ONAYLA ister\n'
+}
+
+kapitan_ai_model_kur() {
+  local manifest_file="${KAPITAN_AI_ROOT}/models/qwen3-4b.manifest.json"
+
+  if [[ ! -f "$manifest_file" ]]; then
+    printf 'kapitan-ai: model manifest bulunamadı: %s\n' "$manifest_file" >&2
+    return 1
+  fi
+
+  local model_id cache_path filename download_url sha256 size_gb
+
+  # jq gerektirmeden manifest ayrıştırma (grep + cut).
+  model_id=$(grep -o '"id": "[^"]*"' "$manifest_file" | cut -d'"' -f4)
+  cache_path=$(grep -o '"cache_path": "[^"]*"' "$manifest_file" | cut -d'"' -f4 | sed "s|\$HOME|$HOME|")
+  filename=$(grep -o '"filename": "[^"]*"' "$manifest_file" | cut -d'"' -f4)
+  download_url=$(grep -o '"download_url": "[^"]*"' "$manifest_file" | cut -d'"' -f4)
+  sha256=$(grep -o '"sha256": "[^"]*"' "$manifest_file" | cut -d'"' -f4)
+  size_gb=$(grep -o '"size_bytes": [0-9]*' "$manifest_file" | cut -d' ' -f2 | awk '{printf "%.1f", $1/1e9}')
+
+  mkdir -p "$cache_path"
+  local model_path="${cache_path}${filename}"
+
+  if [[ -f "$model_path" ]]; then
+    printf 'kapitan-ai: model zaten önbellekte: %s\n' "$model_path"
+    return 0
+  fi
+
+  printf 'kapitan-ai: %s (%s GB) indiriliyor (HuggingFace)...\n' "$model_id" "$size_gb" >&2
+
+  if ! curl -fL --progress-bar "$download_url" -o "$model_path"; then
+    printf 'kapitan-ai: indirme başarısız\n' >&2
+    rm -f "$model_path"
+    return 1
+  fi
+
+  printf 'kapitan-ai: SHA-256 doğrulanıyor...\n' >&2
+  local computed
+  computed=$(sha256sum "$model_path" | cut -d' ' -f1)
+
+  if [[ "$computed" != "$sha256" ]]; then
+    printf 'kapitan-ai: SHA-256 uyuşmuyor! Beklenen %s, bulunan %s\n' "$sha256" "$computed" >&2
+    rm -f "$model_path"
+    return 1
+  fi
+
+  printf 'kapitan-ai: model hazır: %s\n' "$model_path" >&2
+  return 0
+}
+
+kapitan_ai_model_listele() {
+  if [[ -f "$KAPITAN_AI_MODEL_PATH" ]]; then
+    printf 'qwen3-4b\tQwen3-4B-Instruct (Q4_K_M)\tApache-2.0\t%s\n' "$KAPITAN_AI_MODEL_PATH"
+  else
+    printf 'kapitan-ai: önbellekte model yok — «kapitan-ai model kur» ile indirin\n'
+  fi
 }
 
 kapitan_ai_model() {
   case "$(_aifold "${1:-}")" in
     kur)
-      printf 'kapitan-ai: yerel model kurulumu planlanıyor (Ollama + Türkçe GGUF).\n'
-      printf 'Model kaynağı/lisansı ve indirme adresi belirlenince etkinleşecek.\n' ;;
-    listele|liste) printf 'kapitan-ai: kurulu model yok.\n' ;;
-    *) printf 'Kullanım: kapitan-ai model <kur|listele>\n' >&2; return 2 ;;
+      shift 2>/dev/null || true
+      kapitan_ai_model_kur
+      ;;
+    listele|liste)
+      kapitan_ai_model_listele
+      ;;
+    *)
+      printf 'Kullanım: kapitan-ai model <kur|listele>\n' >&2
+      return 2
+      ;;
   esac
 }
 
 kapitan_ai_usage() {
   cat <<'EOF'
-kapitan-ai — KAPiTaN OS Türkçe komut asistanı (iskelet · model yakında)
+kapitan-ai — KAPiTaN OS Türkçe komut asistanı
 
 Kullanım: kapitan-ai [SEÇENEK] <komut> [...]
 
@@ -142,7 +208,7 @@ Komutlar:
   çalıştır <komut...>  Bir komutu güvenlik zırhından geçirerek çalıştır
   sınıf <komut...>     Komutun risk düzeyini yaz (safe|caution|destructive)
   doctor               Durum (model/çalıştırıcı/güvenlik)
-  model <kur|listele>  Model yönetimi (yakında)
+  model <kur|listele>  Model yönetimi (Qwen3-4B-Instruct, önbellekle)
   kodla|açıkla|özet|çevir   (yerel model gerektirir — yakında)
 
 Seçenekler:

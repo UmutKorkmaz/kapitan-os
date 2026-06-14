@@ -60,10 +60,12 @@ setup() {
   [[ "$output" == *"model"* ]]
 }
 
-@test "model kur is an honest stub" {
+@test "model kur finds the manifest and attempts download" {
   run "$AI" model kur
-  [ "$status" -eq 0 ]
-  [[ "$output" == *"planlanıyor"* ]]
+  # Manifest must be found (structural check); download may fail in test env.
+  [[ "$output" != *"manifest bulunamadı"* ]]
+  # Either already cached (0) or download attempted (0 or 1) — never exit 2.
+  [ "$status" -ne 2 ]
 }
 
 @test "kodla requires the model (exit 1)" {
