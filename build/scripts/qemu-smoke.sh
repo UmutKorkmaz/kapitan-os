@@ -113,7 +113,7 @@ detect_boot() {
     return 1
   fi
   grep -qiE \
-    'Welcome to GRUB|GRUB loading|GNU GRUB|Linux version|Debian GNU/Linux|live-config|systemd\[1\]:|Welcome to' \
+    'ISOLINUX|Welcome to GRUB|GRUB loading|GNU GRUB|Linux version|Debian GNU/Linux|live-config|systemd\[1\]:|Welcome to' \
     "${log_path}"
 }
 
