@@ -15,6 +15,9 @@ if [[ -n "${KAPITAN_AI_RISK_LOADED:-}" ]]; then
 fi
 KAPITAN_AI_RISK_LOADED=1
 
+KAPITAN_AI_MODEL_CACHE="${HOME}/.cache/kapitan-ai/models"
+KAPITAN_AI_MODEL_PATH="${KAPITAN_AI_MODEL_CACHE}/qwen3-4b-q4_k_m.gguf"
+
 KAPITAN_AI_READONLY="ls cat pwd echo find grep egrep fgrep head tail uname date whoami id stat file wc which type printenv df du free ps top uptime hostname dir vdir tree less more man help yardım"
 KAPITAN_AI_WRITE="cp mv mkdir rmdir touch ln tee install rename"
 KAPITAN_AI_DESTRUCTIVE="rm dd mkfs shred fdisk parted sgdisk wipefs mkswap shutdown reboot halt poweroff init telinit kill killall pkill"
