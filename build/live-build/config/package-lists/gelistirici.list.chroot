@@ -1,0 +1,47 @@
+# Gelistirici (Developer) Edition — software developers, engineers, container-first
+# Base packages (firmware, kapitan-sh, live-boot) are in kapitan-base.list.chroot
+# This list adds: XFCE desktop + full toolchain + podman
+
+# Display manager
+lightdm
+
+# Desktop environment — core only (no bloat metapackage)
+xfce4
+xfce4-terminal
+xfce4-settings
+xfwm4
+xfdesktop4
+
+# Build tools
+build-essential
+cmake
+git
+pkg-config
+
+# Languages: C/C++
+gcc
+g++
+make
+
+# Languages: Python
+python3
+python3-pip
+python3-venv
+
+# Languages: Node.js
+nodejs
+npm
+
+# Debugging
+gdb
+
+# Container (rootless, no daemon)
+podman
+
+# GUI editor
+geany
+
+# Utilities
+vim
+curl
+wget
