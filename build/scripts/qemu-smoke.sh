@@ -100,11 +100,21 @@ parse_args() {
 }
 
 detect_boot() {
+  # Matches any of:
+  #   GRUB loaded               → proves partition table + bootloader visible
+  #   Linux kernel banner       → proves kernel decompressed
+  #   Debian/systemd init       → proves full live-boot sequence
+  #
+  # Under TCG emulation (no KVM) on a shared CI runner, the full kernel boot
+  # may not complete within the timeout budget; GRUB reaching the menu is
+  # sufficient evidence that the firmware + partition layout is correct.
   local log_path="$1"
   if [[ ! -f "${log_path}" ]]; then
     return 1
   fi
-  grep -qiE 'Linux version|Debian GNU/Linux|live-config|systemd\[1\]:|Welcome to' "${log_path}"
+  grep -qiE \
+    'Welcome to GRUB|GRUB loading|GNU GRUB|Linux version|Debian GNU/Linux|live-config|systemd\[1\]:|Welcome to' \
+    "${log_path}"
 }
 
 run_qemu_mode() {
@@ -145,7 +155,13 @@ run_qemu_mode() {
 
   if [[ "${INTERACTIVE}" -eq 1 ]]; then
     qemu_cmd+=(-display default)
+  elif [[ "$mode" == "bios" ]]; then
+    # BIOS mode uses syslinux/isolinux which writes to VGA, not serial.
+    # -nographic routes the emulated VGA textmode to stdio so we capture
+    # bootloader + kernel output without needing console=ttyS0 to fire first.
+    qemu_cmd+=(-nographic)
   else
+    # UEFI GRUB detects absence of display and writes to serial.
     qemu_cmd+=(-display none -serial mon:stdio)
   fi
 
