@@ -18,8 +18,12 @@ on:
 
 jobs:
   sync-and-dry-run:
-    name: sync-iso-assets + dry-run
+    name: 'Sync & Dry-Run [${{ matrix.edition }}]'
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        edition: [bar, ofis, gelistirici]
+      fail-fast: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -36,10 +40,14 @@ jobs:
       - name: Validate commands
         run: npm run validate:commands
 
-      - name: Sync ISO image assets
+      - name: Sync ISO image assets [${{ matrix.edition }}]
+        env:
+          KAPITAN_EDITION: ${{ matrix.edition }}
         run: npm run sync:iso-assets
 
-      - name: Verify includes.chroot layout
+      - name: Verify includes.chroot layout [${{ matrix.edition }}]
+        env:
+          KAPITAN_EDITION: ${{ matrix.edition }}
         run: |
           set -euo pipefail
           base=build/live-build/config/includes.chroot
@@ -51,9 +59,11 @@ jobs:
           test -f "$base/etc/kapitan/VERSION"
           grep -q 'KAPiTaN OS' "$base/etc/os-release"
           grep -q 'KAPITAN_COMMANDS_JSON' "$base/etc/profile.d/kapitan.sh"
-          test -f build/live-build/config/package-lists/kapitan.list.chroot
+          # Verify the edition-specific package list exists
+          test -f "build/live-build/config/package-lists/${KAPITAN_EDITION}.list.chroot"
+          test -f "build/live-build/config/package-lists/kapitan-base.list.chroot"
           jq -e '.path_guard | length > 0' "$base/usr/share/kapitan/commands.json" >/dev/null
-          echo "includes.chroot layout OK"
+          echo "includes.chroot layout OK for edition: ${KAPITAN_EDITION}"
 
       - name: Install live-build (dry-run prerequisites)
         run: |
@@ -65,19 +75,27 @@ jobs:
           sudo dpkg -i /tmp/live-build.deb
           lb --version
 
-      - name: Dry-run ISO build wrapper
+      - name: Dry-run ISO build [${{ matrix.edition }}]
+        env:
+          KAPITAN_EDITION: ${{ matrix.edition }}
         run: npm run dry-run:iso
 
-  # Full ISO build — manual only (long-running, needs ~15GB disk)
+  # Full ISO build — manual or tag-triggered (long-running, needs ~15GB disk)
   build-iso:
-    name: build-iso (manual)
-    if: github.event_name == 'workflow_dispatch'
+    name: 'Build ISO [${{ matrix.edition }}]'
     runs-on: ubuntu-latest
+    needs: sync-and-dry-run
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
     timeout-minutes: 180
-    # Only this manual job publishes the ISO to a GitHub Release.
+    # Only this job publishes ISOs; escalated to write for future release step.
     permissions:
       contents: write
+    strategy:
+      matrix:
+        edition: [bar, ofis, gelistirici]
+      fail-fast: false
     env:
+      KAPITAN_EDITION: ${{ matrix.edition }}
       KAPITAN_MIRROR: http://deb.debian.org/debian
       KAPITAN_SECURITY_MIRROR: http://deb.debian.org/debian-security
     steps:
@@ -110,13 +128,13 @@ jobs:
           npm run validate:commands
           npm run sync:iso-assets
 
-      - name: Build ISO
+      - name: Build ISO [${{ matrix.edition }}]
         run: sudo -E bash build/live-build/build.sh
 
-      - name: Verify ISO artifact
+      - name: Verify ISO artifact [${{ matrix.edition }}]
         run: |
           set -euo pipefail
-          iso=build/artifacts/kapitan-v0.1.0-alpha-amd64.iso
+          iso="build/artifacts/kapitan-${KAPITAN_EDITION}-v0.1.0-alpha-amd64.iso"
           sudo chown -R "$(id -u):$(id -g)" build/artifacts
           test -f "$iso"
           size=$(stat -c%s "$iso")
@@ -124,42 +142,26 @@ jobs:
           sha256sum "$iso" | tee "$iso.sha256"
           echo "ISO size: $size bytes"
 
-      - name: Upload ISO artifact
+      - name: Upload ISO artifact [${{ matrix.edition }}]
         uses: actions/upload-artifact@v4
         with:
-          name: kapitan-v0.1.0-alpha-amd64
-          path: build/artifacts/kapitan-v0.1.0-alpha-amd64.iso
+          name: iso-${{ matrix.edition }}-${{ github.run_id }}
+          path: build/artifacts/kapitan-${{ matrix.edition }}-v0.1.0-alpha-amd64.iso
           retention-days: 7
 
-      - name: Publish GitHub Release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          tag="v0.1.0-alpha"
-          iso="build/artifacts/kapitan-v0.1.0-alpha-amd64.iso"
-          notes="$(mktemp)"
-          {
-            echo "## KAPiTaN OS 0.1.0-alpha"
-            echo ""
-            echo "F1 alpha skeleton — Debian 12 bookworm amd64 live ISO."
-            echo ""
-            echo "### SHA-256"
-            echo '```'
-            cat "build/artifacts/kapitan-v0.1.0-alpha-amd64.iso.sha256"
-            echo '```'
-          } > "$notes"
-          if gh release view "$tag" >/dev/null 2>&1; then
-            gh release upload "$tag" "$iso" --clobber
-            gh release edit "$tag" --notes-file "$notes"
-          else
-            gh release create "$tag" "$iso" --title "KAPiTaN OS 0.1.0-alpha" --notes-file "$notes"
-          fi
+      # Stage 4 (publish-release) deferred: aggregating all 3 ISOs into a single
+      # GitHub Release requires a downstream job after the matrix completes.
+      # See: docs/KAPiTaN OS BUILD PLAN.md — Stage 4
+
   smoke-dual-boot:
-    name: QEMU Dual-Boot Smoke Test (BIOS + UEFI)
+    name: 'QEMU Dual-Boot Smoke [${{ matrix.edition }}]'
     runs-on: ubuntu-latest
     needs: build-iso
     if: always()
+    strategy:
+      matrix:
+        edition: [bar, ofis, gelistirici]
+      fail-fast: false
     steps:
       - uses: actions/checkout@v4
 
@@ -171,23 +173,25 @@ jobs:
           echo "=== Installed OVMF files ==="
           find /usr/share/OVMF /usr/share/edk2-ovmf /usr/share/edk2 -name '*.fd' 2>/dev/null | sort || true
 
-      - name: Download ISO artifact
+      - name: Download ISO artifact [${{ matrix.edition }}]
         uses: actions/download-artifact@v4
         with:
-          name: kapitan-v0.1.0-alpha-amd64
+          name: iso-${{ matrix.edition }}-${{ github.run_id }}
           path: build/artifacts
 
-      - name: Run dual-boot smoke test
+      - name: Run dual-boot smoke test [${{ matrix.edition }}]
         env:
+          KAPITAN_EDITION: ${{ matrix.edition }}
           # Ubuntu 24.04 runners have no nested KVM; give each firmware mode
           # 5 minutes to emit a kernel/init serial marker without acceleration.
           KAPITAN_SMOKE_TIMEOUT: 300
         run: |
           bash build/scripts/qemu-smoke.sh --mode both
 
-      - name: Upload smoke report
+      - name: Upload smoke report [${{ matrix.edition }}]
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: smoke-report-${{ github.run_id }}
+          name: smoke-report-${{ matrix.edition }}-${{ github.run_id }}
           path: build/smoke-logs/SMOKE-*.md
+          if-no-files-found: ignore
