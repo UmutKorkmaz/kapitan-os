@@ -1,0 +1,37 @@
+# Ofis (Office) Edition — office workers, students, Turkish localization
+# Base packages (firmware, kapitan-sh, live-boot) are in kapitan-base.list.chroot
+# This list adds: XFCE desktop + LibreOffice + Thunderbird + Firefox + Turkish l10n
+
+# Display manager
+lightdm
+
+# Desktop environment — core only (no bloat metapackage)
+xfce4
+xfce4-terminal
+xfce4-settings
+xfwm4
+xfdesktop4
+
+# Office suite with Turkish UI and localization
+libreoffice-writer
+libreoffice-calc
+libreoffice-impress
+libreoffice-l10n-tr
+libreoffice-help-tr
+
+# Turkish spell-check dictionary
+hunspell-tr
+
+# Web browser
+firefox-esr
+
+# Email client with Turkish language pack
+thunderbird
+thunderbird-l10n-tr
+
+# Utilities
+evince
+gnome-calculator
+ristretto
+vlc
+thunar
