@@ -158,8 +158,13 @@ jobs:
           printf '%s' "$KAPITAN_SIGNING_KEY" | gpg --batch --import
           echo "allow-loopback-pinentry" >> "$GNUPGHOME/gpg-agent.conf"
           gpgconf --kill gpg-agent || true
-          # Capture the signing key id (first secret key) for explicit --local-user.
-          keyid="$(gpg --list-secret-keys --with-colons | awk -F: '/^sec:/ {print $5; exit}')"
+          # Capture the signing subkey id (exported via --export-secret-subkeys).
+          # Look for ssb: (secret subkey) since we export only the subkey, not the primary.
+          keyid="$(gpg --list-secret-keys --with-colons | awk -F: '/^ssb:/ {print $5; exit}')"
+          # Fallback to sec: if subkey not found (shouldn't happen, but defensive).
+          if [ -z "$keyid" ]; then
+            keyid="$(gpg --list-secret-keys --with-colons | awk -F: '/^sec:/ {print $5; exit}')"
+          fi
           if [ -z "$keyid" ]; then
             echo "::error::No secret signing key found after import."
             exit 1
