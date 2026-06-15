@@ -1,17 +1,17 @@
 {
   "id": "qwen3-4b",
-  "name": "Qwen3-4B-Instruct (Q4_K_M)",
+  "name": "Qwen3.5-4B-Instruct-Revised (Q4_K_M)",
   "version": "1.0.0",
   "license": "Apache-2.0",
   "source": "huggingface",
-  "model_id": "Qwen/Qwen3-4B-Instruct-GGUF",
-  "filename": "qwen3-4b-q4_k_m.gguf",
-  "size_bytes": 2686623744,
-  "sha256": "(checksum from HF repo — fill in after verification)",
+  "model_id": "Smoffyy/Qwen3.5-4B-Instruct-Revised-GGUF",
+  "filename": "Qwen3.5-4B-Revised-q4_k_m.gguf",
+  "size_bytes": 2708805568,
+  "sha256": "5368a5bc1bf6e68b74387be522e3c1c5c5628680ed02986a50a40e1dd676c0bf",
   "languages": ["en", "tr", "zh", "ar"],
   "capabilities": ["instruction-following", "text-generation", "coding"],
   "cache_path": "$HOME/.cache/kapitan-ai/models/",
-  "download_url": "https://huggingface.co/Qwen/Qwen3-4B-Instruct-GGUF/resolve/main/qwen3-4b-q4_k_m.gguf",
+  "download_url": "https://huggingface.co/Smoffyy/Qwen3.5-4B-Instruct-Revised-GGUF/resolve/main/Qwen3.5-4B-Revised-q4_k_m.gguf",
   "min_ram_gb": 4,
   "recommended_ram_gb": 8
 }
