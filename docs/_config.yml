@@ -3,11 +3,14 @@ title: "KAPiTaN OS"
 description: "Turkish Command-Layer Linux Distribution"
 theme: jekyll-theme-slate
 url: "https://umutkorkmaz.github.io/kapitan-os"
-logo: "https://avatars.githubusercontent.com/u/YOUR_USER_ID?s=64"
 
 # Markdown processor
 markdown: kramdown
 highlighter: rouge
+
+# Site metadata
+author: "Umut Korkmaz"
+repository: "UmutKorkmaz/kapitan-os"
 
 # Exclude from processing
 exclude:
@@ -16,9 +19,15 @@ exclude:
   - Gemfile.lock
   - README.md
   - LICENSE
+  - "*.gemspec"
 
-# Collections
-collections:
-  docs:
-    output: true
-    permalink: /docs/:path/
+# Navigation
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+
+# Build settings
+show_excerpts: true
+paginate: 10
