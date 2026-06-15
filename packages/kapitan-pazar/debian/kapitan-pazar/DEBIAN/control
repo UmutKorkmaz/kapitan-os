@@ -1,0 +1,14 @@
+Package: kapitan-pazar
+Version: 0.1.0~alpha1
+Architecture: all
+Maintainer: Umut Korkmaz <umutkorkmaz.32@gmail.com>
+Installed-Size: 17
+Depends: bash (>= 4.0), apt, dpkg, sudo
+Section: admin
+Priority: optional
+Homepage: https://github.com/UmutKorkmaz/KAPiTaN-OS
+Description: KAPiTaN OS Turkish package manager
+ pazar is a Turkish-language package manager front-end for KAPiTaN OS.
+ It wraps stable apt-get/apt-cache/dpkg-query interfaces, presents plans
+ in Turkish before applying changes, and requires explicit confirmation
+ for all mutating operations.

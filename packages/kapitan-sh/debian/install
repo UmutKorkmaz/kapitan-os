@@ -1,5 +1,4 @@
-kapitan-sh usr/bin
-lib/resolve.sh usr/share/kapitan/kapitan-sh/lib
-lib/help.sh usr/share/kapitan/kapitan-sh/lib
-lib/dispatch.sh usr/share/kapitan/kapitan-sh/lib
-data/commands.json usr/share/kapitan/kapitan-sh/data
+#!/bin/bash
+# Create lib directory structure
+mkdir -p /usr/lib/kapitan-sh
+mkdir -p /etc/kapitan-sh

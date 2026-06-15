@@ -1,0 +1,22 @@
+FROM debian:bookworm
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    locales \
+    less \
+    man-db \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set Turkish locale
+RUN echo "tr_TR.UTF-8 UTF-8" > /etc/locale.gen && locale-gen
+ENV LANG=tr_TR.UTF-8 LC_ALL=tr_TR.UTF-8 LANGUAGE=tr_TR
+
+# Copy and install KAPiTaN packages
+COPY dist/*.deb /tmp/
+RUN apt-get update && \
+    dpkg -i /tmp/*.deb || apt-get install -f -y && \
+    rm /tmp/*.deb && \
+    rm -rf /var/lib/apt/lists/*
+
+# Interactive shell
+ENTRYPOINT ["/bin/bash"]

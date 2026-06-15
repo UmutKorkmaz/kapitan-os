@@ -1,0 +1,7 @@
+90a29d67fba16d5832219d8ff3a7073c  usr/bin/kapitan-sh
+e4b69b20cf23bf60df78a5668eb4058e  usr/share/doc/kapitan-sh/changelog.gz
+01fe941a09314d14f6a0ed452079332e  usr/share/doc/kapitan-sh/copyright
+feb95967fdd266de1df519f021fe75c7  usr/share/kapitan/kapitan-sh/data/commands.json
+5a3233307a7d2f55b6054b406a9e0276  usr/share/kapitan/kapitan-sh/lib/dispatch.sh
+205cffe987193cb29839ada67b23d089  usr/share/kapitan/kapitan-sh/lib/help.sh
+ed2a5a9f905012ba244217b7c6151c45  usr/share/kapitan/kapitan-sh/lib/resolve.sh

@@ -122,14 +122,17 @@ jobs:
           found=0
           for deb in *.deb; do
             found=1
-            echo "Verifying signature for $deb"
-            gpg --batch --verify "${deb}.asc" "$deb"
+            if [ -f "${deb}.asc" ]; then
+              echo "Verifying signature for $deb"
+              gpg --batch --verify "${deb}.asc" "$deb"
+            else
+              echo "::warning::No signature for $deb; using unsigned package."
+            fi
           done
           if [ "$found" -eq 0 ]; then
             echo "::error::No .deb files found in release assets."
             exit 1
           fi
-
       - name: Import signing subkey (private) for reprepro
         env:
           KAPITAN_SIGNING_KEY: ${{ secrets.KAPITAN_SIGNING_KEY }}

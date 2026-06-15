@@ -1,0 +1,16 @@
+#!/bin/sh
+set -e
+
+SHELL_PATH=/usr/bin/kapitan-sh
+
+case "$1" in
+  remove|purge)
+    if [ -f /etc/shells ]; then
+      grep -vx "$SHELL_PATH" /etc/shells > /etc/shells.dpkg-tmp || true
+      mv /etc/shells.dpkg-tmp /etc/shells
+    fi
+    ;;
+esac
+
+
+exit 0

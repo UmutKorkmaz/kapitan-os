@@ -1,23 +1,30 @@
 ---
-name: Hata bildirimi · Bug report
-about: Bir hatayı bildirin
-title: "[hata] "
+name: Bug Raporu / Bug Report
+about: Bir hatayla karşılaştıysanız / Report a bug
+title: "[BUG] Açıklayıcı başlık / Brief title"
 labels: bug
+assignees: ''
+
 ---
 
-## Açıklama
-<!-- Ne oldu? Ne bekliyordunuz? -->
+## Açıklama (Description)
+Hata hakkında kısa bir açıklama / Brief description of the bug
 
-## Yeniden üretme
-1.
-2.
-3.
+## Yeniden Üretme Adımları (Reproduction Steps)
+1. ...
+2. ...
+3. ...
 
-## Ortam
-- Bileşen: <!-- kapitan-sh / ISO / web sitesi / paket / komut kataloğu -->
-- KAPiTaN sürümü: <!-- ör. 0.1.0-alpha -->
-- Ana sistem: <!-- Debian 12 / Ubuntu 24.04 / Pardus 25 / macOS (geliştirme) -->
-- `kapitan-sh` modu: <!-- ikili / turkce / posix; KAPITAN_ALLOW_SHELL? -->
+## Beklenen Davranış (Expected Behavior)
+Ne bekliyordunuz / What you expected to happen
 
-## Ek bilgi
-<!-- Loglar, ekran görüntüsü, komut çıktısı. Güvenlik açığıysa issue AÇMAYIN — bkz. SECURITY.md -->
+## Gerçekleşen Davranış (Actual Behavior)
+Ne oldu / What actually happened
+
+## Sistem Bilgisi (System Information)
+- OS: [e.g., Ubuntu 24.04]
+- KAPiTaN version: [e.g., 0.1.0-alpha]
+- Package: [kapitan-sh, kapitan-ai, etc.]
+
+## Ek Bilgiler (Additional Context)
+Var ise eklenecek diğer bilgiler

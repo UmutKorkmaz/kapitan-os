@@ -1,0 +1,112 @@
+name: Automated Release Pipeline
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., v0.1.0-beta)'
+        required: true
+
+env:
+  REGISTRY: ghcr.io
+  BUILDER_IMAGE: ubuntu:24.04
+
+jobs:
+  build-packages:
+    name: Build Debian Packages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install build dependencies
+        run: |
+          apt-get update
+          apt-get install -y build-essential debhelper devscripts dpkg-dev bats jq
+
+      - name: Build packages
+        run: |
+          mkdir -p dist
+          for pkg in kapitan-sh kapitan-pazar kapitan-ai; do
+            (cd packages/$pkg && dpkg-buildpackage -us -uc -b)
+          done
+          mv packages/*.deb dist/
+          cd dist && sha256sum *.deb > SHA256SUMS
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: debs
+          path: dist/*.deb
+
+  sign-and-release:
+    name: Sign and Release
+    needs: build-packages
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download packages
+        uses: actions/download-artifact@v4
+        with:
+          name: debs
+          path: dist
+
+      - name: Import GPG key
+        env:
+          KAPITAN_SIGNING_KEY: ${{ secrets.KAPITAN_SIGNING_KEY }}
+        run: |
+          mkdir -p ~/.gnupg
+          chmod 700 ~/.gnupg
+          printf '%s' "$KAPITAN_SIGNING_KEY" | gpg --batch --import
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=${{ github.event.inputs.version || github.ref_name }}
+          gh release create "$VERSION" dist/*.deb dist/SHA256SUMS --draft
+
+      - name: Trigger apt-repo publish
+        env:
+          APT_DISPATCH_TOKEN: ${{ secrets.APT_DISPATCH_TOKEN }}
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $APT_DISPATCH_TOKEN" \
+            https://api.github.com/repos/UmutKorkmaz/kapitan-apt/dispatches \
+            -d '{"event_type":"kapitan-release-published","client_payload":{"release_tag":"${{ github.ref_name }}"}}' || true
+
+  test-packages:
+    name: Test Packages in Docker
+    needs: build-packages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download packages
+        uses: actions/download-artifact@v4
+        with:
+          name: debs
+          path: dist
+
+      - name: Build test image
+        run: |
+          docker build -f Dockerfile.test -t kapitan-os:test .
+
+      - name: Run tests
+        run: |
+          docker run --rm kapitan-os:test << 'TESTS'
+          echo "=== Package Tests ==="
+          dpkg -l | grep kapitan
+          echo "=== Locale Test ==="
+          locale
+          TESTS

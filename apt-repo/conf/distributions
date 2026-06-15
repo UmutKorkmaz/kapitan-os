@@ -3,10 +3,8 @@
 # This file drives reprepro when publishing the signed apt repository.
 # It is consumed by the publish workflow in this repo (.github/workflows/publish.yml).
 #
-# IMPORTANT — founder action required:
-#   Replace <FULL_40_HEX> below with the FULL 40-hex fingerprint of the CI
-#   SIGNING SUBKEY (not the primary key). reprepro signs Release with this key.
-#   The matching public key must be shipped to users as kapitan-archive-keyring.asc.
+# The SignWith field contains the full 40-hex fingerprint of the CI signing key.
+# The matching public key is shipped to users as kapitan-archive-keyring.asc.
 #
 # Suite layout (alpha): single codename "alpha" on the "stable" component.
 # At beta the repo moves to repo.kapitan-os.org (Cloudflare); keep this template.

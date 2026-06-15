@@ -1,21 +1,23 @@
 ---
-name: Özellik isteği · Feature request
-about: Bir fikir ya da iyileştirme önerin
-title: "[öneri] "
+name: Özellik İsteği / Feature Request
+about: Yeni bir özellik öneriniz / Suggest a feature
+title: "[FEATURE] Açıklayıcı başlık / Brief title"
 labels: enhancement
+assignees: ''
+
 ---
 
-## Sorun / ihtiyaç
-<!-- Hangi sorunu çözüyor? Kim için? -->
+## Açıklama (Description)
+Özelliğin açıklaması / Description of the feature
 
-## Önerilen çözüm
-<!-- Ne olmasını istiyorsunuz? -->
+## Neden Gerekli? (Motivation)
+Neden bu özelliğe ihtiyaç duyuyorsunuz / Why this feature is needed
 
-## Komut önerisi (varsa)
-<!-- Yeni bir Türkçe komut mu? id / kapitan / kısa / POSIX karşılığı / grup -->
+## Önerilen Çözüm (Proposed Solution)
+Nasıl uygulanabileceği / How this could be implemented
 
-## Alternatifler
-<!-- Değerlendirdiğiniz başka yollar. -->
+## Alternatif Çözümler (Alternatives)
+Başka seçenekler var mı / Are there any alternatives
 
-## Kapsam notu
-<!-- Bu, yol haritasının (docs/ULTIMATE-BUILD-PLAN.md) neresine denk geliyor? -->
+## Bağlam (Context)
+Ek bilgiler / Additional context

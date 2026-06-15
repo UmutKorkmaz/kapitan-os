@@ -1,0 +1,254 @@
+#!/usr/bin/env bash
+# kapitan-ai — KAPiTaN OS Türkçe komut asistanı (iskelet)
+#
+# Bu sürüm henüz bir dil modeli içermez (model kaynağı/lisansı belirleniyor).
+# Hazır olan ve asıl değer taşıyan kısım GÜVENLİK ZIRHIDIR: önerilen her komut
+# KAPiTaN'ın kendi statik risk analizinden geçer, sade Türkçe açıklamayla
+# gösterilir, onaylanır ve YALNIZCA argv ile (asla eval/bash -c, asla otomatik
+# sudo) çalıştırılır. Model geldiğinde önerileri bu zırhtan geçirecektir.
+
+set -o pipefail
+
+KAPITAN_AI_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=lib/risk.sh
+source "${KAPITAN_AI_ROOT}/lib/risk.sh"
+
+KAPITAN_AI_YES=0
+KAPITAN_AI_RUN=0
+
+_aifold() {
+  local s="$1"
+  s="${s//ı/i}"; s="${s//İ/i}"; s="${s//ş/s}"; s="${s//Ş/s}"
+  s="${s//ğ/g}"; s="${s//Ğ/g}"; s="${s//ü/u}"; s="${s//Ü/u}"
+  s="${s//ö/o}"; s="${s//Ö/o}"; s="${s//ç/c}"; s="${s//Ç/c}"
+  printf '%s' "$s"
+}
+
+# Küçük çevrimdışı niyet eşlemesi (model kurulunca gelişir). Bilinçli olarak dar.
+kapitan_ai_propose() {
+  local q; q="$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')"
+  case "$q" in
+    *listele*|*dosyalar*|*"neler var"*) printf 'ls -la' ;;
+    *nerede*|*"hangi dizin"*|*konum*)   printf 'pwd' ;;
+    *tarih*|*saat*)                     printf 'date' ;;
+    *"kullanıcı adı"*|*"ben kimim"*)    printf 'whoami' ;;
+    *disk*|*"boş alan"*|*"ne kadar yer"*) printf 'df -h' ;;
+    *bellek*|*ram*)                     printf 'free -h' ;;
+    *çalışan*|*işlemler*|*süreçler*)    printf 'ps aux' ;;
+    *çekirdek*|*"sistem sürümü"*|*"hangi linux"*) printf 'uname -a' ;;
+    *) printf '' ;;
+  esac
+}
+
+# Güvenlik zırhı: öneri (argv) → risk → açıklama → onay → argv ile çalıştır.
+kapitan_ai_guarded() {
+  local argv=("$@")
+  (( ${#argv[@]} )) || { printf 'kapitan-ai: çalıştırılacak komut yok.\n' >&2; return 2; }
+
+  local tier explain
+  tier="$(kapitan_ai_risk_tier "${argv[@]}")"
+  explain="$(kapitan_ai_explain "${argv[@]}")"
+
+  printf 'Önerilen komut: %s\n' "${argv[*]}"
+  printf 'Ne yapar      : %s\n' "$explain"
+  printf 'Risk          : %s\n' "$tier"
+
+  (( KAPITAN_AI_RUN )) || { printf '(çalıştırmak için: kapitan-ai --çalıştır … ya da «sor»)\n'; return 0; }
+
+  if [[ "$tier" == "destructive" ]]; then
+    if (( KAPITAN_AI_YES )); then
+      printf 'kapitan-ai: TEHLİKELİ komut — «--evet» yeterli değil; etkileşimli olarak ONAYLA yazın.\n' >&2
+      return 1
+    fi
+    if [[ ! -t 0 ]]; then
+      printf 'kapitan-ai: TEHLİKELİ komut — onay için etkileşimli oturum gerekir.\n' >&2
+      return 1
+    fi
+    printf 'Bu komut TEHLİKELİ. Onaylamak için büyük harfle ONAYLA yazın: ' >&2
+    local r; IFS= read -r r || return 1
+    [[ "$r" == "ONAYLA" ]] || { printf 'İptal edildi.\n'; return 1; }
+  else
+    if (( ! KAPITAN_AI_YES )); then
+      if [[ ! -t 0 ]]; then
+        printf 'kapitan-ai: onay gerekiyor; «--evet» kullanın ya da etkileşimli çalıştırın.\n' >&2
+        return 1
+      fi
+      printf 'Çalıştırılsın mı? [e/H] ' >&2
+      local r; IFS= read -r r || return 1
+      case "$(_aifold "$r")" in e|evet|y|yes) ;; *) printf 'İptal edildi.\n'; return 1 ;; esac
+    fi
+  fi
+
+  # YALNIZCA argv — asla eval/bash -c, asla otomatik sudo.
+  command "${argv[@]}"
+}
+
+kapitan_ai_sor() {
+  local intent="$*"
+  [[ -z "${intent// /}" ]] && { printf 'kapitan-ai: ne yapmak istediğinizi yazın: sor "..."\n' >&2; return 2; }
+  local cmd; cmd="$(kapitan_ai_propose "$intent")"
+  if [[ -z "$cmd" ]]; then
+    {
+      printf 'kapitan-ai: bu isteği henüz anlayamadım.\n'
+      printf 'Tam doğal dil desteği yerel model ile gelecek: «kapitan-ai model kur».\n'
+      printf 'Şimdilik basit istekler: listele, nerede, tarih, disk, bellek, işlemler.\n'
+    } >&2
+    return 1
+  fi
+  KAPITAN_AI_RUN=1
+  # shellcheck disable=SC2086  # cmd is from our own controlled table
+  kapitan_ai_guarded $cmd
+}
+
+kapitan_ai_needs_model() {
+  printf 'kapitan-ai: «%s» yerel model gerektirir — önce «kapitan-ai model kur» komutunu çalıştırın.\n' "$1" >&2
+  return 1
+}
+
+kapitan_ai_doctor() {
+  printf 'KAPiTaN AI — durum\n'
+  if grep -q 'boot=live' /proc/cmdline 2>/dev/null || [[ -d /run/live/medium ]]; then
+    printf '  Ortam      : canlı (live) oturum — AI yalnızca kurulu sistemde kullanılır\n'
+  else
+    printf '  Ortam      : kurulu sistem\n'
+  fi
+  if command -v ollama >/dev/null 2>&1; then
+    printf '  Çalıştırıcı: ollama bulundu\n'
+  else
+    printf '  Çalıştırıcı: ollama YOK (apt install ollama ile kurulabilir)\n'
+  fi
+  if [[ -f "$KAPITAN_AI_MODEL_PATH" ]]; then
+    printf '  Model      : %s (önbellekte mevcut)\n' "$KAPITAN_AI_MODEL_PATH"
+  else
+    printf '  Model      : kurulu değil — «kapitan-ai model kur» ile indirin\n'
+  fi
+  printf '  Güvenlik   : öneriler statik risk analizinden geçer; tehlikeli komutlar ONAYLA ister\n'
+}
+
+kapitan_ai_model_kur() {
+  local manifest_file="${KAPITAN_AI_ROOT}/models/qwen3-4b.manifest.json"
+
+  if [[ ! -f "$manifest_file" ]]; then
+    printf 'kapitan-ai: model manifest bulunamadı: %s\n' "$manifest_file" >&2
+    return 1
+  fi
+
+  local model_id cache_path filename download_url sha256 size_gb
+
+  # jq gerektirmeden manifest ayrıştırma (grep + cut).
+  model_id=$(grep -o '"id": "[^"]*"' "$manifest_file" | cut -d'"' -f4)
+  cache_path=$(grep -o '"cache_path": "[^"]*"' "$manifest_file" | cut -d'"' -f4 | sed "s|\$HOME|$HOME|")
+  filename=$(grep -o '"filename": "[^"]*"' "$manifest_file" | cut -d'"' -f4)
+  download_url=$(grep -o '"download_url": "[^"]*"' "$manifest_file" | cut -d'"' -f4)
+  sha256=$(grep -o '"sha256": "[^"]*"' "$manifest_file" | cut -d'"' -f4)
+  size_gb=$(grep -o '"size_bytes": [0-9]*' "$manifest_file" | cut -d' ' -f2 | awk '{printf "%.1f", $1/1e9}')
+
+  mkdir -p "$cache_path"
+  local model_path="${cache_path}${filename}"
+
+  if [[ -f "$model_path" ]]; then
+    printf 'kapitan-ai: model zaten önbellekte: %s\n' "$model_path"
+    return 0
+  fi
+
+  printf 'kapitan-ai: %s (%s GB) indiriliyor (HuggingFace)...\n' "$model_id" "$size_gb" >&2
+
+  if ! curl -fL --progress-bar "$download_url" -o "$model_path"; then
+    printf 'kapitan-ai: indirme başarısız\n' >&2
+    rm -f "$model_path"
+    return 1
+  fi
+
+  printf 'kapitan-ai: SHA-256 doğrulanıyor...\n' >&2
+  local computed
+  computed=$(sha256sum "$model_path" | cut -d' ' -f1)
+
+  if [[ "$computed" != "$sha256" ]]; then
+    printf 'kapitan-ai: SHA-256 uyuşmuyor! Beklenen %s, bulunan %s\n' "$sha256" "$computed" >&2
+    rm -f "$model_path"
+    return 1
+  fi
+
+  printf 'kapitan-ai: model hazır: %s\n' "$model_path" >&2
+  return 0
+}
+
+kapitan_ai_model_listele() {
+  if [[ -f "$KAPITAN_AI_MODEL_PATH" ]]; then
+    printf 'qwen3-4b\tQwen3-4B-Instruct (Q4_K_M)\tApache-2.0\t%s\n' "$KAPITAN_AI_MODEL_PATH"
+  else
+    printf 'kapitan-ai: önbellekte model yok — «kapitan-ai model kur» ile indirin\n'
+  fi
+}
+
+kapitan_ai_model() {
+  case "$(_aifold "${1:-}")" in
+    kur)
+      shift 2>/dev/null || true
+      kapitan_ai_model_kur
+      ;;
+    listele|liste)
+      kapitan_ai_model_listele
+      ;;
+    *)
+      printf 'Kullanım: kapitan-ai model <kur|listele>\n' >&2
+      return 2
+      ;;
+  esac
+}
+
+kapitan_ai_usage() {
+  cat <<'EOF'
+kapitan-ai — KAPiTaN OS Türkçe komut asistanı
+
+Kullanım: kapitan-ai [SEÇENEK] <komut> [...]
+
+Komutlar:
+  sor "<istek>"        Türkçe isteği komuta çevir → güvenli onayla çalıştır
+  çalıştır <komut...>  Bir komutu güvenlik zırhından geçirerek çalıştır
+  sınıf <komut...>     Komutun risk düzeyini yaz (safe|caution|destructive)
+  doctor               Durum (model/çalıştırıcı/güvenlik)
+  model <kur|listele>  Model yönetimi (Qwen3-4B-Instruct, önbellekle)
+  kodla|açıkla|özet|çevir   (yerel model gerektirir — yakında)
+
+Seçenekler:
+  -e, --evet     Tehlikeli olmayan komutları onaysız çalıştır
+      --çalıştır Öneriyi yalnız gösterme; çalıştır (sor zaten çalıştırır)
+  -h, --help     Bu yardım
+
+Güvenlik: risk düzeyi modelin değil KAPiTaN'ın statik analiziyle belirlenir;
+komutlar yalnızca argv ile çalıştırılır (eval yok), sudo asla otomatik eklenmez,
+tehlikeli komutlar büyük harf «ONAYLA» ister.
+EOF
+}
+
+main() {
+  local args=()
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -e|--evet) KAPITAN_AI_YES=1; shift ;;
+      --çalıştır|--calistir|--run) KAPITAN_AI_RUN=1; shift ;;
+      -h|--help) kapitan_ai_usage; exit 0 ;;
+      --) shift; while (($#)); do args+=("$1"); shift; done; break ;;
+      *) args+=("$1"); shift ;;
+    esac
+  done
+  set -- "${args[@]}"
+
+  local sub="${1:-}"; (( $# )) && shift
+  case "$(_aifold "$sub")" in
+    sor)        kapitan_ai_sor "$@" ;;
+    calistir)   KAPITAN_AI_RUN=1; kapitan_ai_guarded "$@" ;;
+    sinif)      kapitan_ai_risk_tier "$@"; printf '\n' ;;
+    doctor|durum) kapitan_ai_doctor ;;
+    model)      kapitan_ai_model "$@" ;;
+    kodla)      kapitan_ai_needs_model "kodla" ;;
+    acikla)     kapitan_ai_needs_model "açıkla" ;;
+    ozet)       kapitan_ai_needs_model "özet" ;;
+    cevir)      kapitan_ai_needs_model "çevir" ;;
+    ''|yardim|help) kapitan_ai_usage ;;
+    *) printf 'kapitan-ai: bilinmeyen komut: «%s»\n' "$sub" >&2; kapitan_ai_usage >&2; exit 2 ;;
+  esac
+}
+
+main "$@"
