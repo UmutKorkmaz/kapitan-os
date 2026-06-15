@@ -158,16 +158,15 @@ jobs:
           printf '%s' "$KAPITAN_SIGNING_KEY" | gpg --batch --import
           echo "allow-loopback-pinentry" >> "$GNUPGHOME/gpg-agent.conf"
           gpgconf --kill gpg-agent || true
-          # Extract key ID from import output or use the known fingerprint directly
-          # The primary key fingerprint is 6EEE93BBB501E039346E7794D5EAF68D8F127BCF
-          keyid="6EEE93BBB501E039346E7794D5EAF68D8F127BCF"
-          # Verify the key exists in keyring
-          if ! gpg --list-keys "$keyid" > /dev/null 2>&1; then
-            echo "::error::Failed to import signing key. Verify KAPITAN_SIGNING_KEY secret is correct."
+          # Extract the signing subkey ID (not the primary key).
+          # The secret subkey is what we exported, so extract its ID.
+          keyid="$(gpg --list-secret-keys --with-colons 2>/dev/null | awk -F: '/^sec:/ {keyid=$5} /^ssb:.*[sS]/ {print $5; exit} END {if (!keyid_found && keyid) print keyid}')"
+          if [ -z "$keyid" ]; then
+            echo "::error::No signing subkey found after import."
             exit 1
           fi
           echo "SIGN_KEYID=$keyid" >> "$GITHUB_ENV"
-          echo "Imported signing key: $keyid"
+          echo "Imported signing subkey: $keyid"
 
       - name: Sign packages and build SHA256SUMS
         env:
