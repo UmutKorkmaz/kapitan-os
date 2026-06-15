@@ -1,0 +1,24 @@
+# GitHub Pages Jekyll Configuration
+title: "KAPiTaN OS"
+description: "Turkish Command-Layer Linux Distribution"
+theme: jekyll-theme-slate
+url: "https://umutkorkmaz.github.io/kapitan-os"
+logo: "https://avatars.githubusercontent.com/u/YOUR_USER_ID?s=64"
+
+# Markdown processor
+markdown: kramdown
+highlighter: rouge
+
+# Exclude from processing
+exclude:
+  - .gitignore
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - LICENSE
+
+# Collections
+collections:
+  docs:
+    output: true
+    permalink: /docs/:path/
