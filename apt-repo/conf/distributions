@@ -19,4 +19,4 @@ Version: 0.1
 Architectures: amd64 source
 Components: main
 Description: KAPiTaN OS — Turkish command-layer Linux distribution (alpha apt repository)
-SignWith: 6EEE93BBB501E039346E7794D5EAF68D8F127BCF
+SignWith: 11E8DEEE8C014E7EEA1D8953DFF0439169E3553F

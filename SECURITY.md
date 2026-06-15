@@ -56,7 +56,7 @@ açık anahtarın parmak izini bu değerle doğrulamalıdır (bkz.
 ```
 KAPiTaN OS imza alt anahtarı parmak izi · signing subkey fingerprint:
 6EEE 93BB B501 E039 346E  7794 D5EA F68D 8F12 7BCF
-(tam 40-hex: 6EEE93BBB501E039346E7794D5EAF68D8F127BCF)
+(tam 40-hex: 11E8DEEE8C014E7EEA1D8953DFF0439169E3553F)
 ```
 
 Apt deposu ayrı bir depoda barındırılır: <https://github.com/UmutKorkmaz/kapitan-apt>
