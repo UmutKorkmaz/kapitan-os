@@ -73,7 +73,7 @@ setup() {
   local AI="${AI_ROOT}/kapitan-ai"
   # Plant a fake model file in the temp cache directory.
   mkdir -p "$MODEL_CACHE"
-  touch "${MODEL_CACHE}/qwen3-4b-q4_k_m.gguf"
+  touch "${MODEL_CACHE}/Qwen3.5-4B-Revised-q4_k_m.gguf"
 
   run "$AI" model kur
   [ "$status" -eq 0 ]
