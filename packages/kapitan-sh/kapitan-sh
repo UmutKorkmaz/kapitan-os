@@ -4,7 +4,10 @@
 
 set -o pipefail
 
-KAPITAN_SH_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+KAPITAN_SH_ROOT="/usr/share/kapitan/kapitan-sh"
+if [ ! -d "$KAPITAN_SH_ROOT" ]; then
+  KAPITAN_SH_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+fi
 export KAPITAN_SH_ROOT
 
 # Default language mode: ikili (Turkish + short + POSIX)

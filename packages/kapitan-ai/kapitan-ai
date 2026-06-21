@@ -9,7 +9,10 @@
 
 set -o pipefail
 
-KAPITAN_AI_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+KAPITAN_AI_ROOT="/usr/share/kapitan/kapitan-ai"
+if [ ! -d "$KAPITAN_AI_ROOT" ]; then
+  KAPITAN_AI_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+fi
 # shellcheck source=lib/risk.sh
 source "${KAPITAN_AI_ROOT}/lib/risk.sh"
 

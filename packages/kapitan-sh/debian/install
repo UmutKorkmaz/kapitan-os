@@ -1,4 +1,0 @@
-#!/bin/bash
-# Create lib directory structure
-mkdir -p /usr/lib/kapitan-sh
-mkdir -p /etc/kapitan-sh
