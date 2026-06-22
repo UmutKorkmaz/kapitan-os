@@ -30,7 +30,7 @@ _aifold() {
 # Ollama API configuration
 KAPITAN_AI_OLLAMA_HOST="${KAPITAN_AI_OLLAMA_HOST:-localhost:11434}"
 KAPITAN_AI_MODEL="${KAPITAN_AI_MODEL:-qwen3:4b}"
-KAPITAN_AI_TIMEOUT="${KAPITAN_AI_TIMEOUT:-30}"
+KAPITAN_AI_TIMEOUT="${KAPITAN_AI_TIMEOUT:-60}"
 
 KAPITAN_AI_SYSTEM_PROMPT='Sen bir Linux komut satırı asistanısın. Kullanıcı Türkçe bir istek yapacak, sen SADECE çalıştırılacak tek bir Linux komutunu döndür. Açıklama yapma, sadece komutu yaz. Örnek: Kullanıcı "dosyaları listele" derse, sen "ls -la" yaz. Kullanıcı "disk alanını göster" derse "df -h" yaz. Eğer istek bir komuta çevrilemiyorsa boş satır döndür.'
 
@@ -40,11 +40,21 @@ kapitan_ai_ollama_available() {
 
 kapitan_ai_ollama_query() {
   local prompt="$1"
-  local response
+  local payload response
+  if command -v jq > /dev/null 2>&1; then
+    payload=$(jq -n --arg model "$KAPITAN_AI_MODEL" --arg prompt "/no_think
+$prompt" --arg system "$KAPITAN_AI_SYSTEM_PROMPT" \
+      '{model: $model, prompt: $prompt, system: $system, stream: false, options: {temperature: 0.1, num_predict: 100}}')
+  else
+    local escaped_prompt escaped_system
+    escaped_prompt=$(printf '%s' "/no_think $prompt" | sed 's/\\/\\\\/g; s/"/\\"/g')
+    escaped_system=$(printf '%s' "$KAPITAN_AI_SYSTEM_PROMPT" | sed 's/\\/\\\\/g; s/"/\\"/g')
+    payload=$(printf '{"model":"%s","prompt":"%s","system":"%s","stream":false,"options":{"temperature":0.1,"num_predict":100}}' \
+      "$KAPITAN_AI_MODEL" "$escaped_prompt" "$escaped_system")
+  fi
   response=$(curl -s --max-time "$KAPITAN_AI_TIMEOUT" \
     "http://${KAPITAN_AI_OLLAMA_HOST}/api/generate" \
-    -d "$(printf '{"model":"%s","prompt":"%s","system":"%s","stream":false,"options":{"temperature":0.1,"num_predict":100}}' \
-      "$KAPITAN_AI_MODEL" "$prompt" "$KAPITAN_AI_SYSTEM_PROMPT")" 2>/dev/null)
+    -d "$payload" 2>/dev/null)
 
   if [[ -z "$response" ]]; then
     return 1
@@ -194,11 +204,23 @@ kapitan_ai_chat() {
     *)       system_prompt="Kullanıcının isteğine Türkçe olarak yanıt ver. Kısa ve faydalı ol." ;;
   esac
 
-  local response
+  local payload response
+  if command -v jq > /dev/null 2>&1; then
+    payload=$(jq -n --arg model "$KAPITAN_AI_MODEL" --arg prompt "/no_think
+$prompt" --arg system "$system_prompt" \
+      '{model: $model, prompt: $prompt, system: $system, stream: false, options: {num_predict: 500}}')
+  else
+    local escaped_prompt escaped_system
+    escaped_prompt=$(printf '%s' "/no_think
+$prompt" | sed 's/\\/\\\\/g; s/"/\\"/g; s/\t/\\t/g' | tr '\n' ' ')
+    escaped_system=$(printf '%s' "$system_prompt" | sed 's/\\/\\\\/g; s/"/\\"/g')
+    payload=$(printf '{"model":"%s","prompt":"%s","system":"%s","stream":false,"options":{"num_predict":500}}' \
+      "$KAPITAN_AI_MODEL" "$escaped_prompt" "$escaped_system")
+  fi
+
   response=$(curl -s --max-time "$KAPITAN_AI_TIMEOUT" \
     "http://${KAPITAN_AI_OLLAMA_HOST}/api/generate" \
-    -d "$(printf '{"model":"%s","prompt":"%s","system":"%s","stream":false}' \
-      "$KAPITAN_AI_MODEL" "$prompt" "$system_prompt")" 2>/dev/null)
+    -d "$payload" 2>/dev/null)
 
   if [[ -z "$response" ]]; then
     printf 'kapitan-ai: model yanıt vermedi (zaman aşımı: %ss)\n' "$KAPITAN_AI_TIMEOUT" >&2
