@@ -22,10 +22,9 @@ setup() {
   [ "$status" -eq 0 ]
 }
 
-@test "unimplemented command exits 127 (not 0)" {
-  run "$KSH" -c "sor"
-  [ "$status" -eq 127 ]
-  [[ "$output" == *"henüz uygulanmadı"* ]]
+@test "command mapping to missing binary exits non-zero" {
+  run "$KSH" -c "sor test"
+  [ "$status" -ne 0 ]
 }
 
 # --- compound correctness --------------------------------------------------
@@ -37,9 +36,9 @@ setup() {
   [[ "$output" == *"kapdir"* ]]
 }
 
-@test "compound with unimplemented command fails cleanly, no eval syntax error" {
-  run "$KSH" -c "nerede && sor && listele ${BATS_TEST_TMPDIR}"
-  [ "$status" -eq 127 ]
+@test "compound with missing-binary command fails cleanly, no eval syntax error" {
+  run "$KSH" -c "nerede && sor test && listele ${BATS_TEST_TMPDIR}"
+  [ "$status" -ne 0 ]
   [[ "$output" != *"syntax error"* ]]
   [[ "$output" != *"&&&&"* ]]
 }

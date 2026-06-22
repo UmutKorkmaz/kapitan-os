@@ -185,7 +185,7 @@
       "description": "Çalışan işlemleri canlı izle",
       "group": "sistem",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "ps",
@@ -195,7 +195,7 @@
       "description": "Anlık işlem listesini göster",
       "group": "sistem",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "kill",
@@ -205,7 +205,7 @@
       "description": "Bir işlemi sonlandır",
       "group": "sistem",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "df",
@@ -215,7 +215,7 @@
       "description": "Disk doluluğunu göster",
       "group": "sistem",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "du",
@@ -225,7 +225,7 @@
       "description": "Klasör disk boyutunu hesapla",
       "group": "sistem",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "free",
@@ -235,7 +235,7 @@
       "description": "RAM ve takas bellek kullanımını göster",
       "group": "sistem",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "shutdown",
@@ -245,7 +245,7 @@
       "description": "Sistemi kapat",
       "group": "sistem",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "reboot",
@@ -255,7 +255,7 @@
       "description": "Sistemi yeniden başlat",
       "group": "sistem",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "date",
@@ -285,7 +285,7 @@
       "description": "Komut geçmişini listele",
       "group": "sistem",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "ping",
@@ -295,7 +295,7 @@
       "description": "Bir sunucuya erişimi sına",
       "group": "ag",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "curl",
@@ -305,7 +305,7 @@
       "description": "HTTP isteği gönder",
       "group": "ag",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "wget",
@@ -315,7 +315,7 @@
       "description": "Bağlantıdan dosya indir",
       "group": "ag",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "ip-a",
@@ -325,7 +325,7 @@
       "description": "Ağ arayüzlerini listele",
       "group": "ag",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "ssh",
@@ -335,7 +335,7 @@
       "description": "Uzak sunucuya güvenli bağlan",
       "group": "ag",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "scp",
@@ -345,7 +345,7 @@
       "description": "Uzak sunucuya dosya aktar",
       "group": "ag",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "hostname",
@@ -355,7 +355,7 @@
       "description": "Makine adını göster",
       "group": "ag",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "netstat",
@@ -365,7 +365,7 @@
       "description": "Ağ bağlantılarını listele",
       "group": "ag",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "apt-install",
@@ -475,7 +475,7 @@
       "description": "Satırları alfabetik ya da sayısal sırala",
       "group": "metin",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "wc",
@@ -485,7 +485,7 @@
       "description": "Satır, kelime ve karakter sayısını göster",
       "group": "metin",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "diff",
@@ -495,7 +495,7 @@
       "description": "İki dosya arasındaki farkı göster",
       "group": "metin",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "sed",
@@ -505,7 +505,7 @@
       "description": "Metin içinde bul-değiştir işlemi yap",
       "group": "metin",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "cut",
@@ -515,7 +515,7 @@
       "description": "Satırdan belirli sütunları kes",
       "group": "metin",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "less",
@@ -525,7 +525,7 @@
       "description": "Dosyayı sayfa sayfa görüntüle",
       "group": "metin",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "echo",
@@ -545,7 +545,7 @@
       "description": "Çalışma ağacının durumunu göster",
       "group": "git",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "git-add",
@@ -555,7 +555,7 @@
       "description": "Değişiklikleri kayıt için hazırla",
       "group": "git",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "git-commit",
@@ -565,7 +565,7 @@
       "description": "Hazırlanan değişiklikleri kaydet",
       "group": "git",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "git-push",
@@ -575,7 +575,7 @@
       "description": "Değişiklikleri uzak depoya gönder",
       "group": "git",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "git-pull",
@@ -585,7 +585,7 @@
       "description": "Uzak depodan değişiklikleri çek",
       "group": "git",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "git-clone",
@@ -595,7 +595,7 @@
       "description": "Uzak depoyu yerel makineye kopyala",
       "group": "git",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "git-log",
@@ -605,7 +605,7 @@
       "description": "Kayıt geçmişini listele",
       "group": "git",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "git-branch",
@@ -615,7 +615,7 @@
       "description": "Dalları listele ya da yeni dal oluştur",
       "group": "git",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "git-checkout",
@@ -625,7 +625,7 @@
       "description": "Dal ya da dosyaya geç",
       "group": "git",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "git-merge",
@@ -635,7 +635,7 @@
       "description": "İki dalı birleştir",
       "group": "git",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "git-stash",
@@ -645,7 +645,7 @@
       "description": "Değişiklikleri geçici olarak rafa kaldır",
       "group": "git",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "git-reset",
@@ -655,7 +655,7 @@
       "description": "Hazırlama alanını ya da kayıtları sıfırla",
       "group": "git",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "ai-sor",
@@ -665,7 +665,7 @@
       "description": "AI'ya Türkçe ile soru sor",
       "group": "ai",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "ai-kodla",
@@ -675,7 +675,7 @@
       "description": "Açıklamadan kod üret",
       "group": "ai",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "ai-acikla",
@@ -685,7 +685,7 @@
       "description": "Bir komutu ya da hatayı açıkla",
       "group": "ai",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "ai-ozet",
@@ -695,7 +695,7 @@
       "description": "Bir dosyayı ya da metni özetle",
       "group": "ai",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     },
     {
       "id": "ai-cevir",
@@ -705,7 +705,7 @@
       "description": "50+ dil arası çeviri yap",
       "group": "ai",
       "phase": 1,
-      "implemented": false
+      "implemented": true
     }
   ],
   "path_guard": [
