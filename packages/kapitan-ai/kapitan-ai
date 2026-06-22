@@ -45,7 +45,12 @@ kapitan_ai_propose() {
 
 # Güvenlik zırhı: öneri (argv) → risk → açıklama → onay → argv ile çalıştır.
 kapitan_ai_guarded() {
-  local argv=("$@")
+  local argv
+  if (( $# == 1 )); then
+    read -ra argv <<< "$1"
+  else
+    argv=("$@")
+  fi
   (( ${#argv[@]} )) || { printf 'kapitan-ai: çalıştırılacak komut yok.\n' >&2; return 2; }
 
   local tier explain
