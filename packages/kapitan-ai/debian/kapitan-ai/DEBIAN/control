@@ -2,7 +2,7 @@ Package: kapitan-ai
 Version: 0.1.0~alpha1
 Architecture: all
 Maintainer: Umut Korkmaz <umutkorkmaz.32@gmail.com>
-Installed-Size: 26
+Installed-Size: 30
 Depends: bash (>= 4.0)
 Section: utils
 Priority: optional

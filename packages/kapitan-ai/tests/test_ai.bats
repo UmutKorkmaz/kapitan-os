@@ -54,10 +54,10 @@ setup() {
   [[ "$output" == *"Önerilen komut: ls -la"* ]]
 }
 
-@test "sor on an unknown intent points to the model, exit 1" {
+@test "sor on an unknown intent exits non-zero without ollama" {
   run "$AI" sor "kuantum dolanıklığını çöz"
   [ "$status" -eq 1 ]
-  [[ "$output" == *"model"* ]]
+  [[ "$output" == *"anlayamadım"* || "$output" == *"Ollama"* || "$output" == *"model"* ]]
 }
 
 @test "model kur finds the manifest and attempts download" {

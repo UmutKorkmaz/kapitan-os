@@ -9,7 +9,10 @@
 
 set -o pipefail
 
-KAPITAN_AI_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+KAPITAN_AI_ROOT="/usr/share/kapitan/kapitan-ai"
+if [ ! -d "$KAPITAN_AI_ROOT" ]; then
+  KAPITAN_AI_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+fi
 # shellcheck source=lib/risk.sh
 source "${KAPITAN_AI_ROOT}/lib/risk.sh"
 
@@ -24,8 +27,44 @@ _aifold() {
   printf '%s' "$s"
 }
 
-# Küçük çevrimdışı niyet eşlemesi (model kurulunca gelişir). Bilinçli olarak dar.
-kapitan_ai_propose() {
+# Ollama API configuration
+KAPITAN_AI_OLLAMA_HOST="${KAPITAN_AI_OLLAMA_HOST:-localhost:11434}"
+KAPITAN_AI_MODEL="${KAPITAN_AI_MODEL:-qwen3:4b}"
+KAPITAN_AI_TIMEOUT="${KAPITAN_AI_TIMEOUT:-30}"
+
+KAPITAN_AI_SYSTEM_PROMPT='Sen bir Linux komut satırı asistanısın. Kullanıcı Türkçe bir istek yapacak, sen SADECE çalıştırılacak tek bir Linux komutunu döndür. Açıklama yapma, sadece komutu yaz. Örnek: Kullanıcı "dosyaları listele" derse, sen "ls -la" yaz. Kullanıcı "disk alanını göster" derse "df -h" yaz. Eğer istek bir komuta çevrilemiyorsa boş satır döndür.'
+
+kapitan_ai_ollama_available() {
+  curl -s --connect-timeout 2 "http://${KAPITAN_AI_OLLAMA_HOST}/api/tags" > /dev/null 2>&1
+}
+
+kapitan_ai_ollama_query() {
+  local prompt="$1"
+  local response
+  response=$(curl -s --max-time "$KAPITAN_AI_TIMEOUT" \
+    "http://${KAPITAN_AI_OLLAMA_HOST}/api/generate" \
+    -d "$(printf '{"model":"%s","prompt":"%s","system":"%s","stream":false,"options":{"temperature":0.1,"num_predict":100}}' \
+      "$KAPITAN_AI_MODEL" "$prompt" "$KAPITAN_AI_SYSTEM_PROMPT")" 2>/dev/null)
+
+  if [[ -z "$response" ]]; then
+    return 1
+  fi
+
+  local cmd
+  if command -v jq > /dev/null 2>&1; then
+    cmd=$(printf '%s' "$response" | jq -r '.response // empty' 2>/dev/null)
+  else
+    cmd=$(printf '%s' "$response" | grep -o '"response":"[^"]*"' | head -1 | sed 's/"response":"//;s/"$//')
+  fi
+
+  cmd=$(printf '%s' "$cmd" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | head -1)
+  cmd=$(printf '%s' "$cmd" | sed 's/^```[a-z]*//;s/```$//' | sed '/^$/d' | head -1)
+
+  [[ -n "$cmd" ]] && printf '%s' "$cmd"
+}
+
+# Çevrimdışı niyet eşlemesi (Ollama yoksa kullanılır)
+kapitan_ai_propose_offline() {
   local q; q="$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')"
   case "$q" in
     *listele*|*dosyalar*|*"neler var"*) printf 'ls -la' ;;
@@ -36,13 +75,41 @@ kapitan_ai_propose() {
     *bellek*|*ram*)                     printf 'free -h' ;;
     *çalışan*|*işlemler*|*süreçler*)    printf 'ps aux' ;;
     *çekirdek*|*"sistem sürümü"*|*"hangi linux"*) printf 'uname -a' ;;
+    *"dosya ara"*|*"bul"*)             printf 'find . -name' ;;
+    *"ağ durumu"*|*"ip adresim"*)      printf 'ip a' ;;
+    *"açık port"*|*"dinleyen"*)        printf 'ss -tlnp' ;;
+    *güncelle*)                        printf 'apt update' ;;
+    *kur*)                             printf 'apt install' ;;
+    *"yeniden başlat"*|*reboot*)       printf 'reboot' ;;
+    *kapat*|*shutdown*)                printf 'shutdown -h now' ;;
     *) printf '' ;;
   esac
 }
 
+kapitan_ai_propose() {
+  local intent="$1"
+  local cmd=""
+
+  if kapitan_ai_ollama_available; then
+    cmd="$(kapitan_ai_ollama_query "$intent")"
+    if [[ -n "$cmd" ]]; then
+      printf '%s' "$cmd"
+      return 0
+    fi
+  fi
+
+  cmd="$(kapitan_ai_propose_offline "$intent")"
+  printf '%s' "$cmd"
+}
+
 # Güvenlik zırhı: öneri (argv) → risk → açıklama → onay → argv ile çalıştır.
 kapitan_ai_guarded() {
-  local argv=("$@")
+  local argv
+  if (( $# == 1 )); then
+    read -ra argv <<< "$1"
+  else
+    argv=("$@")
+  fi
   (( ${#argv[@]} )) || { printf 'kapitan-ai: çalıştırılacak komut yok.\n' >&2; return 2; }
 
   local tier explain
@@ -86,43 +153,103 @@ kapitan_ai_guarded() {
 kapitan_ai_sor() {
   local intent="$*"
   [[ -z "${intent// /}" ]] && { printf 'kapitan-ai: ne yapmak istediğinizi yazın: sor "..."\n' >&2; return 2; }
+
+  if kapitan_ai_ollama_available; then
+    printf 'kapitan-ai: [%s] modeline soruluyor...\n' "$KAPITAN_AI_MODEL" >&2
+  fi
+
   local cmd; cmd="$(kapitan_ai_propose "$intent")"
   if [[ -z "$cmd" ]]; then
     {
-      printf 'kapitan-ai: bu isteği henüz anlayamadım.\n'
-      printf 'Tam doğal dil desteği yerel model ile gelecek: «kapitan-ai model kur».\n'
-      printf 'Şimdilik basit istekler: listele, nerede, tarih, disk, bellek, işlemler.\n'
+      printf 'kapitan-ai: bu isteği anlayamadım.\n'
+      if ! kapitan_ai_ollama_available; then
+        printf 'İpucu: Ollama çalışmıyor. Başlatmak için: ollama serve\n'
+        printf 'Model kurmak için: ollama pull %s\n' "$KAPITAN_AI_MODEL"
+      fi
+      printf 'Çevrimdışı desteklenen istekler: listele, nerede, tarih, disk, bellek, işlemler, güncelle\n'
     } >&2
     return 1
   fi
   KAPITAN_AI_RUN=1
-  # shellcheck disable=SC2086  # cmd is from our own controlled table
   kapitan_ai_guarded $cmd
 }
 
-kapitan_ai_needs_model() {
-  printf 'kapitan-ai: «%s» yerel model gerektirir — önce «kapitan-ai model kur» komutunu çalıştırın.\n' "$1" >&2
-  return 1
+kapitan_ai_chat() {
+  local subcmd="$1"; shift
+  local prompt="$*"
+  [[ -z "${prompt// /}" ]] && { printf 'kapitan-ai: metin girin: kapitan-ai %s "..."\n' "$subcmd" >&2; return 2; }
+
+  if ! kapitan_ai_ollama_available; then
+    printf 'kapitan-ai: «%s» yerel model gerektirir.\n' "$subcmd" >&2
+    printf 'Başlatmak için: ollama serve && ollama pull %s\n' "$KAPITAN_AI_MODEL" >&2
+    return 1
+  fi
+
+  local system_prompt
+  case "$subcmd" in
+    kodla)   system_prompt="Sen bir programcı asistanısın. Kullanıcının Türkçe isteğine göre kod yaz. Açıklama yapma, sadece kodu döndür." ;;
+    açıkla)  system_prompt="Verilen komutu veya kodu Türkçe olarak basitçe açıkla. Kısa ve öz ol." ;;
+    özet)    system_prompt="Verilen metni Türkçe olarak kısa bir paragrafta özetle." ;;
+    çevir)   system_prompt="Verilen metni Türkçeye çevir. Sadece çeviriyi döndür." ;;
+    *)       system_prompt="Kullanıcının isteğine Türkçe olarak yanıt ver. Kısa ve faydalı ol." ;;
+  esac
+
+  local response
+  response=$(curl -s --max-time "$KAPITAN_AI_TIMEOUT" \
+    "http://${KAPITAN_AI_OLLAMA_HOST}/api/generate" \
+    -d "$(printf '{"model":"%s","prompt":"%s","system":"%s","stream":false}' \
+      "$KAPITAN_AI_MODEL" "$prompt" "$system_prompt")" 2>/dev/null)
+
+  if [[ -z "$response" ]]; then
+    printf 'kapitan-ai: model yanıt vermedi (zaman aşımı: %ss)\n' "$KAPITAN_AI_TIMEOUT" >&2
+    return 1
+  fi
+
+  local text
+  if command -v jq > /dev/null 2>&1; then
+    text=$(printf '%s' "$response" | jq -r '.response // empty' 2>/dev/null)
+  else
+    text=$(printf '%s' "$response" | grep -o '"response":"[^"]*"' | sed 's/"response":"//;s/"$//')
+  fi
+
+  if [[ -n "$text" ]]; then
+    printf '%s\n' "$text"
+  else
+    printf 'kapitan-ai: model boş yanıt döndürdü.\n' >&2
+    return 1
+  fi
 }
 
 kapitan_ai_doctor() {
   printf 'KAPiTaN AI — durum\n'
-  if grep -q 'boot=live' /proc/cmdline 2>/dev/null || [[ -d /run/live/medium ]]; then
-    printf '  Ortam      : canlı (live) oturum — AI yalnızca kurulu sistemde kullanılır\n'
-  else
-    printf '  Ortam      : kurulu sistem\n'
-  fi
+  printf '  Model      : %s\n' "$KAPITAN_AI_MODEL"
+  printf '  Sunucu     : %s\n' "$KAPITAN_AI_OLLAMA_HOST"
+
   if command -v ollama >/dev/null 2>&1; then
-    printf '  Çalıştırıcı: ollama bulundu\n'
+    printf '  Ollama     : ✓ kurulu\n'
   else
-    printf '  Çalıştırıcı: ollama YOK (apt install ollama ile kurulabilir)\n'
+    printf '  Ollama     : ✗ kurulu değil (curl https://ollama.ai/install.sh | sh)\n'
   fi
-  if [[ -f "$KAPITAN_AI_MODEL_PATH" ]]; then
-    printf '  Model      : %s (önbellekte mevcut)\n' "$KAPITAN_AI_MODEL_PATH"
+
+  if kapitan_ai_ollama_available; then
+    printf '  Bağlantı   : ✓ çalışıyor\n'
+    local models
+    models=$(curl -s "http://${KAPITAN_AI_OLLAMA_HOST}/api/tags" 2>/dev/null)
+    if command -v jq > /dev/null 2>&1 && [[ -n "$models" ]]; then
+      local count
+      count=$(printf '%s' "$models" | jq -r '.models | length' 2>/dev/null)
+      printf '  Modeller   : %s adet yüklü\n' "${count:-0}"
+      printf '%s' "$models" | jq -r '.models[].name' 2>/dev/null | while read -r m; do
+        printf '               - %s\n' "$m"
+      done
+    fi
   else
-    printf '  Model      : kurulu değil — «kapitan-ai model kur» ile indirin\n'
+    printf '  Bağlantı   : ✗ çalışmıyor (ollama serve ile başlatın)\n'
   fi
-  printf '  Güvenlik   : öneriler statik risk analizinden geçer; tehlikeli komutlar ONAYLA ister\n'
+
+  printf '  Çevrimdışı : ✓ temel komutlar çalışır (15+ intent)\n'
+  printf '  Güvenlik   : ✓ tüm öneriler risk analizinden geçer\n'
+  printf '  Zaman aşımı: %s saniye\n' "$KAPITAN_AI_TIMEOUT"
 }
 
 kapitan_ai_model_kur() {
@@ -242,10 +369,10 @@ main() {
     sinif)      kapitan_ai_risk_tier "$@"; printf '\n' ;;
     doctor|durum) kapitan_ai_doctor ;;
     model)      kapitan_ai_model "$@" ;;
-    kodla)      kapitan_ai_needs_model "kodla" ;;
-    acikla)     kapitan_ai_needs_model "açıkla" ;;
-    ozet)       kapitan_ai_needs_model "özet" ;;
-    cevir)      kapitan_ai_needs_model "çevir" ;;
+    kodla)      kapitan_ai_chat "kodla" "$@" ;;
+    acikla)     kapitan_ai_chat "açıkla" "$@" ;;
+    ozet)       kapitan_ai_chat "özet" "$@" ;;
+    cevir)      kapitan_ai_chat "çevir" "$@" ;;
     ''|yardim|help) kapitan_ai_usage ;;
     *) printf 'kapitan-ai: bilinmeyen komut: «%s»\n' "$sub" >&2; kapitan_ai_usage >&2; exit 2 ;;
   esac
